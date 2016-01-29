@@ -1,0 +1,40 @@
+Package: alakazam
+Type: Package
+Version: 0.2.2
+Date: 2016-01-29
+Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
+                    email="jason.vanderheiden@yale.edu"),
+             person("Namita", "Gupta", role=c("ctb"), 
+                    email="namita.gupta@yale.edu"),
+             person("Daniel", "Gadala-Maria", role=c("ctb"), 
+                    email="daniel.gadala-maria@yale.edu"),
+             person("Susanna", "Marquez", role=c("ctb"), 
+                    email="susanna.marquez@yale.edu"),
+             person("Roy", "Jiang", role=c("ctb"), 
+                    email="ruoyi.jiang@yale.edu"))
+Title: Immunoglobulin Clonal Lineage and Diversity Analysis
+Description: Core functionality, lineage reconstruction, and diversity analysis,
+    and amino acid property analysis components of the Change-O tool suite.
+License: CC BY-NC-SA 4.0
+URL: http://clip.med.yale.edu/changeo
+BugReports: https://bitbucket.org/kleinstein/alakazam/issues
+LazyData: true
+BuildVignettes: true
+VignetteBuilder: knitr
+Depends: R (>= 3.0.0), ggplot2
+Imports: dplyr, graphics, grid, igraph (>= 1.0.0), lazyeval, methods,
+        scales, seqinr, stats, stringi, utils
+Suggests: knitr, rmarkdown, testthat
+RoxygenNote: 5.0.1
+Collate: 'Alakazam.R' 'AminoAcids.R' 'Core.R' 'Diversity.R'
+        'GeneUsage.R' 'Lineage.R' 'Sequence.R'
+NeedsCompilation: no
+Packaged: 2016-01-29 20:03:31 UTC; jason
+Author: Jason Vander Heiden [aut, cre],
+  Namita Gupta [ctb],
+  Daniel Gadala-Maria [ctb],
+  Susanna Marquez [ctb],
+  Roy Jiang [ctb]
+Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
+Repository: CRAN
+Date/Publication: 2016-01-29 22:26:44
