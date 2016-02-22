@@ -24,7 +24,7 @@ the method of Ikai. Non-informative positions are excluded, where non-informativ
 is defined as any character in \code{c("X", "-", ".", "*")}.
 }
 \examples{
-seq <- c("CARDRSTPWRRGIASTTVRTSW", "XXTQMYVRT")
+seq <- c("CARDRSTPWRRGIASTTVRTSW", NA, "XXTQMYVRT")
 aliphatic(seq)
 
 }

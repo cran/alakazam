@@ -1,23 +1,21 @@
-Alakazam
+Alakazam - Immunoglobulin clonal lineage and diversity analysis
 -------------------------------------------------------------------------------
-January 29, 2016  
-Version 0.2.2
 
-Lineage, diversity, gene usage and amino acid property analysis R package of 
-the Change-O suite.
+The alakazam R package provides a set of tool to investigate lymphocyte receptor 
+clonal lineages, diversity and other repertoire level properties, with a focus on 
+high-throughput immunoglobulin (Ig) sequencing.
 
-Dependencies
--------------------------------------------------------------------------------
-R 3.0  
-R packages
+Alakazam serves five main purposes:
 
-  - dplyr
-  - ggplot2
-  - igraph
-  - lazyeval
-  - scales
-  - seqinr
-  - stringi
+1. Providing core functionality for other R packages in the Change-O suite. This
+   includes common tasks such as file I/O, basic DNA sequence manipulation, and
+   interacting with V(D)J segment and gene annotations.
+2. Providing an R interface for interacting with the output of the pRESTO 
+   tool suite.
+3. Performing lineage reconstruction on clonal populations of immunoglobulin 
+   (Ig) sequences. 
+4. Performing clonal abundance and diversity analysis on lymphocyte repertoires.
+5. Performing physicochemical property analyses of lymphocyte receptor sequences.
 
 Build Instructions
 -------------------------------------------------------------------------------
@@ -26,21 +24,16 @@ Install build dependencies:
 install.packages(c("devtools", "roxygen2", "testthat", "knitr", "rmarkdown"))
 ```
 
-Building with Rstudio:
-
--  Build -> Configure Build Tools
--  Check use devtools option
--  Check use roxygen option
--  Select configure roxygen options and check everything.
--  Build -> Build and Reload
-
 Building from the R console:
 
 ```R
-library(roxygen2)
-library(devtools)
-install_deps()
-document()
-build(vignettes=FALSE)
-install()
+devtools::install_deps()
+devtools::document()
+devtools::build()
+devtools::install()
+```
+
+Optionally, you can skip the vignettes:
+```R
+devtools::build(vignettes=FALSE)
 ```

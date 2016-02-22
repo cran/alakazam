@@ -2,14 +2,18 @@
 
 #' The alakazam package
 #' 
-#' \code{alakazam} in a member of the Change-O suite of tools and serves three main 
+#' \code{alakazam} in a member of the Change-O suite of tools and serves five main 
 #' purposes:
 #' \itemize{
 #'   \item  Providing core functionality for other R packages in the Change-O suite. This
-#'          includes common tasks such as file I/O and basic DNA sequence manipulation.
-#'   \item  Providing an R interface for interacting with the output of the pRESTO tool suite.
-#'   \item  Providing tools to perform lineage reconstruction and diversity analysis on clonal 
-#'          populations of immunoglobulin (Ig) sequences. 
+#'          includes common tasks such as file I/O, basic DNA sequence manipulation, and
+#'          interacting with V(D)J segment and gene annotations.
+#'   \item  Providing an R interface for interacting with the output of the pRESTO 
+#'          tool suite.
+#'   \item  Performing lineage reconstruction on clonal populations of immunoglobulin 
+#'          (Ig) sequences. 
+#'   \item  Performing clonal abundance and diversity analysis on lymphocyte repertoires.
+#'   \item  Performing physicochemical property analyses of lymphocyte receptor sequences.
 #' }
 #' For additional details regarding the use of the \code{alakazam} package see the 
 #' vignettes:\cr
@@ -116,7 +120,23 @@
 #'                        dbinom pbinom qbinom rbinom
 #'                        dnorm pnorm qnorm rnorm
 #'                        dmultinom rmultinom
-#' @importFrom  stringi   stri_extract_first_regex stri_replace_first_regex
+#' @importFrom  stringi   stri_dup stri_flatten stri_join stri_length 
+#'                        stri_count_boundaries stri_count_regex 
+#'                        stri_extract_all_regex stri_extract_first_regex  
+#'                        stri_replace_all_regex stri_replace_first_regex
 NULL
 
 
+#### Sysdata ####
+
+# 1x20 vector of default amino acid hydropathy scores
+# HYDROPATHY_KYTJ82
+
+# 1x20 vector of default amino acid bulkiness scores
+# BULKINESS_ZIMJ68
+
+# 1x20 vector of default amino acid polarity scores
+# POLARITY_GRAR74
+
+# 1x7 vector of default amino acid pK values
+# PK_EMBOSS
