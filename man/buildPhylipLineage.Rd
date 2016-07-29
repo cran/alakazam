@@ -7,7 +7,7 @@
 buildPhylipLineage(clone, dnapars_exec, rm_temp = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{clone}{\code{\link{ChangeoClone}} object containing clone data.}
+\item{clone}{\link{ChangeoClone} object containing clone data.}
 
 \item{dnapars_exec}{path to the PHYLIP dnapars executable.}
 
@@ -87,12 +87,8 @@ as the distance between each sequence.
 }
 \examples{
 \dontrun{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
 # Preprocess clone
-clone <- subset(df, CLONE == 164)
+clone <- subset(ExampleDb, CLONE == 3138)
 clone <- makeChangeoClone(clone, text_fields=c("SAMPLE", "ISOTYPE"), num_fields="DUPCOUNT")
 
 # Run PHYLIP and process output
@@ -101,8 +97,8 @@ graph <- buildPhylipLineage(clone, dnapars_exec, rm_temp=TRUE)
 
 # Plot graph with a tree layout
 library(igraph)
-ly <- layout_as_tree(graph, root="Germline", circular=F, flip.y=T)
-plot(graph, layout=ly)
+plot(graph, layout=layout_as_tree, vertex.label=V(graph)$ISOTYPE, 
+     vertex.size=50, edge.arrow.mode=0, vertex.color="grey80")
 }
 
 }
@@ -116,10 +112,10 @@ plot(graph, layout=ly)
 }
 }
 \seealso{
-Takes as input a \code{\link{ChangeoClone}}. 
-          Temporary directories are created with \code{\link{makeTempDir}}.
-          Distance is calculated using \code{\link{getSeqDistance}}. 
-          See \code{\link{igraph}} and \code{\link{igraph.plotting}} for working 
+Takes as input a \link{ChangeoClone}. 
+          Temporary directories are created with \link{makeTempDir}.
+          Distance is calculated using \link{seqDist}. 
+          See \link{igraph} and \link{igraph.plotting} for working 
           with igraph \code{graph} objects.
 }
 

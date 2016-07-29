@@ -39,15 +39,11 @@ A data.frame summarizing clone counts and frequencies with columns:
 clonal groups.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
 # Without copy numbers
-clones <- countClones(df, groups="SAMPLE")
+clones <- countClones(ExampleDb, groups="SAMPLE")
 
 # With copy numbers and multiple groups
-clones <- countClones(df, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
+clones <- countClones(ExampleDb, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
 
 }
 

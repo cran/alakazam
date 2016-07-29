@@ -1,8 +1,5 @@
 # Common input/output and data structure manipulation functions for Alakazam
 
-#' @include Alakazam.R
-NULL
-
 #### File I/O functions ####
 
 #' Read a Change-O tab-delimited database file
@@ -37,18 +34,21 @@ NULL
 #'             \item  GERMLINE_IMGT_D_MASK
 #'           }
 #'                   
-#' @seealso  Wraps \code{\link{read.table}}.
-#' @family   file input and output functions
+#' @seealso  Wraps \link{read.table} and \link[data.table]{fread}. 
+#'           See \link{writeChangeoDb} for writing to Change-O files.
 #' 
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
+#' \dontrun{
+#'     # Read all columns in and convert sequence fields to upper case
+#'     db <- readChangeoDb("changeo.tsv")
 #' 
-#' # Subset columns and convert sequence fields to upper case
-#' df <- readChangeoDb(file, select=c("SEQUENCE_ID", "SEQUENCE_IMGT"), seq_upper=TRUE)
+#'     # Subset columns and convert sequence fields to upper case
+#'     db <- readChangeoDb("changeo.tsv", select=c("SEQUENCE_ID", "SEQUENCE_IMGT"))
 #' 
-#' # Drop columns and do not alter sequence field case
-#' df <- readChangeoDb(file, drop=c("D_CALL", "DUPCOUNT"), seq_upper=FALSE)
+#'     # Drop columns and do not alter sequence field case
+#'     db <- readChangeoDb("changeo.tsv", drop=c("D_CALL", "DUPCOUNT"), 
+#'                         seq_upper=FALSE)
+#' }
 #' 
 #' @export
 readChangeoDb <- function(file, select=NULL, drop=NULL, seq_upper=TRUE) {
@@ -57,34 +57,43 @@ readChangeoDb <- function(file, select=NULL, drop=NULL, seq_upper=TRUE) {
                      "GERMLINE_IMGT", "GERMLINE_IMGT_D_MASK")
     text_columns <- c("SEQUENCE_ID", "CLONE", "SAMPLE")
     
-    # Read file
-    db_df <- read.delim(file, as.is=TRUE, na.strings=c("", "NA", "None"))
-    
-    # Select columns
-    select_columns <- colnames(db_df)
-    if(!is.null(select)) { select_columns <- intersect(select_columns, select) }
-    if(!is.null(drop)) { select_columns <- setdiff(select_columns, drop) }
-    db_df <- subset(db_df, select=select_columns)
-    
+    db <- tryCatch({ 
+            # Attempt to use fread
+            data.table::fread(file, sep="\t", header=TRUE, stringsAsFactors=FALSE,
+                              na.strings=c("", "NA", "None"), select=select, drop=drop,
+                              data.table=FALSE)
+        }, error=function(e) {
+            # Read file using read.delim if fread fails
+            #message("Failed to read file with fread. Falling back to read.table.")
+            db <- read.delim(file, as.is=TRUE, na.strings=c("", "NA", "None"))
+            
+            # Select columns
+            select_columns <- colnames(db)
+            if(!is.null(select)) { select_columns <- intersect(select_columns, select) }
+            if(!is.null(drop)) { select_columns <- setdiff(select_columns, drop) }
+            
+            subset(db, select=select_columns)
+        })    
+
     # Convert sequence fields to upper case
     if (seq_upper) {
-        for (x in intersect(seq_columns, select_columns)) {
-            db_df[, x] <- toupper(db_df[, x]) 
+        for (x in intersect(seq_columns, names(db))) {
+            db[, x] <- toupper(db[, x]) 
         }
     }
     
     # Convert text fields to character
-    for (x in intersect(text_columns, select_columns)) {
-        db_df[, x] <- as.character(db_df[, x])
+    for (x in intersect(text_columns, names(db))) {
+        db[, x] <- as.character(db[, x])
     }
     
-    return(db_df)
+    return(db)
 }
 
 
 #' Write a Change-O tab-delimited database file
 #' 
-#' \code{writeChangeoDb} is a simple wrapper around \code{\link{write.table}} with defaults 
+#' \code{writeChangeoDb} is a simple wrapper around \link{write.table} with defaults 
 #' appropriate for writing a Change-O tab-delimited database file from a data.frame.
 #'
 #' @param    data  data.frame of Change-O data.
@@ -92,13 +101,12 @@ readChangeoDb <- function(file, select=NULL, drop=NULL, seq_upper=TRUE) {
 #' 
 #' @return   NULL
 #' 
-#' @seealso  Wraps \code{\link{write.table}}.
-#' @family   file input and output functions
+#' @seealso  Wraps \link{write.table}. See \link{readChangeoDb} for reading to Change-O files.
 #' 
 #' @examples
 #' \dontrun{
 #'   # Write a database
-#'   writeChangeoDb(data, "changeo_output.tab")
+#'   writeChangeoDb(data, "changeo.tsv")
 #' }
 #' 
 #' @export
@@ -116,9 +124,8 @@ writeChangeoDb <- function(data, file) {
 #' 
 #' @return   The path to the temporary folder.
 #' 
-#' @seealso  This is just a wrapper for \code{\link{tempfile}} and 
-#'           \code{\link{dir.create}}.
-#' @family   file input and output functions
+#' @seealso  This is just a wrapper for \link{tempfile} and 
+#'           \link{dir.create}.
 #' 
 #' @examples
 #' makeTempDir("Clone50")
@@ -150,9 +157,9 @@ makeTempDir <- function(prefix) {
 #' \code{strings} value or it will not be replaced.  Values that do not have a replacement
 #' named in the \code{translation} parameter will not be modified.
 #' 
-#' Replacement is accomplished using \code{\link{gsub}}.
+#' Replacement is accomplished using \link{gsub}.
 #' 
-#' @seealso  See \code{\link{gsub}} for single value replacement in the base package.
+#' @seealso  See \link{gsub} for single value replacement in the base package.
 #' 
 #' @examples
 #' # Using a vector translation
@@ -289,7 +296,7 @@ getBaseTheme <- function(sizing=c("figure", "window")) {
 #' http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)
 #' 
 #' @export
-multiggplot <- function(..., ncol=1) {
+gridPlot <- function(..., ncol=1) {
     p <- list(...)
     n <- length(p)
     layout <- matrix(seq(1, ncol*ceiling(n/ncol)), ncol=ncol, nrow=ceiling(n/ncol))

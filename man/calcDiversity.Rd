@@ -50,6 +50,6 @@ calcDiversity(p, q)
 }
 }
 \seealso{
-Used by \code{\link{rarefyDiversity}} and \code{\link{testDiversity}}.
+Used by \link{rarefyDiversity} and \link{testDiversity}.
 }
 

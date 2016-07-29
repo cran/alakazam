@@ -5,7 +5,7 @@
 \title{Pairwise test of the diversity index}
 \usage{
 testDiversity(data, q, group, clone = "CLONE", copy = NULL, min_n = 30,
-  max_n = NULL, nboot = 2000)
+  max_n = NULL, nboot = 2000, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -29,9 +29,11 @@ A group with less observations than the minimum is excluded.}
 if automatically determined from the size of the largest group.}
 
 \item{nboot}{number of bootstrap realizations to perform.}
+
+\item{progress}{if \code{TRUE} show a progress bar.}
 }
 \value{
-A \code{\link{DiversityTest}} object containing p-values and summary statistics.
+A \link{DiversityTest} object containing p-values and summary statistics.
 }
 \description{
 \code{testDiversity} performs pairwise significance tests of the diversity index 
@@ -40,7 +42,7 @@ rarefaction and bootstrapping.
 }
 \details{
 Clonal diversity is calculated using the generalized diversity index proposed by 
-Hill (Hill, 1973). See \code{\link{calcDiversity}} for further details.
+Hill (Hill, 1973). See \link{calcDiversity} for further details.
 
 Diversity is calculated on the estimated complete clonal abundance distribution.
 This distribution is inferred by using the Chao1 estimator to estimate the number
@@ -69,12 +71,8 @@ in such cases. We are currently investigating this potential problem.
 }
 \examples{
  
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
 # Groups under the size threshold are excluded and a warning message is issued.
-testDiversity(df, "SAMPLE", q=0, min_n=30, nboot=100)
+testDiversity(ExampleDb, "SAMPLE", q=0, min_n=30, nboot=100)
 
 }
 \references{
@@ -95,10 +93,10 @@ testDiversity(df, "SAMPLE", q=0, min_n=30, nboot=100)
 }
 }
 \seealso{
-See \code{\link{calcDiversity}} for the basic calculation and 
-          \code{\link{DiversityTest}} for the return object. 
-          See \code{\link{rarefyDiversity}} for curve generation.
-          See \code{\link{ecdf}} for computation of the empirical cumulative 
+See \link{calcDiversity} for the basic calculation and 
+          \link{DiversityTest} for the return object. 
+          See \link{rarefyDiversity} for curve generation.
+          See \link{ecdf} for computation of the empirical cumulative 
           distribution function.
 }
 

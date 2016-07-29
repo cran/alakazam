@@ -1,46 +1,7 @@
 # Ig lineage reconstruction via maximum parsimony
 
-#' @include Alakazam.R
+#' @include Classes.R
 NULL
-
-#### Classes ####
-
-#' S4 class defining a clone
-#' 
-#' \code{ChangeoClone} defines a common data structure for perform lineage recontruction
-#' from Change-O data.
-#' 
-#' @slot     data      data.frame containing sequences and annotations. Contains the
-#'                     columns \code{SEQUENCE_ID} and \code{SEQUENCE}, as well as any additional 
-#'                     sequence-specific annotation columns.
-#' @slot     clone     string defining the clone identifier.
-#' @slot     germline  string containing the germline sequence for the clone.
-#' @slot     v_gene    string defining the V segment gene call.
-#' @slot     j_gene    string defining the J segment gene call.
-#' @slot     junc_len  numeric junction length (nucleotide count).
-#' 
-#' @seealso  See \code{\link{makeChangeoClone}} and \code{\link{buildPhylipLineage}} for use.
-#'           
-#' @name         ChangeoClone-class
-#' @rdname       ChangeoClone-class
-#' @aliases      ChangeoClone
-#' @exportClass  ChangeoClone
-setClass("ChangeoClone", 
-         slots=c(data="data.frame",
-                 clone="character",
-                 germline="character", 
-                 v_gene="character", 
-                 j_gene="character", 
-                 junc_len="numeric"))
-
-#### Data ####
-
-#' Example Ig lineage trees
-#'
-#' A set of Ig lineage trees generated from the \code{extdata/ExampleDb.gz} file.
-#'
-#' @format   A list of igraph objects output by \code{\link{buildPhylipLineage}}.
-"ExampleTrees"
 
 
 #### Preprocessing functions ####
@@ -84,7 +45,7 @@ setClass("ChangeoClone",
 #'                        COLLAPSE_COUNT during duplicate removal that indicates the 
 #'                        number of sequences that were collapsed.
 #'
-#' @return   A \code{\link{ChangeoClone}} object containing the modified clone.
+#' @return   A \link{ChangeoClone} object containing the modified clone.
 #'
 #' @details
 #' The input data.frame (\code{data}) must columns for each of the required column name 
@@ -114,14 +75,14 @@ setClass("ChangeoClone",
 #' \code{germ}, \code{vcall}, \code{jcall}, \code{junc_len} and \code{clone} columns, 
 #' respectively. For any given clone, each value in these columns should be identical.
 #'  
-#' @seealso  Executes in order \code{\link{maskSeqGaps}}, \code{\link{maskSeqEnds}}
-#'           and \code{\link{collapseDuplicates}}. 
-#'           Returns a \code{\link{ChangeoClone}} object which serves as input to
-#'           \code{\link{buildPhylipLineage}}.
+#' @seealso  Executes in order \link{maskSeqGaps}, \link{maskSeqEnds}
+#'           and \link{collapseDuplicates}. 
+#'           Returns a \link{ChangeoClone} object which serves as input to
+#'           \link{buildPhylipLineage}.
 #' 
 #' @examples
 #' # Example Change-O data.frame
-#' df <- data.frame(SEQUENCE_ID=LETTERS[1:4],
+#' db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
 #'                  SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
 #'                  V_CALL="Homsap IGKV1-39*01 F",
 #'                  J_CALL="Homsap IGKJ5*01 F",
@@ -133,10 +94,10 @@ setClass("ChangeoClone",
 #'                  stringsAsFactors=FALSE)
 #' 
 #' # Without end masking
-#' makeChangeoClone(df, text_fields="TYPE", num_fields="COUNT")
+#' makeChangeoClone(db, text_fields="TYPE", num_fields="COUNT")
 #'
 #' # With end masking
-#' makeChangeoClone(df, max_mask=3, text_fields="TYPE", num_fields="COUNT")
+#' makeChangeoClone(db, max_mask=3, text_fields="TYPE", num_fields="COUNT")
 #'
 #' @export
 makeChangeoClone <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT", 
@@ -352,7 +313,7 @@ modifyPhylipEdges <- function(edges, clone, dist_mat=getDNAMatrix(gap=0)) {
             seq1 <- clone@data[["SEQUENCE"]][clone@data[["SEQUENCE_ID"]] == edges$from[i]]
         }
         seq2 <- clone@data[["SEQUENCE"]][clone@data[["SEQUENCE_ID"]] == edges$to[i]]
-        edges$weight[i] <- getSeqDistance(seq1, seq2, dist_mat)        
+        edges$weight[i] <- seqDist(seq1, seq2, dist_mat)        
     }
     
     # Find rows zero weight edges with inferred parent nodes
@@ -376,7 +337,7 @@ modifyPhylipEdges <- function(edges, clone, dist_mat=getDNAMatrix(gap=0)) {
                 seq1 <- clone@data[["SEQUENCE"]][clone@data[["SEQUENCE_ID"]] == edges$from[i]]
             }
             seq2 <- clone@data[["SEQUENCE"]][clone@data[["SEQUENCE_ID"]] == edges$to[i]]
-            edges$weight[i] <- getSeqDistance(seq1, seq2, dist_mat)      
+            edges$weight[i] <- seqDist(seq1, seq2, dist_mat)      
         }
         
         # Remove row
@@ -438,7 +399,7 @@ phylipToGraph <- function(edges, clone) {
 #' \code{buildPhylipLineage} reconstructs an Ig lineage via maximum parsimony using the 
 #' dnapars application of the PHYLIP package.
 #' 
-#' @param    clone         \code{\link{ChangeoClone}} object containing clone data.
+#' @param    clone         \link{ChangeoClone} object containing clone data.
 #' @param    dnapars_exec  path to the PHYLIP dnapars executable.
 #' @param    rm_temp       if \code{TRUE} delete the temporary directory after running dnapars;
 #'                         if \code{FALSE} keep the temporary directory.
@@ -517,20 +478,16 @@ phylipToGraph <- function(edges, clone) {
 #'            Sci Transl Med. 2014 6(248):248ra107.
 #' }
 #'   
-#' @seealso  Takes as input a \code{\link{ChangeoClone}}. 
-#'           Temporary directories are created with \code{\link{makeTempDir}}.
-#'           Distance is calculated using \code{\link{getSeqDistance}}. 
-#'           See \code{\link{igraph}} and \code{\link{igraph.plotting}} for working 
+#' @seealso  Takes as input a \link{ChangeoClone}. 
+#'           Temporary directories are created with \link{makeTempDir}.
+#'           Distance is calculated using \link{seqDist}. 
+#'           See \link{igraph} and \link{igraph.plotting} for working 
 #'           with igraph \code{graph} objects. 
 #'
 #' @examples
 #' \dontrun{
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # Preprocess clone
-#' clone <- subset(df, CLONE == 164)
+#' clone <- subset(ExampleDb, CLONE == 3138)
 #' clone <- makeChangeoClone(clone, text_fields=c("SAMPLE", "ISOTYPE"), num_fields="DUPCOUNT")
 #' 
 #' # Run PHYLIP and process output
@@ -539,8 +496,8 @@ phylipToGraph <- function(edges, clone) {
 #' 
 #' # Plot graph with a tree layout
 #' library(igraph)
-#' ly <- layout_as_tree(graph, root="Germline", circular=F, flip.y=T)
-#' plot(graph, layout=ly)
+#' plot(graph, layout=layout_as_tree, vertex.label=V(graph)$ISOTYPE, 
+#'      vertex.size=50, edge.arrow.mode=0, vertex.color="grey80")
 #' }
 #' 
 #' @export

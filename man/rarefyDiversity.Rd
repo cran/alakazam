@@ -6,7 +6,7 @@
 \usage{
 rarefyDiversity(data, group, clone = "CLONE", copy = NULL, min_q = 0,
   max_q = 4, step_q = 0.05, min_n = 30, max_n = NULL, ci = 0.95,
-  nboot = 2000)
+  nboot = 2000, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -36,9 +36,11 @@ if automatically determined from the size of the largest group.}
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
 
 \item{nboot}{number of bootstrap realizations to generate.}
+
+\item{progress}{if \code{TRUE} show a progress bar.}
 }
 \value{
-A \code{\link{DiversityCurve}} object summarizing the diversity scores.
+A \link{DiversityCurve} object summarizing the diversity scores.
 }
 \description{
 \code{rarefyDiversity} divides a set of clones by a group annotation,
@@ -47,7 +49,7 @@ scores (\eqn{D}) over an interval of diversity orders (\eqn{q}).
 }
 \details{
 Clonal diversity is calculated using the generalized diversity index (Hill numbers) 
-proposed by Hill (Hill, 1973). See \code{\link{calcDiversity}} for further details.
+proposed by Hill (Hill, 1973). See \link{calcDiversity} for further details.
 
 Diversity is calculated on the estimated complete clonal abundance distribution.
 This distribution is inferred by using the Chao1 estimator to estimate the number
@@ -65,16 +67,13 @@ realizations. Confidence intervals are derived using the standard deviation of t
 resampling realizations, as described in Chao et al, 2015.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
 # Group by sample identifier
-div <- rarefyDiversity(df, "SAMPLE", step_q=1, max_q=10, nboot=100)
+div <- rarefyDiversity(ExampleDb, "SAMPLE", step_q=1, max_q=10, nboot=100)
 plotDiversityCurve(div, legend_title="Sample")
                    
 # Grouping by isotype rather than sample identifier
-div <- rarefyDiversity(df, "ISOTYPE", min_n=40, step_q=1, max_q=10, nboot=100)
+div <- rarefyDiversity(ExampleDb, "ISOTYPE", min_n=40, step_q=1, max_q=10, 
+                       nboot=100)
 plotDiversityCurve(div, legend_title="Isotype")
 
 }
@@ -93,9 +92,9 @@ plotDiversityCurve(div, legend_title="Isotype")
 }
 }
 \seealso{
-See \code{\link{calcDiversity}} for the basic calculation and 
-          \code{\link{DiversityCurve}} for the return object. 
-          See \code{\link{testDiversity}} for significance testing.
-          See \code{\link{plotDiversityCurve}} for plotting the return object.
+See \link{calcDiversity} for the basic calculation and 
+          \link{DiversityCurve} for the return object. 
+          See \link{testDiversity} for significance testing.
+          See \link{plotDiversityCurve} for plotting the return object.
 }
 

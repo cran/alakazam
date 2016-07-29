@@ -27,7 +27,6 @@ maskSeqGaps("--ATG-C-", outer_only=TRUE)
 
 }
 \seealso{
-Other sequence manipulation functions: \code{\link{collapseDuplicates}},
-  \code{\link{maskSeqEnds}}
+See \link{maskSeqEnds} for masking ragged edges.
 }
 

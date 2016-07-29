@@ -25,7 +25,7 @@ isValidAASeq(seq)
 
 }
 \seealso{
-See \code{\link{ABBREV_AA}} for the set of non-ambiguous amino acid characters.
-See \code{\link{IUPAC_AA}} for the full set of ambiguous amino acid characters.
+See \link{ABBREV_AA} for the set of non-ambiguous amino acid characters.
+See \link{IUPAC_AA} for the full set of ambiguous amino acid characters.
 }
 

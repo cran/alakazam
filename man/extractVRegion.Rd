@@ -27,10 +27,8 @@ the V-segment for IMGT-gapped immunoglobulin (Ig) nucleotide sequences according
 IMGT numbering scheme.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-clone <- subset(df, CLONE == 164)
+# Assign example clone
+clone <- subset(ExampleDb, CLONE == 3138)
 
 # Get all regions
 extractVRegion(clone$SEQUENCE_IMGT)
@@ -47,14 +45,12 @@ extractVRegion(clone$SEQUENCE_IMGT, c("FWR1", "FWR2", "FWR3"))
 }
 \references{
 \enumerate{
-  \item  Lefranc M-P, et al. IMGT unique numbering for immunoglobulin and T cell receptor 
-           variable domains and Ig superfamily V-like domains.
+  \item  Lefranc M-P, et al. IMGT unique numbering for immunoglobulin and T cell 
+           receptor variable domains and Ig superfamily V-like domains.
            Dev Comp Immunol. 2003 27(1):55-77.
 }
 }
 \seealso{
-IMGT-gapped region boundaries are defined in \code{\link{IMGT_REGIONS}}.
-
-Other sequence annotation functions: \code{\link{getSegment}}
+IMGT-gapped region boundaries are defined in \link{IMGT_REGIONS}.
 }
 

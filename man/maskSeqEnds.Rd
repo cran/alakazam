@@ -43,7 +43,6 @@ maskSeqEnds(seq, max_mask=1, trim=TRUE)
 
 }
 \seealso{
-Other sequence manipulation functions: \code{\link{collapseDuplicates}},
-  \code{\link{maskSeqGaps}}
+See \link{maskSeqGaps} for masking internal gaps.
 }
 

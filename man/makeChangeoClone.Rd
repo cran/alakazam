@@ -56,7 +56,7 @@ COLLAPSE_COUNT during duplicate removal that indicates the
 number of sequences that were collapsed.}
 }
 \value{
-A \code{\link{ChangeoClone}} object containing the modified clone.
+A \link{ChangeoClone} object containing the modified clone.
 }
 \description{
 \code{makeChangeoClone} takes a data.frame with Change-O style columns as input and 
@@ -94,7 +94,7 @@ respectively. For any given clone, each value in these columns should be identic
 }
 \examples{
 # Example Change-O data.frame
-df <- data.frame(SEQUENCE_ID=LETTERS[1:4],
+db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
                  SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
                  V_CALL="Homsap IGKV1-39*01 F",
                  J_CALL="Homsap IGKJ5*01 F",
@@ -106,16 +106,16 @@ df <- data.frame(SEQUENCE_ID=LETTERS[1:4],
                  stringsAsFactors=FALSE)
 
 # Without end masking
-makeChangeoClone(df, text_fields="TYPE", num_fields="COUNT")
+makeChangeoClone(db, text_fields="TYPE", num_fields="COUNT")
 
 # With end masking
-makeChangeoClone(df, max_mask=3, text_fields="TYPE", num_fields="COUNT")
+makeChangeoClone(db, max_mask=3, text_fields="TYPE", num_fields="COUNT")
 
 }
 \seealso{
-Executes in order \code{\link{maskSeqGaps}}, \code{\link{maskSeqEnds}}
-          and \code{\link{collapseDuplicates}}. 
-          Returns a \code{\link{ChangeoClone}} object which serves as input to
-          \code{\link{buildPhylipLineage}}.
+Executes in order \link{maskSeqGaps}, \link{maskSeqEnds}
+          and \link{collapseDuplicates}. 
+          Returns a \link{ChangeoClone} object which serves as input to
+          \link{buildPhylipLineage}.
 }
 

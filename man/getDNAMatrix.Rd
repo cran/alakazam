@@ -30,7 +30,7 @@ getDNAMatrix(gap=0)
 
 }
 \seealso{
-Creates DNA distance matrix for \code{\link{getSeqDistance}}.
+Creates DNA distance matrix for \link{seqDist}.
           See \link{getAAMatrix} for amino acid distances.
 }
 

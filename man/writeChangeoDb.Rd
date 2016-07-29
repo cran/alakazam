@@ -12,20 +12,17 @@ writeChangeoDb(data, file)
 \item{file}{output file name.}
 }
 \description{
-\code{writeChangeoDb} is a simple wrapper around \code{\link{write.table}} with defaults 
+\code{writeChangeoDb} is a simple wrapper around \link{write.table} with defaults 
 appropriate for writing a Change-O tab-delimited database file from a data.frame.
 }
 \examples{
 \dontrun{
   # Write a database
-  writeChangeoDb(data, "changeo_output.tab")
+  writeChangeoDb(data, "changeo.tsv")
 }
 
 }
 \seealso{
-Wraps \code{\link{write.table}}.
-
-Other file input and output functions: \code{\link{makeTempDir}},
-  \code{\link{readChangeoDb}}
+Wraps \link{write.table}. See \link{readChangeoDb} for reading to Change-O files.
 }
 

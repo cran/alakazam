@@ -1,8 +1,5 @@
 # Amino acid sequence properties
 
-#' @include Alakazam.R
-NULL
-
 #### Chemical property functions ####
 
 #' Calculates the average bulkiness of amino acid sequences
@@ -25,7 +22,7 @@ NULL
 #'            in proteins by statistical methods. J Theor Biol 21, 170-201 (1968).
 #' }
 #' @seealso 
-#' For additional size related indices see \code{\link[seqinr]{aaindex}}.
+#' For additional size related indices see \link[seqinr]{aaindex}.
 #'
 #' @examples
 #' # Default bulkiness scale
@@ -239,20 +236,20 @@ aliphatic <- function(seq, normalize=TRUE) {
 #' 
 #' @examples 
 #' seq <- c("CARDRSTPWRRGIASTTVRTSW", "XXTQMYVRT") 
-#' # Normalized charge
-#' charge(seq)
 #' # Unnormalized charge
-#' charge(seq, normalize=FALSE)
+#' charge(seq)
+#' # Normalized charge
+#' charge(seq, normalize=TRUE)
 #' 
 #' # Use the Murray et al, 2006 scores from the seqinr package
 #' library(seqinr)
 #' data(pK)
 #' x <- setNames(pK[["Murray"]], rownames(pK))
 #' # Calculate charge
-#' charge(seq, pK=x, normalize=FALSE)
+#' charge(seq, pK=x)
 #'
 #' @export
-charge <- function(seq, pH=7.4, pK=NULL, normalize=TRUE) {
+charge <- function(seq, pH=7.4, pK=NULL, normalize=FALSE) {
     
     # Get charge data
     if(is.null(pK)) {
@@ -288,8 +285,8 @@ charge <- function(seq, pH=7.4, pK=NULL, normalize=TRUE) {
 #' @return   A logical vector with \code{TRUE} for each valid amino acid sequences 
 #'           and \code{FALSE} for each invalid sequence.
 #' @seealso 
-#' See \code{\link{ABBREV_AA}} for the set of non-ambiguous amino acid characters.
-#' See \code{\link{IUPAC_AA}} for the full set of ambiguous amino acid characters.
+#' See \link{ABBREV_AA} for the set of non-ambiguous amino acid characters.
+#' See \link{IUPAC_AA} for the full set of ambiguous amino acid characters.
 #' 
 #' @examples 
 #' seq <- c("CARDRSTPWRRGIASTTVRTSW", "XXTQMYVR--XX", "CARJ", "10") 
@@ -413,7 +410,7 @@ countPatterns <- function(seq, patterns, nt=FALSE, trim=FALSE, label="REGION") {
 #'            \item  \code{*_AA_BULK}:       average bulkiness of amino acids.
 #'            \item  \code{*_AA_ALIPHATIC}:  aliphatic index.
 #'            \item  \code{*_AA_POLARITY}:   average polarity of amino acids.
-#'            \item  \code{*_AA_CHARGE}:     normalized net charge.
+#'            \item  \code{*_AA_CHARGE}:     net charge.
 #'            \item  \code{*_AA_BASIC}:      fraction of informative positions that are 
 #'                                           Arg, His or Lys.
 #'            \item  \code{*_AA_ACIDIC}:     fraction of informative positions that are 
@@ -475,18 +472,16 @@ countPatterns <- function(seq, patterns, nt=FALSE, trim=FALSE, label="REGION") {
 #' that calculate the included properties individually.
 #' 
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' df <- df[c(1,10,100), c("SEQUENCE_ID", "JUNCTION")]
+#' # Subset example data
+#' db <- ExampleDb[c(1,10,100), c("SEQUENCE_ID", "JUNCTION")]
 #' 
 #' # Calculate default amino acid properties from amino acid sequences
 #' # Use a custom output column prefix
-#' df$JUNCTION_TRANS <- translateDNA(df$JUNCTION)
-#' aminoAcidProperties(df, seq="JUNCTION_TRANS", label="JUNCTION")
+#' db$JUNCTION_TRANS <- translateDNA(db$JUNCTION)
+#' aminoAcidProperties(db, seq="JUNCTION_TRANS", label="JUNCTION")
 #
 #' # Calculate default amino acid properties from DNA sequences
-#' aminoAcidProperties(df, seq="JUNCTION", nt=TRUE)
+#' aminoAcidProperties(db, seq="JUNCTION", nt=TRUE)
 #' 
 #' # Use the Grantham, 1974 side chain volume scores from the seqinr package
 #' # Set pH=7.0 for the charge calculation
@@ -498,7 +493,7 @@ countPatterns <- function(seq, patterns, nt=FALSE, trim=FALSE, label="REGION") {
 #' # Rename the score vector to use single-letter codes
 #' names(x) <- translateStrings(names(x), ABBREV_AA)
 #' # Calculate properties
-#' aminoAcidProperties(df, property=c("bulk", "charge"), seq="JUNCTION", nt=TRUE, 
+#' aminoAcidProperties(db, property=c("bulk", "charge"), seq="JUNCTION", nt=TRUE, 
 #'                     trim=TRUE, label="CDR3", bulkiness=x, pH=7.0)
 #'
 #' @export

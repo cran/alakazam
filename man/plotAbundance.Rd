@@ -38,17 +38,13 @@ abundance distribution. The distribution is plotted as a log rank abundance
 distribution.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
-# Plot
-abund <- estimateAbundance(df, "SAMPLE", nboot=100)
+# Estimate abundance by sample and plot
+abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 plotAbundance(abund)
 
 }
 \seealso{
-See \code{\link{estimateAbundance}} for generating the input abundance distribution.
-Plotting is performed with \code{\link{ggplot}}.
+See \link{estimateAbundance} for generating the input abundance distribution.
+Plotting is performed with \link{ggplot}.
 }
 

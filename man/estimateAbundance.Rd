@@ -5,7 +5,7 @@
 \title{Estimates the complete clonal relative abundance distribution}
 \usage{
 estimateAbundance(data, group, clone = "CLONE", copy = NULL, ci = 0.95,
-  nboot = 2000)
+  nboot = 2000, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -23,6 +23,8 @@ copy numbers within each clonal group.}
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
 
 \item{nboot}{number of bootstrap realizations to generate.}
+
+\item{progress}{if \code{TRUE} show a progress bar.}
 }
 \value{
 A data.frame with relative clonal abundance data and confidence intervals,
@@ -49,11 +51,7 @@ Confidence intervals are derived using the standard deviation of the resampling
 realizations, as described in Chao et al, 2015.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
-abund <- estimateAbundance(df, "SAMPLE", nboot=100)
+abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 
 }
 \references{
@@ -69,7 +67,7 @@ abund <- estimateAbundance(df, "SAMPLE", nboot=100)
 }
 }
 \seealso{
-See \code{\link{plotAbundance}} for plotting of the abundance distribution.
-See \code{\link{rarefyDiversity}} for a similar application to clonal diversity.
+See \link{plotAbundance} for plotting of the abundance distribution.
+See \link{rarefyDiversity} for a similar application to clonal diversity.
 }
 

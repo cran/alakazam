@@ -21,64 +21,76 @@
 #' 
 #' @section  File I/O:
 #' \itemize{
-#'   \item  \code{\link{readChangeoDb}}:        Input Change-O style files.
-#'   \item  \code{\link{writeChangeoDb}}:       Output Change-O style files.
+#'   \item  \link{readChangeoDb}:        Input Change-O style files.
+#'   \item  \link{writeChangeoDb}:       Output Change-O style files.
 #' }
 #' 
 #' @section  Sequence cleaning:
 #' \itemize{
-#'   \item  \code{\link{maskSeqEnds}}:          Mask ragged ends.
-#'   \item  \code{\link{maskSeqGaps}}:          Mask gap characters.
-#'   \item  \code{\link{collapseDuplicates}}:   Remove duplicate sequences.
+#'   \item  \link{maskSeqEnds}:          Mask ragged ends.
+#'   \item  \link{maskSeqGaps}:          Mask gap characters.
+#'   \item  \link{collapseDuplicates}:   Remove duplicate sequences.
 #' }
 #' 
 #' @section  Lineage reconstruction:
 #' \itemize{
-#'   \item  \code{\link{makeChangeoClone}}:     Clean sequences for lineage reconstruction.
-#'   \item  \code{\link{buildPhylipLineage}}:   Perform lineage reconstruction of Ig sequences.
+#'   \item  \link{makeChangeoClone}:     Clean sequences for lineage reconstruction.
+#'   \item  \link{buildPhylipLineage}:   Perform lineage reconstruction of Ig sequences.
+#' }
+#' 
+#' @section  Lineage topology analysis:
+#' \itemize{
+#'   \item  \link{tableEdges}:           Tabulate annotation relationships over edges.
+#'   \item  \link{testEdges}:            Significance testing of annotation edges.
+#'   \item  \link{testMRCA}:             Significance testing of MRCA annotations.
+#'   \item  \link{summarizeSubtrees}:    Various summary statistics for subtrees.
+#'   \item  \link{plotSubtrees}:         Plot distributions of summary statistics 
+#'                                       for a population of trees.
 #' }
 #' 
 #' @section  Diversity analysis:
 #' \itemize{
-#'   \item  \code{\link{countClones}}:          Calculate clonal abundance.
-#'   \item  \code{\link{estimateAbundance}}:    Infer complete clonal abundance distribution with
-#'                                              confidence intervals.
-#'   \item  \code{\link{rarefyDiversity}}:      Generate clonal diversity curves.
-#'   \item  \code{\link{testDiversity}}:        Test significance of clonal diversity scores.
-#'   \item  \code{\link{plotAbundance}}:        Plot clone size distribution as a rank-abundance 
-#'                                              curve.
-#'   \item  \code{\link{plotDiversityCurve}}:   Plot clonal diversity curves.
+#'   \item  \link{countClones}:          Calculate clonal abundance.
+#'   \item  \link{estimateAbundance}:    Infer complete clonal abundance distribution with
+#'                                       confidence intervals.
+#'   \item  \link{rarefyDiversity}:      Generate clonal diversity curves.
+#'   \item  \link{testDiversity}:        Test significance of clonal diversity scores.
+#'   \item  \link{plotAbundance}:        Plot clone size distribution as a rank-abundance 
+#'                                       curve.
+#'   \item  \link{plotDiversityCurve}:   Plot clonal diversity curves.
 #' }
 #' 
 #' @section  Ig and TCR sequence annotation:
 #' \itemize{
-#'   \item  \code{\link{countGenes}}:           Calculate Ig and TCR allele, gene and family usage.
-#'   \item  \code{\link{extractVRegion}}:       Extract CDRs and FWRs sub-sequences.
-#'   \item  \code{\link{getAllele}}:            Get V(D)J allele names.
-#'   \item  \code{\link{getGene}}:              Get V(D)J gene names.
-#'   \item  \code{\link{getFamily}}:            Get V(D)J family names.
+#'   \item  \link{countGenes}:           Calculate Ig and TCR allele, gene and family usage.
+#'   \item  \link{extractVRegion}:       Extract CDRs and FWRs sub-sequences.
+#'   \item  \link{getAllele}:            Get V(D)J allele names.
+#'   \item  \link{getGene}:              Get V(D)J gene names.
+#'   \item  \link{getFamily}:            Get V(D)J family names.
 #' }
 #' 
 #' @section  Sequence distance calculation:
 #' \itemize{
-#'   \item  \code{\link{getSeqDistance}}:       Calculate Hamming distance between sequences.
-#'   \item  \code{\link{getSeqMatrix}}:         Calculate a matrix of pairwise Hamming distances 
-#'                                              for a sequence set.
-#'   \item  \code{\link{testSeqEqual}}:         Test sequences for equality.
+#'   \item  \link{seqDist}:        Calculate Hamming distance between two sequences.
+#'   \item  \link{seqEqual}:       Test two sequences for equivalence.
+#'   \item  \link{pairwiseDist}:   Calculate a matrix of pairwise Hamming distances for a 
+#'                                 set of sequences.
+#'   \item  \link{pairwiseEqual}:  Calculate a logical matrix of pairwise equivalence for a 
+#'                                 set of sequences.
 #' }
 #' 
 #' @section  Amino acid propertes:
 #' \itemize{
-#'   \item  \code{\link{translateDNA}}:         Translate DNA sequences to amino acid sequences.
-#'   \item  \code{\link{aminoAcidProperties}}:  Calculate various physicochemical properties of amino acid 
-#'                                              sequences.
-#'   \item  \code{\link{countPatterns}}:        Count patterns in sequences.
+#'   \item  \link{translateDNA}:         Translate DNA sequences to amino acid sequences.
+#'   \item  \link{aminoAcidProperties}:  Calculate various physicochemical properties of amino acid 
+#'                                       sequences.
+#'   \item  \link{countPatterns}:        Count patterns in sequences.
 #'                                              
 #' }
 #' 
 #' @section  General data manipulation:
 #' \itemize{
-#'   \item  \code{\link{translateStrings}}:     Perform multiple string replacement operations.
+#'   \item  \link{translateStrings}:     Perform multiple string replacement operations.
 #' } 
 #' 
 #' @name     alakazam
@@ -103,40 +115,30 @@
 #' @import      graphics
 #' @import      methods
 #' @import      utils
-#' @importFrom  dplyr     do n desc %>%
-#'                        as_data_frame data_frame data_frame_
-#'                        bind_cols bind_rows combine
-#'                        filter filter_ select select_ arrange arrange_
-#'                        group_by group_by_ ungroup
-#'                        mutate mutate_ transmute transmute_
-#'                        rename rename_ summarize summarize_
-#' @importFrom  igraph    V E graph_from_data_frame
-#'                        vertex_attr set_vertex_attr
-#' @importFrom  lazyeval  interp
-#' @importFrom  scales    log2_trans log10_trans trans_breaks trans_format
-#'                        math_format percent scientific
-#' @importFrom  seqinr    translate
-#' @importFrom  stats     na.omit setNames ecdf sd cor cov median mad
-#'                        dbinom pbinom qbinom rbinom
-#'                        dnorm pnorm qnorm rnorm
-#'                        dmultinom rmultinom
-#' @importFrom  stringi   stri_dup stri_flatten stri_join stri_length 
-#'                        stri_count_boundaries stri_count_regex 
-#'                        stri_extract_all_regex stri_extract_first_regex  
-#'                        stri_replace_all_regex stri_replace_first_regex
+#' @importFrom  data.table  fread
+#' @importFrom  dplyr       do n desc %>%
+#'                          data_frame data_frame_
+#'                          bind_cols bind_rows combine arrange arrange_ 
+#'                          group_by group_by_ ungroup
+#'                          filter filter_ slice slice_ select select_ 
+#'                          mutate mutate_ transmute transmute_
+#'                          rename rename_ summarize summarize_
+#' @importFrom  igraph      V E graph_from_data_frame as_data_frame as_edgelist 
+#'                          make_graph make_directed_graph make_undirected_graph
+#'                          vertex_attr set_vertex_attr 
+#'                          degree shortest_paths all_shortest_paths distances
+#' @importFrom  lazyeval    interp
+#' @importFrom  scales      log2_trans log10_trans trans_breaks trans_format
+#'                          math_format percent scientific
+#' @importFrom  seqinr      translate
+#' @importFrom  stats       na.omit setNames ecdf sd cor cov median mad
+#'                          dbinom pbinom qbinom rbinom
+#'                          dnorm pnorm qnorm rnorm
+#'                          dmultinom rmultinom
+#' @importFrom  stringi     stri_dup stri_flatten stri_join stri_length 
+#'                          stri_count_boundaries stri_count_regex 
+#'                          stri_extract_all_regex stri_extract_first_regex  
+#'                          stri_replace_all_regex stri_replace_first_regex
+#' @importFrom  Rcpp evalCpp
+#' @useDynLib   alakazam
 NULL
-
-
-#### Sysdata ####
-
-# 1x20 vector of default amino acid hydropathy scores
-# HYDROPATHY_KYTJ82
-
-# 1x20 vector of default amino acid bulkiness scores
-# BULKINESS_ZIMJ68
-
-# 1x20 vector of default amino acid polarity scores
-# POLARITY_GRAR74
-
-# 1x7 vector of default amino acid pK values
-# PK_EMBOSS

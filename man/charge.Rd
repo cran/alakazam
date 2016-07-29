@@ -4,7 +4,7 @@
 \alias{charge}
 \title{Calculates the net charge of amino acid sequences.}
 \usage{
-charge(seq, pH = 7.4, pK = NULL, normalize = TRUE)
+charge(seq, pH = 7.4, pK = NULL, normalize = FALSE)
 }
 \arguments{
 \item{seq}{vector strings defining of amino acid sequences.}
@@ -31,17 +31,17 @@ the method of Moore, 1985, with exclusion of the C-terminus and N-terminus charg
 }
 \examples{
 seq <- c("CARDRSTPWRRGIASTTVRTSW", "XXTQMYVRT") 
-# Normalized charge
-charge(seq)
 # Unnormalized charge
-charge(seq, normalize=FALSE)
+charge(seq)
+# Normalized charge
+charge(seq, normalize=TRUE)
 
 # Use the Murray et al, 2006 scores from the seqinr package
 library(seqinr)
 data(pK)
 x <- setNames(pK[["Murray"]], rownames(pK))
 # Calculate charge
-charge(seq, pK=x, normalize=FALSE)
+charge(seq, pK=x)
 
 }
 \references{

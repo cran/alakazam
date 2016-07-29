@@ -1,25 +1,30 @@
 ---
-title: 'Alakazam: Ig lineage reconstruction'
+title: 'Alakazam: Reconstruction of Ig lineage trees'
 author: "Jason Anthony Vander Heiden"
 date: '`r Sys.Date()`'
 output:
-  html_document:
-    fig_height: 4
-    fig_width: 7.5
-    highlight: pygments
-    theme: readable
-    toc: yes
   pdf_document:
     dev: pdf
     fig_height: 4
     fig_width: 7.5
     highlight: pygments
     toc: yes
+  html_document:
+    fig_height: 4
+    fig_width: 7.5
+    highlight: pygments
+    theme: readable
+    toc: yes
+  md_document:
+    fig_height: 4
+    fig_width: 7.5
+    preserve_yaml: no
+    toc: yes
 geometry: margin=1in
 fontsize: 11pt
 vignette: >
-  %\VignetteIndexEntry{Ig lineage reconstruction}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Lineage reconstruction}
   %\usepackage[utf8]{inputenc}
 ---
 
@@ -29,11 +34,11 @@ Reconstruction of an Ig lineage requires the following steps:
 2. Preprocess the clone to remove gap characters and duplicate sequences
 3. Run PHYLIP, parse the output, and modify the tree topology
 
-Load Change-O data
---------------------------------------------------------------------------------
-A small example Change-O tab-delimited database file is included in the 
-`alakazam` package. Lineage reconstruction requires the following fields 
-(columns) to be present in the Change-O file: 
+## Example data
+
+A small example Change-O database, `ExampleDb`, is included in the `alakazam` package. 
+Lineage reconstruction requires the following fields (columns) to be present 
+in the Change-O file: 
 
 * `SEQUENCE_ID`
 * `SEQUENCE_IMGT` 
@@ -44,18 +49,18 @@ A small example Change-O tab-delimited database file is included in the
 * `JUNCTION_LENGTH`
 
 ```{r, eval=TRUE, warning=FALSE, message=FALSE}
+# Load required packages
 library(alakazam)
+library(igraph)
+library(dplyr)
 
-# Load Change-O file
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
-# Select clone
-sub_df <- subset(df, CLONE == 164)
+# Select clone from example database
+data(ExampleDb)
+sub_db <- subset(ExampleDb, CLONE == 3138)
 ```
 
-Preprocess a clone
---------------------------------------------------------------------------------
+## Preprocess a clone
+
 Before a lineage can be contructed the sequences must first be cleaned of gap
 (-, .) characters added by IMGT, duplicate sequences must be removed, and
 annotations must be conbined for each cluster of duplicate sequences. 
@@ -74,15 +79,15 @@ following duplicate removal. Unique values appearing within columns given by the
 ```{r, eval=TRUE}
 # This example data set does not have ragged ends
 # Preprocess clone without ragged end masking (default)
-clone <- makeChangeoClone(sub_df, text_fields=c("SAMPLE", "ISOTYPE"), 
+clone <- makeChangeoClone(sub_db, text_fields=c("SAMPLE", "ISOTYPE"), 
                           num_fields="DUPCOUNT")
 
 # Show combined annotations
 clone@data[, c("SAMPLE", "ISOTYPE", "DUPCOUNT")]
 ```
 
-Run PHYLIP
---------------------------------------------------------------------------------
+## Run PHYLIP
+
 Lineage construction uses the `dnapars` (maximum parsimony) application of the
 PHYLIP package. The function `buildPhylipLineage` performs a number of steps to
 execute `dnapars`, parse its output, and modify the tree topology to meet the
@@ -97,26 +102,33 @@ output. This is created in the system temporary location (according to
 deleting files is somewhat rude).  In most cases, you will want to set 
 `rm_temp=TRUE` to delete this folder.
 
-```{r, eval=TRUE, warning=FALSE, message=FALSE}
-library(igraph)
+```{r, eval=FALSE}
 # Run PHYLIP and parse output
 dnapars_exec <- "~/apps/phylip-3.69/dnapars"
 graph <- buildPhylipLineage(clone, dnapars_exec, rm_temp=TRUE)
+```
 
-# Clone annotations
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Load data insted of running phylip
+# Clone 3138 is at index 23
+graph <- ExampleTrees[[23]]
+```
+
+```{r, eval=TRUE, warning=FALSE, message=FALSE}
+# The graph has shared annotations for the clone
 data.frame(CLONE=graph$clone,
            JUNCTION_LENGTH=graph$junc_len,
            V_GENE=graph$v_gene,
            J_GENE=graph$j_gene)
 
-# Sequence annotations
+# The vertices have sequence specific annotations
 data.frame(SEQUENCE_ID=V(graph)$name, 
            ISOTYPE=V(graph)$ISOTYPE,
            DUPCOUNT=V(graph)$DUPCOUNT)
 ```
 
-Plotting of the lineage tree
---------------------------------------------------------------------------------
+## Plotting of the lineage tree
+
 Plotting of a lineage tree may be done using the built-in functions of the 
 igraph package. The default edge and vertex labels are edge weights and sequence 
 identifiers, respectively. 
@@ -134,7 +146,7 @@ germline sequence, which is named "Germline" in the object returned by
 
 ```{r, eval=TRUE}
 # Modify graph and plot attributes
-V(graph)$color <- "lightgrey"
+V(graph)$color <- "steelblue"
 V(graph)$color[V(graph)$name == "Germline"] <- "black"
 V(graph)$color[grepl("Inferred", V(graph)$name)] <- "white"
 V(graph)$label <- V(graph)$ISOTYPE
@@ -142,36 +154,39 @@ E(graph)$label <- ""
 
 # Remove large default margins
 par(mar=c(0, 0, 0, 0) + 0.1)
-# Define a tree layout with the Germline at the top
-ly <- layout_as_tree(graph, root="Germline", circular=F, flip.y=T)
 # Plot graph
-plot(graph, layout=ly, edge.arrow.mode=0, vertex.frame.color="black",
-     vertex.label.color="black", vertex.size=50)
+plot(graph, layout=layout_as_tree, edge.arrow.mode=0, vertex.frame.color="black",
+     vertex.label.color="black", vertex.size=40)
 # Add legend
 legend("topleft", c("Germline", "Inferred", "Sample"), 
-       fill=c("black", "white", "grey80"), cex=0.75)
+       fill=c("black", "white", "steelblue"), cex=0.75)
 ```
 
 Which is much better.
 
-Batch processing lineage trees
---------------------------------------------------------------------------------
+## Batch processing lineage trees
+
 Multiple lineage trees may be generated at once, by splitting the Change-O 
 data.frame on the clone column.
 
 ```{r, eval=TRUE, warning=FALSE, results="hide"}
-library(dplyr)
-
 # Preprocess clones
-clones <- df %>%
+clones <- ExampleDb %>%
     group_by(CLONE) %>%
     do(CHANGEO=makeChangeoClone(., text_fields=c("SAMPLE", "ISOTYPE"), 
                                 num_fields="DUPCOUNT"))
+```
 
+```{r, eval=FALSE}
 # Build lineages
 dnapars_exec <- "~/apps/phylip-3.69/dnapars"
 graphs <- lapply(clones$CHANGEO, buildPhylipLineage, 
                  dnapars_exec=dnapars_exec, rm_temp=TRUE)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Load data insted of running phylip
+graphs <- ExampleTrees
 ```
 
 ```{r, eval=TRUE}
@@ -180,7 +195,7 @@ graphs <- lapply(clones$CHANGEO, buildPhylipLineage,
 # These entries may be removed for clarity
 graphs[sapply(graphs, is.null)] <- NULL
 
-# Leaving a subset of clones
-nrow(clones)
-length(graphs)
+# The set of tree may then be subset by node count for further 
+# analysis, if desired.
+graphs <- graphs[sapply(graphs, vcount) >= 5]
 ```

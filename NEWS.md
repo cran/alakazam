@@ -1,3 +1,54 @@
+Version 0.2.4:  July 20, 2016
+-------------------------------------------------------------------------------
+
+General:
+
++ Added Rcpp and data.table dependencies.
++ Modified `readChangeoDb()` to wrap `data.table::fread()` instead of 
+  `utils::read.table()` if the input file is not compressed.
++ Ported `testSeqEqual()`, `getSeqDistance()` and `getSeqMatrix()` to C++ to 
+  improve performance of `collapseDuplicates()` and other dependent functions.
++ Renamed `testSeqEqual()`, `getSeqDistance()` and `getSeqMatrix()` to 
+  `seqEqual()`, `seqDist()` and `pairwiseDist()`, respectively.
++ Added `pairwiseEqual()` which creates a logical sequence distance matrix;
+  TRUE if sequences are identical, FALSE if not, excluding Ns and gaps.
++ Added translation of ambiguous and gap characters to `X` in 
+  `translateDNA()`.
++ Fixed bug in `collapseDuplicates()` wherein the input data type sanity check
+  would cause the vignette to fail to build under R 3.3.
++ Replaced the `ExampleDb.gz` file with a larger, more clonal, `ExampleDb` 
+  data object.
++ Replaced `ExampleTrees` with a larger set of trees.
++ Renamed `multiggplot()` to `gridPlot()`.
+
+Amino Acid Analysis:
+
++ Set default to `normalize=FALSE` for charge calculations to be more consistent
+  with previously published repertoire sequencing results.
+  
+Diversity Analysis:
+
++ Added a `progress` argument to `rarefyDiversity()` and `testDiversity()` to
+  enable the (previously default) progress bar.
++ Fixed a bug in `estimateAbundance()` were the function would fail if there 
+  was only a single input sequence per group.
++ Changed column names in `data` and `summary` slots of `DiversityTest` to 
+  uppercase for consistency with other tools.
++ Added dispatching of `plot` to `plotDiversityCurve` for `DiversityCurve`
+  objects.
+  
+Gene Usage:
+
++ Added `sortGenes()` function to sort V(D)J genes by name or locus position.
++ Added `clone` argument to `countGenes()` to allow restriction of gene 
+  abundance to one gene per clone.
+
+Topology Analysis:
+
++ Added a set of functions for lineage tree topology analysis.
++ Added a vignette showing basic tree topology analysis.
+
+
 Version 0.2.3:  February 22, 2016
 -------------------------------------------------------------------------------
 

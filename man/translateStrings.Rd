@@ -24,7 +24,7 @@ Does not perform partial replacements. Each translation value must match a compl
 \code{strings} value or it will not be replaced.  Values that do not have a replacement
 named in the \code{translation} parameter will not be modified.
 
-Replacement is accomplished using \code{\link{gsub}}.
+Replacement is accomplished using \link{gsub}.
 }
 \examples{
 # Using a vector translation
@@ -39,6 +39,6 @@ translateStrings(strings, translation)
 
 }
 \seealso{
-See \code{\link{gsub}} for single value replacement in the base package.
+See \link{gsub} for single value replacement in the base package.
 }
 

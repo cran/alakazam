@@ -27,10 +27,10 @@ string with each unique value alphabetized and delimited by
 of duplicate sequences will be summed.}
 
 \item{seq_fields}{vector of nucletoide sequence columns to collapse. The sequence 
-with the fewest numer of non-informative characters will be retained. 
-Where a non-informative character is one of \code{c("N", "-", ".", "?")}. 
-Note, this is distinct from the \code{seq} parameter which is used to 
-determine duplicates.}
+with the fewest numer of non-informative characters will be 
+retained. Where a non-informative character is one of 
+\code{c("N", "-", ".", "?")}. Note, this is distinct from the 
+\code{seq} parameter which is used to determine duplicates.}
 
 \item{add_count}{if \code{TRUE} add the column \code{COLLAPSE_COUNT} that 
 indicates the number of sequences that were collapsed to build 
@@ -79,7 +79,7 @@ false-positive annotation merger. Ambiguous sequences are not included in the
 }
 \examples{
 # Example Change-O data.frame
-df <- data.frame(SEQUENCE_ID=LETTERS[1:4],
+db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
                  SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
                  TYPE=c("IgM", "IgG", "IgG", "IgA"),
                  SAMPLE=c("S1", "S1", "S2", "S2"),
@@ -88,33 +88,30 @@ df <- data.frame(SEQUENCE_ID=LETTERS[1:4],
 
 # Annotations are not parsed if neither text_fields nor num_fields is specified
 # The retained sequence annotations will be random
-collapseDuplicates(df, verbose=TRUE)
+collapseDuplicates(db, verbose=TRUE)
 
 # Unique text_fields annotations are combined into a single string with ","
 # num_fields annotations are summed
 # Ambiguous duplicates are discarded
-collapseDuplicates(df, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
                    verbose=TRUE)
 
 # Use alternate delimiter for collapsing textual annotations
-collapseDuplicates(df, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
                    sep="/", verbose=TRUE)
 
 # Add count of duplicates
-collapseDuplicates(df, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
                    add_count=TRUE, verbose=TRUE)
 
 # Masking ragged ends may impact duplicate removal
-df$SEQUENCE_IMGT <- maskSeqEnds(df$SEQUENCE_IMGT)
-collapseDuplicates(df, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+db$SEQUENCE_IMGT <- maskSeqEnds(db$SEQUENCE_IMGT)
+collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
                    add_count=TRUE, verbose=TRUE)
 
 }
 \seealso{
-Equality is tested with \code{\link{testSeqEqual}}.  For IUPAC ambiguous 
-          character codes see \code{\link{IUPAC_DNA}}.
-
-Other sequence manipulation functions: \code{\link{maskSeqEnds}},
-  \code{\link{maskSeqGaps}}
+Equality is tested with \link{seqEqual} and \link{pairwiseEqual}. 
+          For IUPAC ambiguous character codes see \link{IUPAC_DNA}.
 }
 

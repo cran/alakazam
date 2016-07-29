@@ -1,44 +1,48 @@
 Package: alakazam
 Type: Package
-Version: 0.2.3
-Date: 2016-02-22
+Version: 0.2.4
+Date: 2016-07-20
 Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
                     email="jason.vanderheiden@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
                     email="namita.gupta@yale.edu"),
-             person("Daniel", "Gadala-Maria", role=c("ctb"), 
-                    email="daniel.gadala-maria@yale.edu"),
              person("Susanna", "Marquez", role=c("ctb"), 
                     email="susanna.marquez@yale.edu"),
+             person("Daniel", "Gadala-Maria", role=c("ctb"), 
+                    email="daniel.gadala-maria@yale.edu"),
              person("Roy", "Jiang", role=c("ctb"), 
                     email="ruoyi.jiang@yale.edu"),
              person("Steven", "Kleinstein", role=c("aut", "cph"), 
                     email="steven.kleinstein@yale.edu"))
 Title: Immunoglobulin Clonal Lineage and Diversity Analysis
-Description: Provides immunoglobulin (Ig) sequence lineage reconstruction, 
+Description: Provides immunoglobulin (Ig) sequence lineage reconstruction,
     diversity profiling, and amino acid property analysis. Also provides
     core functionality for other tools in the Change-O suite.
 License: CC BY-NC-SA 4.0
-URL: http://clip.med.yale.edu/changeo
+URL: http://alakazam.readthedocs.org
 BugReports: https://bitbucket.org/kleinstein/alakazam/issues
 LazyData: true
 BuildVignettes: true
 VignetteBuilder: knitr
+SystemRequirements: C++11
 Depends: R (>= 3.1.2), ggplot2 (>= 2.0.0)
-Imports: dplyr, graphics, grid, igraph (>= 1.0.0), lazyeval, methods,
-        scales, seqinr, stats, stringi, utils
+Imports: data.table (>= 1.9.4), dplyr, graphics, grid, igraph (>=
+        1.0.0), lazyeval, methods, Rcpp (>= 0.12.3), scales, seqinr,
+        stats, stringi, utils
+LinkingTo: Rcpp
 Suggests: knitr, rmarkdown, testthat
 RoxygenNote: 5.0.1
-Collate: 'Alakazam.R' 'AminoAcids.R' 'Core.R' 'Diversity.R'
-        'GeneUsage.R' 'Lineage.R' 'Sequence.R'
-NeedsCompilation: no
-Packaged: 2016-02-22 21:34:07 UTC; jason
+Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
+        'Diversity.R' 'Gene.R' 'Lineage.R' 'RcppExports.R' 'Sequence.R'
+        'Topology.R'
+NeedsCompilation: yes
+Packaged: 2016-07-22 18:29:23 UTC; jason
 Author: Jason Vander Heiden [aut, cre],
   Namita Gupta [aut],
-  Daniel Gadala-Maria [ctb],
   Susanna Marquez [ctb],
+  Daniel Gadala-Maria [ctb],
   Roy Jiang [ctb],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
 Repository: CRAN
-Date/Publication: 2016-02-22 22:49:30
+Date/Publication: 2016-07-29 00:32:44

@@ -1,10 +1,11 @@
 ## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+# Load required packages
 library(alakazam)
+library(dplyr)
 
-# Load Change-O file
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-db <- readChangeoDb(file)
-db <- db[db$SAMPLE == "RL01", ]
+# Subset example data
+data(ExampleDb)
+db <- ExampleDb[ExampleDb$SAMPLE == "+7d", ]
 
 ## ---- eval=TRUE, warning=FALSE, fig.width=7.5, fig.height=6--------------
 db_props <- aminoAcidProperties(db, seq="JUNCTION", nt=TRUE, trim=TRUE, 
@@ -13,8 +14,10 @@ db_props <- aminoAcidProperties(db, seq="JUNCTION", nt=TRUE, trim=TRUE,
 # The full set of properties are calculated by default
 dplyr::select(db_props[1:3, ], starts_with("CDR3"))
 
-# Plot a subset of the properties
+# Define a ggplot theme for all plots
 tmp_theme <- theme_bw() + theme(legend.position="bottom")
+
+# Generate plots for a four of the properties
 g1 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_LENGTH)) + tmp_theme +
     ggtitle("CDR3 length") + 
     xlab("Isotype") + ylab("Amino acids") +
@@ -37,7 +40,9 @@ g4 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_ACIDIC)) + tmp_theme +
     scale_y_continuous(labels=scales::percent) +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
     geom_boxplot(aes(fill=ISOTYPE))
-multiggplot(g1, g2, g3, g4, ncol=2)
+
+# Plot in a 2x2 grid
+gridPlot(g1, g2, g3, g4, ncol=2)
 
 ## ---- eval=TRUE, warning=FALSE-------------------------------------------
 db_props <- aminoAcidProperties(db, seq="JUNCTION", property=c("gravy", "charge"),

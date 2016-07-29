@@ -1,5 +1,5 @@
 ---
-title: 'Alakazam: Analysis of amino acid physicochemical properties'
+title: 'Alakazam: Amino acid physicochemical property analysis'
 author: "Susanna Marquez"
 date: '`r Sys.Date()`'
 output:
@@ -8,6 +8,11 @@ output:
     fig_height: 4
     fig_width: 7.5
     highlight: pygments
+    toc: yes
+  md_document:
+    fig_height: 4
+    fig_width: 7.5
+    preserve_yaml: no
     toc: yes
   html_document:
     fig_height: 4
@@ -18,10 +23,11 @@ output:
 geometry: margin=1in
 fontsize: 11pt
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown} 
-  %\VignetteIndexEntry{Analysis of amino acid physicochemical properties} 
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Amino acid property analysis}
   %\usepackage[utf8]{inputenc}
 ---
+
 The `alakazam` package includes a set of function to analyze the physicochemical 
 properties of Ig and TCR amino acid sequences. Of particular interest is the analysis of 
 CDR3 properties, which this vignette will demonstate. However, the same process
@@ -35,22 +41,22 @@ can be applied to other regions simply by altering the sequence data column used
         Front Immunol 2, 1-12 (2011).
 
 
-Load Change-O data
---------------------------------------------------------------------------------
-A small example Change-O tab-delimited database file is included in the 
-`alakazam` package. 
+## Example data
+
+A small example Change-O database, `ExampleDb`, is included in the `alakazam` package. 
 
 ```{r, eval=TRUE, warning=FALSE, message=FALSE}
+# Load required packages
 library(alakazam)
+library(dplyr)
 
-# Load Change-O file
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-db <- readChangeoDb(file)
-db <- db[db$SAMPLE == "RL01", ]
+# Subset example data
+data(ExampleDb)
+db <- ExampleDb[ExampleDb$SAMPLE == "+7d", ]
 ```
 
-Calculate the properties of amino acid sequences
---------------------------------------------------------------------------------
+## Calculate the properties of amino acid sequences
+
 Multiple amino acid physicochemical properties can be obtained with the function 
 `aminoAcidProperties`. The available properties are:
 
@@ -81,8 +87,10 @@ db_props <- aminoAcidProperties(db, seq="JUNCTION", nt=TRUE, trim=TRUE,
 # The full set of properties are calculated by default
 dplyr::select(db_props[1:3, ], starts_with("CDR3"))
 
-# Plot a subset of the properties
+# Define a ggplot theme for all plots
 tmp_theme <- theme_bw() + theme(legend.position="bottom")
+
+# Generate plots for a four of the properties
 g1 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_LENGTH)) + tmp_theme +
     ggtitle("CDR3 length") + 
     xlab("Isotype") + ylab("Amino acids") +
@@ -105,10 +113,12 @@ g4 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_ACIDIC)) + tmp_theme +
     scale_y_continuous(labels=scales::percent) +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
     geom_boxplot(aes(fill=ISOTYPE))
-multiggplot(g1, g2, g3, g4, ncol=2)
+
+# Plot in a 2x2 grid
+gridPlot(g1, g2, g3, g4, ncol=2)
 ```
 
-## Obtaining properties individually ##
+### Obtaining properties individually
 
 A subset of the properties may be calculated using the `property` argument of
 `aminoAcidProperties`.  For example, calculations may be restricted to only the 
@@ -121,7 +131,7 @@ db_props <- aminoAcidProperties(db, seq="JUNCTION", property=c("gravy", "charge"
 dplyr::select(db_props[1:3, ], starts_with("CDR3"))
 ```
 
-## Using user defined scales ##
+### Using user defined scales
 
 Each property has a default scale setting, but users may specify alternate scales 
 if they wish. The following example shows how to import and use the
@@ -144,7 +154,7 @@ db_props <- aminoAcidProperties(db, seq="JUNCTION", property=c("gravy", "charge"
 dplyr::select(db_props[1:3, ], starts_with("CDR3"))
 ```
 
-## Getting vectors of individual properties ##
+### Getting vectors of individual properties
 
 The `aminoAcidProperties` function provides a convenient wrapper for calculating
 multiple properties at once from a data.frame. If a vector of a specific property is
@@ -187,8 +197,7 @@ charge(cdr3, normalize=FALSE)
 countPatterns(cdr3, c(ACIDIC="[DE]"), label="CDR3")
 ```
 
-Default scales
---------------------------------------------------------------------------------
+## Default scales
 
 The following references were used for the default physicochemical scales:
 

@@ -36,7 +36,7 @@ A modified \code{data} data.frame with the following columns:
            \item  \code{*_AA_BULK}:       average bulkiness of amino acids.
            \item  \code{*_AA_ALIPHATIC}:  aliphatic index.
            \item  \code{*_AA_POLARITY}:   average polarity of amino acids.
-           \item  \code{*_AA_CHARGE}:     normalized net charge.
+           \item  \code{*_AA_CHARGE}:     net charge.
            \item  \code{*_AA_BASIC}:      fraction of informative positions that are 
                                           Arg, His or Lys.
            \item  \code{*_AA_ACIDIC}:     fraction of informative positions that are 
@@ -77,17 +77,15 @@ The following data sources were used for the default property scores:
 }
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-df <- df[c(1,10,100), c("SEQUENCE_ID", "JUNCTION")]
+# Subset example data
+db <- ExampleDb[c(1,10,100), c("SEQUENCE_ID", "JUNCTION")]
 
 # Calculate default amino acid properties from amino acid sequences
 # Use a custom output column prefix
-df$JUNCTION_TRANS <- translateDNA(df$JUNCTION)
-aminoAcidProperties(df, seq="JUNCTION_TRANS", label="JUNCTION")
+db$JUNCTION_TRANS <- translateDNA(db$JUNCTION)
+aminoAcidProperties(db, seq="JUNCTION_TRANS", label="JUNCTION")
 # Calculate default amino acid properties from DNA sequences
-aminoAcidProperties(df, seq="JUNCTION", nt=TRUE)
+aminoAcidProperties(db, seq="JUNCTION", nt=TRUE)
 
 # Use the Grantham, 1974 side chain volume scores from the seqinr package
 # Set pH=7.0 for the charge calculation
@@ -99,7 +97,7 @@ x <- aaindex[["GRAR740103"]]$I
 # Rename the score vector to use single-letter codes
 names(x) <- translateStrings(names(x), ABBREV_AA)
 # Calculate properties
-aminoAcidProperties(df, property=c("bulk", "charge"), seq="JUNCTION", nt=TRUE, 
+aminoAcidProperties(db, property=c("bulk", "charge"), seq="JUNCTION", nt=TRUE, 
                     trim=TRUE, label="CDR3", bulkiness=x, pH=7.0)
 
 }

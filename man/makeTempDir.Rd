@@ -21,10 +21,7 @@ makeTempDir("Clone50")
 
 }
 \seealso{
-This is just a wrapper for \code{\link{tempfile}} and 
-          \code{\link{dir.create}}.
-
-Other file input and output functions: \code{\link{readChangeoDb}},
-  \code{\link{writeChangeoDb}}
+This is just a wrapper for \link{tempfile} and 
+          \link{dir.create}.
 }
 

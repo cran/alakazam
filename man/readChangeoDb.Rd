@@ -42,20 +42,21 @@ A data.frame of the database file. Columns will be imported as is, except for
 into a data.frame.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
+\dontrun{
+    # Read all columns in and convert sequence fields to upper case
+    db <- readChangeoDb("changeo.tsv")
 
-# Subset columns and convert sequence fields to upper case
-df <- readChangeoDb(file, select=c("SEQUENCE_ID", "SEQUENCE_IMGT"), seq_upper=TRUE)
+    # Subset columns and convert sequence fields to upper case
+    db <- readChangeoDb("changeo.tsv", select=c("SEQUENCE_ID", "SEQUENCE_IMGT"))
 
-# Drop columns and do not alter sequence field case
-df <- readChangeoDb(file, drop=c("D_CALL", "DUPCOUNT"), seq_upper=FALSE)
+    # Drop columns and do not alter sequence field case
+    db <- readChangeoDb("changeo.tsv", drop=c("D_CALL", "DUPCOUNT"), 
+                        seq_upper=FALSE)
+}
 
 }
 \seealso{
-Wraps \code{\link{read.table}}.
-
-Other file input and output functions: \code{\link{makeTempDir}},
-  \code{\link{writeChangeoDb}}
+Wraps \link{read.table} and \link[data.table]{fread}. 
+          See \link{writeChangeoDb} for writing to Change-O files.
 }
 

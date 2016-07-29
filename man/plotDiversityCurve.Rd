@@ -5,12 +5,12 @@
 \title{Plot the results of rarefyDiversity}
 \usage{
 plotDiversityCurve(data, colors = NULL, main_title = "Diversity",
-  legend_title = NULL, log_q = TRUE, log_d = TRUE, xlim = NULL,
+  legend_title = "Group", log_q = TRUE, log_d = TRUE, xlim = NULL,
   ylim = NULL, annotate = c("none", "depth"), silent = FALSE, ...)
 }
 \arguments{
-\item{data}{\code{\link{DiversityCurve}} object returned by 
-\code{\link{rarefyDiversity}}.}
+\item{data}{\link{DiversityCurve} object returned by 
+\link{rarefyDiversity}.}
 
 \item{colors}{named character vector whose names are values in the 
 \code{group} column of the \code{data} slot of \code{data},
@@ -49,17 +49,13 @@ A \code{ggplot} object defining the plot.
 \code{plotDiversityCurve} plots a \code{DiversityCurve} object.
 }
 \examples{
-# Load example data
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
 # All groups pass default minimum sampling threshold of 10 sequences
-div <- rarefyDiversity(df, "SAMPLE", step_q=0.1, max_q=10, nboot=100)
+div <- rarefyDiversity(ExampleDb, "SAMPLE", step_q=0.1, max_q=10, nboot=100)
 plotDiversityCurve(div, legend_title="Sample")
 
 }
 \seealso{
-See \code{\link{rarefyDiversity}} for generating \code{\link{DiversityCurve}}
-          objects for input. Plotting is performed with \code{\link{ggplot}}.
+See \link{rarefyDiversity} for generating \link{DiversityCurve}
+          objects for input. Plotting is performed with \link{ggplot}.
 }
 

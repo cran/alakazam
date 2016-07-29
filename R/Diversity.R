@@ -1,125 +1,7 @@
 # Clonal diversity analysis
 
-#' @include Alakazam.R
+#' @include Classes.R
 NULL
-
-
-#### Classes ####
-
-#' S4 class defining diversity curve 
-#'
-#' \code{DiversityCurve} defines diversity (\eqn{D}) scores over multiple diversity 
-#' orders (\eqn{Q}).
-#' 
-#' @slot  data      data.frame defining the diversity curve with the following columns:
-#'                  \itemize{
-#'                    \item  \code{GROUP}:    group label.
-#'                    \item  \code{Q}:        diversity order.
-#'                    \item  \code{D}:        mean diversity index over all bootstrap 
-#'                                            realizations.
-#'                    \item  \code{D_SD}:     standard deviation of the diversity index 
-#'                                            over all bootstrap realizations.
-#'                    \item  \code{D_LOWER}:  diversity lower confidence inverval bound.
-#'                    \item  \code{D_UPPER}:  diversity upper confidence interval bound.
-#'                    \item  \code{E}:        evenness index calculated as \code{D} 
-#'                                            divided by \code{D} at \code{Q=0}.
-#'                    \item  \code{E_LOWER}:  evenness lower confidence inverval bound.
-#'                    \item  \code{E_UPPER}:  eveness upper confidence interval bound.
-#'                  }
-#' @slot  groups    character vector of groups retained in the diversity calculation.
-#' @slot  n         numeric vector indication the number of sequences sampled from each group.
-#' @slot  nboot     number of bootstrap realizations performed.
-#' @slot  ci        confidence interval defining the upper and lower bounds 
-#'                  (a value between 0 and 1).
-#' 
-#' @name         DiversityCurve-class
-#' @rdname       DiversityCurve-class
-#' @aliases      DiversityCurve
-#' @exportClass  DiversityCurve
-setClass("DiversityCurve", 
-         slots=c(data="data.frame", 
-                 groups="character", 
-                 n="numeric", 
-                 nboot="numeric", 
-                 ci="numeric"))
-
-#' S4 class defining diversity significance
-#'
-#' \code{DiversityTest} defines the signifance of diversity (\eqn{D}) differences at a 
-#' fixed diversity order (\eqn{q}).
-#' 
-#' @slot  tests    data.frame describing the significance test results with columns:
-#'                 \itemize{
-#'                   \item  \code{test}:          string listing the two groups tested.
-#'                   \item  \code{pvalue}:        p-value for the test.
-#'                   \item  \code{delta_mean}:    mean of the \eqn{D} bootstrap delta 
-#'                                                distribution for the test.
-#'                   \item  \code{delta_sd}:      standard deviation of the \eqn{D} 
-#'                                                bootstrap delta distribution for the test.
-#'                 }
-#' @slot  summary  data.frame containing summary statistics for the diversity index 
-#'                 bootstrap distributions, at the given value of \eqn{q}, with columns:
-#'                 \itemize{
-#'                   \item  \code{group}:   the name of the group.
-#'                   \item  \code{mean}:    mean of the \eqn{D} bootstrap distribution.
-#'                   \item  \code{sd}:      standard deviation of the \eqn{D} bootstrap 
-#'                                          distribution.
-#'                 }
-#' @slot  groups   character vector of groups retained in diversity calculation.
-#' @slot  q        diversity order tested (\eqn{q}).
-#' @slot  n        numeric vector indication the number of sequences sampled from each group.
-#' @slot  nboot    number of bootstrap realizations.
-#' 
-#' @name         DiversityTest-class
-#' @rdname       DiversityTest-class
-#' @aliases      DiversityTest
-#' @exportClass  DiversityTest
-DiversityTest <- setClass("DiversityTest", 
-         slots=c(tests="data.frame",
-                 summary="data.frame",
-                 groups="character", 
-                 q="numeric",
-                 n="numeric", 
-                 nboot="numeric"))
-
-
-#### Methods ####
-
-# TODO:  plot method for DiversityCurve pointing to plotDiversityCurve
-# TODO:  plot method for DiversityTest
-# TODO:  summary method for DiversityTest
-# TODO:  summary method for DiversityCurve
-
-#' @param    x  DiversityCurve object
-#' 
-#' @rdname   DiversityCurve-class
-#' @aliases  print,DiversityCurve-method
-setMethod("print", "DiversityCurve", function(x) { print(x@data) })
-
-#' @param    x  DiversityTest object
-#' 
-#' @rdname   DiversityTest-class
-#' @aliases  print,DiversityTest-method
-setMethod("print", "DiversityTest", function(x) { print(x@tests) })
-
-# @rdname DiversityCurve
-# @export
-# setMethod("plot", 
-#           signature("DiversityCurve", 
-#                     colors="character", 
-#                     main_title="character", 
-#                     legend_title="character", 
-#                     log_q="logical", 
-#                     log_d="logical",
-#                     xlim="numeric", 
-#                     ylim="numeric", 
-#                     silent="logical"),
-#           function(data, colors=NULL, main_title="Diversity", 
-#                    legend_title=NULL, log_q=TRUE, log_d=TRUE,
-#                    xlim=NULL, ylim=NULL, silent=FALSE) {
-#             plotDiversityCurve(data, colors=colors, main_title=main_title, 
-#                                legend_title=legend_title, log_q=log_q, log_d=log_d,
-#                                xlim=xlim, ylim=ylim, silent=silent) })
 
 
 #### Coverage functions ####
@@ -145,17 +27,14 @@ setMethod("print", "DiversityTest", function(x) { print(x@tests) })
 #' }
 #' 
 #' @seealso  
-#' Used by \code{\link{rarefyDiversity}}.
+#' Used by \link{rarefyDiversity}.
 #'           
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # Calculate clone sizes
-#' clones <- countClones(df, groups="SAMPLE")
-#' # Calculate 1st order coverage for a single sample
-#' calcCoverage(clones$SEQ_COUNT[clones$SAMPLE == "RL01"])
+#' clones <- countClones(ExampleDb, groups="SAMPLE")
+#' 
+#' # Calculate 1first order coverage for a single sample
+#' calcCoverage(clones$SEQ_COUNT[clones$SAMPLE == "+7d"])
 #'
 #' @export
 calcCoverage <- function(x, r=1) {
@@ -331,15 +210,11 @@ adjustObservedAbundance <- function(x) {
 #'           Also includes additional columns specified in the \code{groups} argument.
 #' 
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # Without copy numbers
-#' clones <- countClones(df, groups="SAMPLE")
+#' clones <- countClones(ExampleDb, groups="SAMPLE")
 #'
 #' # With copy numbers and multiple groups
-#' clones <- countClones(df, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
+#' clones <- countClones(ExampleDb, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
 #' 
 #' @export
 countClones <- function(data, groups=NULL, copy=NULL, clone="CLONE") {
@@ -375,16 +250,17 @@ countClones <- function(data, groups=NULL, copy=NULL, clone="CLONE") {
 #' \code{estimateAbundance} estimates the complete clonal relative abundance distribution 
 #' and confidence intervals on clone sizes using bootstrapping.
 #' 
-#' @param    data   data.frame with Change-O style columns containing clonal assignments.
-#' @param    group  name of the \code{data} column containing group identifiers.
-#' @param    clone  name of the \code{data} column containing clone identifiers.
-#' @param    copy   name of the \code{data} column containing copy numbers for each 
-#'                  sequence. If \code{copy=NULL} (the default), then clone abundance
-#'                  is determined by the number of sequences. If a \code{copy} column
-#'                  is specified, then clone abundances is determined by the sum of 
-#'                  copy numbers within each clonal group.
-#' @param    ci     confidence interval to calculate; the value must be between 0 and 1.
-#' @param    nboot  number of bootstrap realizations to generate.
+#' @param    data      data.frame with Change-O style columns containing clonal assignments.
+#' @param    group     name of the \code{data} column containing group identifiers.
+#' @param    clone     name of the \code{data} column containing clone identifiers.
+#' @param    copy      name of the \code{data} column containing copy numbers for each 
+#'                     sequence. If \code{copy=NULL} (the default), then clone abundance
+#'                     is determined by the number of sequences. If a \code{copy} column
+#'                     is specified, then clone abundances is determined by the sum of 
+#'                     copy numbers within each clonal group.
+#' @param    ci        confidence interval to calculate; the value must be between 0 and 1.
+#' @param    nboot     number of bootstrap realizations to generate.
+#' @param    progress  if \code{TRUE} show a progress bar. 
 #' 
 #' @return   A data.frame with relative clonal abundance data and confidence intervals,
 #'           containing the following columns:
@@ -418,19 +294,18 @@ countClones <- function(data, groups=NULL, copy=NULL, clone="CLONE") {
 #' }
 #' 
 #' @seealso  
-#' See \code{\link{plotAbundance}} for plotting of the abundance distribution.
-#' See \code{\link{rarefyDiversity}} for a similar application to clonal diversity.
+#' See \link{plotAbundance} for plotting of the abundance distribution.
+#' See \link{rarefyDiversity} for a similar application to clonal diversity.
 #'           
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
-#' abund <- estimateAbundance(df, "SAMPLE", nboot=100)
+#' abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 #'
 #' @export
-estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, nboot=2000) {
-    #group="SAMPLE"; clone="CLONE"; copy="UID_CLUSTCOUNT"; ci=0.95; nboot=200
+estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, 
+                              nboot=2000, progress=FALSE) {
+    ## DEBUG
+    # group="SAMPLE"; clone="CLONE"; copy="UID_CLUSTCOUNT"; ci=0.95; nboot=200
+    # data=clones; group="SUBJECT"; clone="CLONE"; copy=NULL; ci=0.95; nboot=200; progress=FALSE
     
     # Check input
     if (!is.data.frame(data)) {
@@ -460,8 +335,10 @@ estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, nb
     ci_z <- ci + (1 - ci) / 2
     
     # Generate diversity index and confidence intervals via resampling
-    cat("-> ESTIMATING ABUNDANCE\n")
-    pb <- txtProgressBar(min=0, max=length(group_set), initial=0, width=40, style=3)
+    if (progress) { 
+        cat("-> ESTIMATING ABUNDANCE\n")
+        pb <- txtProgressBar(min=0, max=length(group_set), initial=0, width=40, style=3) 
+    }
     abund_list <- list()
     i <- 0
     for (g in group_set) {
@@ -474,8 +351,8 @@ estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, nb
         p1 <- adjustObservedAbundance(abund_obs)
         p2 <- inferUnseenAbundance(abund_obs)
         p <- c(p1, p2)
-        names(p) <- c(clone_tab$CLONE[clone_tab[[group]] == g], 
-                      paste0("U", 1:length(p2)))
+        p2_names <- if (length(p2) > 0) { paste0("U", 1:length(p2)) } else { NULL }
+        names(p) <- c(clone_tab$CLONE[clone_tab[[group]] == g], p2_names)
         
         # Bootstrap abundance
         boot_mat <- rmultinom(nboot, nsam, p) / nsam
@@ -492,7 +369,7 @@ estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, nb
         abund_df$RANK <- 1:nrow(abund_df)
         abund_list[[g]] <- abund_df
         
-        setTxtProgressBar(pb, i)
+        if (progress) { setTxtProgressBar(pb, i) }
     }
     cat("\n")
     
@@ -532,7 +409,7 @@ estimateAbundance <- function(data, group, clone="CLONE", copy=NULL, ci=0.95, nb
 #'            Ecology. 1973 54(2):427-32.
 #' }
 #' 
-#' @seealso  Used by \code{\link{rarefyDiversity}} and \code{\link{testDiversity}}.
+#' @seealso  Used by \link{rarefyDiversity} and \link{testDiversity}.
 #' 
 #' @examples
 #' # May define p as clonal member counts
@@ -614,12 +491,13 @@ inferRarefiedDiversity <- function(x, q, m) {
 #'                     if automatically determined from the size of the largest group.
 #' @param    ci        confidence interval to calculate; the value must be between 0 and 1.
 #' @param    nboot     number of bootstrap realizations to generate.
+#' @param    progress  if \code{TRUE} show a progress bar.
 #' 
-#' @return   A \code{\link{DiversityCurve}} object summarizing the diversity scores.
+#' @return   A \link{DiversityCurve} object summarizing the diversity scores.
 #' 
 #' @details
 #' Clonal diversity is calculated using the generalized diversity index (Hill numbers) 
-#' proposed by Hill (Hill, 1973). See \code{\link{calcDiversity}} for further details.
+#' proposed by Hill (Hill, 1973). See \link{calcDiversity} for further details.
 #'
 #' Diversity is calculated on the estimated complete clonal abundance distribution.
 #' This distribution is inferred by using the Chao1 estimator to estimate the number
@@ -650,28 +528,25 @@ inferRarefiedDiversity <- function(x, q, m) {
 #'            Ecology. 2015 96, 11891201.
 #' }
 #'  
-#' @seealso  See \code{\link{calcDiversity}} for the basic calculation and 
-#'           \code{\link{DiversityCurve}} for the return object. 
-#'           See \code{\link{testDiversity}} for significance testing.
-#'           See \code{\link{plotDiversityCurve}} for plotting the return object.
+#' @seealso  See \link{calcDiversity} for the basic calculation and 
+#'           \link{DiversityCurve} for the return object. 
+#'           See \link{testDiversity} for significance testing.
+#'           See \link{plotDiversityCurve} for plotting the return object.
 #' 
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # Group by sample identifier
-#' div <- rarefyDiversity(df, "SAMPLE", step_q=1, max_q=10, nboot=100)
+#' div <- rarefyDiversity(ExampleDb, "SAMPLE", step_q=1, max_q=10, nboot=100)
 #' plotDiversityCurve(div, legend_title="Sample")
 #'                    
 #' # Grouping by isotype rather than sample identifier
-#' div <- rarefyDiversity(df, "ISOTYPE", min_n=40, step_q=1, max_q=10, nboot=100)
+#' div <- rarefyDiversity(ExampleDb, "ISOTYPE", min_n=40, step_q=1, max_q=10, 
+#'                        nboot=100)
 #' plotDiversityCurve(div, legend_title="Isotype")
 #'
 #' @export
 rarefyDiversity <- function(data, group, clone="CLONE", copy=NULL, 
                             min_q=0, max_q=4, step_q=0.05, min_n=30, max_n=NULL, 
-                            ci=0.95, nboot=2000) {
+                            ci=0.95, nboot=2000, progress=FALSE) {
     #group="SAMPLE"; clone="CLONE"; copy=NULL; min_q=0; max_q=4; step_q=1; min_n=30; max_n=NULL; ci=0.95; nboot=200
 
     # Check input
@@ -725,8 +600,10 @@ rarefyDiversity <- function(data, group, clone="CLONE", copy=NULL,
     }
     
     # Generate diversity index and confidence intervals via resampling
-    cat("-> CALCULATING DIVERSITY\n")
-    pb <- txtProgressBar(min=0, max=length(group_keep), initial=0, width=40, style=3)
+    if (progress) { 
+        pb <- txtProgressBar(min=0, max=length(group_keep), initial=0, width=40, style=3) 
+        cat("-> CALCULATING DIVERSITY\n")
+    }
     div_list <- list()
     #coverage <- setNames(numeric(length(group_keep)), group_keep)
     i <- 0
@@ -778,7 +655,7 @@ rarefyDiversity <- function(data, group, clone="CLONE", copy=NULL,
         # Update list with results
         div_list[[g]] <- as.data.frame(result_mat)
         
-        setTxtProgressBar(pb, i <- i + 1)
+        if (progress) { setTxtProgressBar(pb, i <- i + 1) }
     }
     cat("\n")
     
@@ -815,12 +692,13 @@ rarefyDiversity <- function(data, group, clone="CLONE", copy=NULL,
 #' @param    max_n     maximum number of observations to sample. If \code{NULL} the maximum
 #'                     if automatically determined from the size of the largest group.
 #' @param    nboot     number of bootstrap realizations to perform.
+#' @param    progress  if \code{TRUE} show a progress bar.
 #' 
-#' @return   A \code{\link{DiversityTest}} object containing p-values and summary statistics.
+#' @return   A \link{DiversityTest} object containing p-values and summary statistics.
 #' 
 #' @details
 #' Clonal diversity is calculated using the generalized diversity index proposed by 
-#' Hill (Hill, 1973). See \code{\link{calcDiversity}} for further details.
+#' Hill (Hill, 1973). See \link{calcDiversity} for further details.
 #' 
 #' Diversity is calculated on the estimated complete clonal abundance distribution.
 #' This distribution is inferred by using the Chao1 estimator to estimate the number
@@ -864,23 +742,19 @@ rarefyDiversity <- function(data, group, clone="CLONE", copy=NULL,
 #'            Ecology. 2015 96, 11891201.
 #' }
 #' 
-#' @seealso  See \code{\link{calcDiversity}} for the basic calculation and 
-#'           \code{\link{DiversityTest}} for the return object. 
-#'           See \code{\link{rarefyDiversity}} for curve generation.
-#'           See \code{\link{ecdf}} for computation of the empirical cumulative 
+#' @seealso  See \link{calcDiversity} for the basic calculation and 
+#'           \link{DiversityTest} for the return object. 
+#'           See \link{rarefyDiversity} for curve generation.
+#'           See \link{ecdf} for computation of the empirical cumulative 
 #'           distribution function.
 #' 
 #' @examples  
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # Groups under the size threshold are excluded and a warning message is issued.
-#' testDiversity(df, "SAMPLE", q=0, min_n=30, nboot=100)
+#' testDiversity(ExampleDb, "SAMPLE", q=0, min_n=30, nboot=100)
 #' 
 #' @export
 testDiversity <- function(data, q, group, clone="CLONE", copy=NULL, 
-                          min_n=30, max_n=NULL, nboot=2000) {
+                          min_n=30, max_n=NULL, nboot=2000, progress=FALSE) {
     #group="SAMPLE"; clone="CLONE"; copy=NULL; q=1; min_n=30; max_n=NULL; nboot=200
     # TODO:  write plotDiversityTest function
 
@@ -925,8 +799,10 @@ testDiversity <- function(data, q, group, clone="CLONE", copy=NULL,
     }
 
     # Generate diversity index and confidence intervals via resampling
-    cat("-> CALCULATING DIVERSITY\n")
-    pb <- txtProgressBar(min=0, max=length(group_keep), initial=0, width=40, style=3)
+    if (progress) { 
+        cat("-> CALCULATING DIVERSITY\n")
+        pb <- txtProgressBar(min=0, max=length(group_keep), initial=0, width=40, style=3) 
+    }
     ngroup <- length(group_keep)
     div_mat <- matrix(NA, nboot, ngroup, dimnames=list(NULL, group_keep))
     for (i in 1:ngroup) {
@@ -946,7 +822,7 @@ testDiversity <- function(data, q, group, clone="CLONE", copy=NULL,
         # Calculate diversity
         div_mat[, i] <- apply(sample_mat, 2, calcDiversity, q=q)
 
-        setTxtProgressBar(pb, i)
+        if (progress) { setTxtProgressBar(pb, i) }
     }
     cat("\n")
         
@@ -954,7 +830,7 @@ testDiversity <- function(data, q, group, clone="CLONE", copy=NULL,
     group_pairs <- combn(group_keep, 2, simplify=F)
     npairs <- length(group_pairs)
     pvalue_mat <- matrix(NA, npairs, 3, 
-                         dimnames=list(NULL, c("pvalue", "delta_mean", "delta_sd")))
+                         dimnames=list(NULL, c("DELTA_MEAN", "DELTA_SD", "PVALUE")))
     test_names <- sapply(group_pairs, paste, collapse=" != ")
     for (i in 1:npairs) {
         g1 <- group_pairs[[i]][1]
@@ -970,15 +846,13 @@ testDiversity <- function(data, q, group, clone="CLONE", copy=NULL,
         g_cdf <- ecdf(g_delta)
         p <- g_cdf(0)
         p <- ifelse(p <= 0.5, p * 2, (1 - p) * 2)
-        pvalue_mat[i, ] <- c(p, 
-                             mean(g_delta), 
-                             sd(g_delta))
+        pvalue_mat[i, ] <- c(mean(g_delta), sd(g_delta), p)
     }
     
     tests_df <- cbind(data.frame(test=test_names), as.data.frame(pvalue_mat))
-    summary_df <- data.frame(group=group_keep, 
-                             mean=apply(div_mat, 2, mean),
-                             sd=apply(div_mat, 2, sd))
+    summary_df <- data.frame(GROUP=group_keep, 
+                             MEAN=apply(div_mat, 2, mean),
+                             SD=apply(div_mat, 2, sd))
     
     # Generate return object
     div <- new("DiversityTest", 
@@ -1018,16 +892,12 @@ testDiversity <- function(data, q, group, clone="CLONE", copy=NULL,
 #' @return   A \code{ggplot} object defining the plot.
 #' 
 #' @seealso  
-#' See \code{\link{estimateAbundance}} for generating the input abundance distribution.
-#' Plotting is performed with \code{\link{ggplot}}.
+#' See \link{estimateAbundance} for generating the input abundance distribution.
+#' Plotting is performed with \link{ggplot}.
 #'           
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
-#' # Plot
-#' abund <- estimateAbundance(df, "SAMPLE", nboot=100)
+#' # Estimate abundance by sample and plot
+#' abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 #' plotAbundance(abund)
 #' 
 #' @export
@@ -1074,8 +944,8 @@ plotAbundance <- function(data, colors=NULL, main_title="Rank Abundance",
 #' 
 #' \code{plotDiversityCurve} plots a \code{DiversityCurve} object.
 #'
-#' @param    data            \code{\link{DiversityCurve}} object returned by 
-#'                           \code{\link{rarefyDiversity}}.
+#' @param    data            \link{DiversityCurve} object returned by 
+#'                           \link{rarefyDiversity}.
 #' @param    colors          named character vector whose names are values in the 
 #'                           \code{group} column of the \code{data} slot of \code{data},
 #'                           and whose values are colors to assign to those group names.
@@ -1099,21 +969,17 @@ plotAbundance <- function(data, colors=NULL, main_title="Rank Abundance",
 #'
 #' @return   A \code{ggplot} object defining the plot.
 #' 
-#' @seealso  See \code{\link{rarefyDiversity}} for generating \code{\link{DiversityCurve}}
-#'           objects for input. Plotting is performed with \code{\link{ggplot}}.
+#' @seealso  See \link{rarefyDiversity} for generating \link{DiversityCurve}
+#'           objects for input. Plotting is performed with \link{ggplot}.
 #' 
 #' @examples
-#' # Load example data
-#' file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-#' df <- readChangeoDb(file)
-#' 
 #' # All groups pass default minimum sampling threshold of 10 sequences
-#' div <- rarefyDiversity(df, "SAMPLE", step_q=0.1, max_q=10, nboot=100)
+#' div <- rarefyDiversity(ExampleDb, "SAMPLE", step_q=0.1, max_q=10, nboot=100)
 #' plotDiversityCurve(div, legend_title="Sample")
 #' 
 #' @export
 plotDiversityCurve <- function(data, colors=NULL, main_title="Diversity", 
-                               legend_title=NULL, log_q=TRUE, log_d=TRUE,
+                               legend_title="Group", log_q=TRUE, log_d=TRUE,
                                xlim=NULL, ylim=NULL, 
                                annotate=c("none", "depth"),
                                silent=FALSE, ...) {

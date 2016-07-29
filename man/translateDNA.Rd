@@ -19,14 +19,14 @@ A vector of translated sequence strings.
 \code{translateDNA} translates nucleotide sequences to amino acid sequences.
 }
 \examples{
-library(alakazam)
-# Load Change-O file
-file <- system.file("extdata", "ExampleDb.gz", package="alakazam")
-df <- readChangeoDb(file)
-
-translateDNA(df$JUNCTION[1:3])
-translateDNA(df$JUNCTION[1:3], trim=TRUE)
+# Translate a single sequence
 translateDNA("ACTGACTCGA")
+
+# Translate a vector of sequences
+translateDNA(ExampleDb$JUNCTION[1:3])
+
+# Remove the first and last codon from the translation
+translateDNA(ExampleDb$JUNCTION[1:3], trim=TRUE)
 
 }
 \seealso{
