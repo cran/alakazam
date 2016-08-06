@@ -39,6 +39,7 @@ A \code{ggplot} object defining the plot.
 \code{testMRCA}.
 }
 \examples{
+\donttest{
 # Define example tree set
 graphs <- ExampleTrees[1-10]
 
@@ -48,6 +49,7 @@ x <- testMRCA(graphs, "ISOTYPE", nperm=10)
 # Plot
 plotMRCATest(x, color="steelblue", style="hist")
 plotMRCATest(x, style="cdf")
+}
 
 }
 \seealso{

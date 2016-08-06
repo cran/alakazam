@@ -6,42 +6,6 @@ using namespace Rcpp;
 // [[Rcpp::plugins(cpp11)]]
 
 
-// Checks for valid character positions
-//
-// @param    seq1  sequence one
-// @param    seq2  sequence two
-// @return   Vector of valid positions.
-// @examples
-// x <- validChars("ATC-C.T", "AT--.TT")
-// all.equal(x, c(0,1,2,4,5,6))
-// [[Rcpp::export]]
-IntegerVector validChars (std::string seq1, std::string seq2) {
-    
-    int len_seq1 = seq1.length();
-    int len_seq2 = seq2.length();
-    
-    if (len_seq1 != len_seq2) {
-        throw std::range_error("Sequences of different length.");  
-    }
-    
-    IntegerVector valid_idx=IntegerVector();
-    
-    for (int i = 0; i < len_seq1; i++)
-    {
-        char seq1_char = (char)seq1[i];
-        char seq2_char = (char)seq2[i];
-        
-        bool valid_seq1 = ( seq1_char != '.') & (seq1_char != '-');
-        bool valid_seq2 = ( seq2_char != '.') & (seq2_char != '-');
-        
-        if (valid_seq1 | valid_seq2) {
-            valid_idx.push_back(i);
-        }
-    } 
-    return valid_idx;
-}
-
-
 //' Test DNA sequences for equality.
 //' 
 //' \code{seqEqual} checks if two DNA sequences are identical.
@@ -49,6 +13,7 @@ IntegerVector validChars (std::string seq1, std::string seq2) {
 //' @param    seq1    character string containing a DNA sequence.
 //' @param    seq2    character string containing a DNA sequence.
 //' @param    ignore  vector of characters to ignore when testing for equality.
+//'                   Default is to ignore c("N",".","-","?")
 //' 
 //' @return   Returns \code{TRUE} if sequences are equal and \code{FALSE} if they are not.
 //'           Sequences of unequal length will always return \code{FALSE} regardless of
@@ -71,17 +36,9 @@ IntegerVector validChars (std::string seq1, std::string seq2) {
 //' @export
 // [[Rcpp::export]]
 bool seqEqual(std::string seq1, std::string seq2, 
-              CharacterVector ignore=CharacterVector()) {
+              CharacterVector ignore=CharacterVector::create("N","-",".","?")) {
     
     int ig_len = ignore.length();
-    
-    // Default ignore characters
-    if (ig_len == 0) {
-        ignore.push_back("N");
-        ignore.push_back("-");
-        ignore.push_back(".");
-        ignore.push_back("?");
-    }
     
     ig_len = ignore.length();
     
@@ -179,11 +136,16 @@ LogicalMatrix pairwiseEqual (StringVector seq) {
 // [[Rcpp::export]]
 double seqDistRcpp(std::string seq1, std::string seq2, 
                    NumericMatrix dist_mat) {
-    // Get valid positions
-    IntegerVector valid_seq1 = validChars(seq1, seq2);
-    
+
     // Check that seq1 and seq2 have same length
-    int len_seqs = valid_seq1.length();
+    int len_seq1 = seq1.length();
+    int len_seq2 = seq2.length();
+    
+    if (len_seq1 != len_seq2) {
+        throw std::range_error("Sequences of different length.");  
+    }
+    
+    int len_seqs = len_seq1;
     
     List dist_mat_dims = dist_mat.attr("dimnames");
     //print (dist_mat_dims);

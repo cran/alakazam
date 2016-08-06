@@ -31,12 +31,14 @@ the significance of an annotation's association with the MRCA position of the li
 trees.
 }
 \examples{
+\donttest{
 # Define example tree set
 graphs <- ExampleTrees[1-10]
 
 # Perform MRCA test on isotypes
 x <- testMRCA(graphs, "ISOTYPE", nperm=10)
 print(x)
+}
 
 }
 \seealso{

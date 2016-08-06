@@ -4,14 +4,15 @@
 \alias{seqEqual}
 \title{Test DNA sequences for equality.}
 \usage{
-seqEqual(seq1, seq2, ignore = character())
+seqEqual(seq1, seq2, ignore = as.character(c("N", "-", ".", "?")))
 }
 \arguments{
 \item{seq1}{character string containing a DNA sequence.}
 
 \item{seq2}{character string containing a DNA sequence.}
 
-\item{ignore}{vector of characters to ignore when testing for equality.}
+\item{ignore}{vector of characters to ignore when testing for equality.
+Default is to ignore c("N",".","-","?")}
 }
 \value{
 Returns \code{TRUE} if sequences are equal and \code{FALSE} if they are not.

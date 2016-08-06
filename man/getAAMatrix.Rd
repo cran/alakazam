@@ -4,7 +4,10 @@
 \alias{getAAMatrix}
 \title{Build an AA distance matrix}
 \usage{
-getAAMatrix()
+getAAMatrix(gap = 0)
+}
+\arguments{
+\item{gap}{value to assign to characters in the set \code{c("-", ".")}.}
 }
 \value{
 A \code{matrix} of amino acid character distances with row and column names 

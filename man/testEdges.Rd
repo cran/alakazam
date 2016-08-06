@@ -33,12 +33,14 @@ An \link{EdgeTest} object containing the test results and permutation
 the significance of an annotation's association with parent-child relationships.
 }
 \examples{
+\donttest{
 # Define example tree set
 graphs <- ExampleTrees[1-10]
 
 # Perform edge test on isotypes
 x <- testEdges(graphs, "ISOTYPE", nperm=10)
 print(x)
+}
 
 }
 \seealso{

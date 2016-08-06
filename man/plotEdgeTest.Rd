@@ -39,6 +39,7 @@ A \code{ggplot} object defining the plot.
 \code{testEdges} as either a histogram or cumulative distribution function.
 }
 \examples{
+\donttest{
 # Define example tree set
 graphs <- ExampleTrees[1-10]
 
@@ -48,6 +49,7 @@ x <- testEdges(graphs, "ISOTYPE", nperm=10)
 # Plot
 plotEdgeTest(x, color="steelblue", style="hist")
 plotEdgeTest(x, style="cdf")
+}
 
 }
 \seealso{
