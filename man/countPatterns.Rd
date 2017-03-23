@@ -40,4 +40,3 @@ names(patterns) <- c("ARG", "VAL", "ISO_LEU")
 countPatterns(seq, patterns, nt=TRUE, trim=TRUE, label="CDR3")
             
 }
-

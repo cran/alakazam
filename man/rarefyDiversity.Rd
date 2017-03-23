@@ -97,4 +97,3 @@ See \link{calcDiversity} for the basic calculation and
           See \link{testDiversity} for significance testing.
           See \link{plotDiversityCurve} for plotting the return object.
 }
-

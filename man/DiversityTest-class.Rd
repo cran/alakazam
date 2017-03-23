@@ -2,10 +2,10 @@
 % Please edit documentation in R/Classes.R
 \docType{class}
 \name{DiversityTest-class}
-\alias{DiversityTest}
 \alias{DiversityTest-class}
-\alias{DiversityTest-method}
+\alias{DiversityTest}
 \alias{print,DiversityTest-method}
+\alias{DiversityTest-method}
 \title{S4 class defining diversity significance}
 \usage{
 \S4method{print}{DiversityTest}(x)

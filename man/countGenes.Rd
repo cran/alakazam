@@ -66,4 +66,3 @@ genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"),
                     clone="CLONE", mode="family")
 
 }
-

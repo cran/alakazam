@@ -51,4 +51,3 @@ getMRCA(graph, path="distance", root="Germline", field="ISOTYPE", exclude=NA)
 \seealso{
 Path lengths are determined with \link{getPathLengths}.
 }
-

@@ -22,4 +22,3 @@ only those trees with at least four nodes.
 \link{ExampleTrees}
 }
 \keyword{datasets}
-

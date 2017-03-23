@@ -46,4 +46,3 @@ bulk(seq, bulkiness=x)
 \seealso{
 For additional size related indices see \link[seqinr]{aaindex}.
 }
-

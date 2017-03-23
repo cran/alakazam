@@ -56,7 +56,6 @@ into a data.frame.
 
 }
 \seealso{
-Wraps \link{read.table} and \link[data.table]{fread}. 
+Wraps \link[readr]{read_delim}. 
           See \link{writeChangeoDb} for writing to Change-O files.
 }
-

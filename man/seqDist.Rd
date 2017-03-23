@@ -58,4 +58,3 @@ Nucleotide distance matrix may be built with
           with \link{getAAMatrix}. Used by \link{pairwiseDist} for generating
           distance matrices. See \link{seqEqual} for testing sequence equivalence.
 }
-

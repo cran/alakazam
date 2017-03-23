@@ -38,4 +38,3 @@ seqEqual("AT--T", "ATGGC", ignore="N")
 Used by \link{pairwiseEqual} within \link{collapseDuplicates}.
           See \link{seqDist} for calculation Hamming distances between sequences.
 }
-

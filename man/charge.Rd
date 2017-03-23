@@ -54,4 +54,3 @@ charge(seq, pK=x)
 \seealso{
 For additional pK scales see \code{\link[seqinr]{pK}}.
 }
-

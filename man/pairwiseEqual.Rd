@@ -30,4 +30,3 @@ d
 Uses \link{seqEqual} for testing equivalence between pairs.
           See \link{pairwiseDist} for generating a sequence distance matrix.
 }
-

@@ -53,4 +53,3 @@ extractVRegion(clone$SEQUENCE_IMGT, c("FWR1", "FWR2", "FWR3"))
 \seealso{
 IMGT-gapped region boundaries are defined in \link{IMGT_REGIONS}.
 }
-

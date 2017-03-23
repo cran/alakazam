@@ -114,6 +114,7 @@ vignettes:\cr
   \item  \link{translateStrings}:     Perform multiple string replacement operations.
 }
 }
+
 \references{
 \enumerate{
   \item  Vander Heiden JA, Yaari G, et al. pRESTO: a toolkit for processing 
@@ -130,4 +131,3 @@ vignettes:\cr
            Under review.
 }
 }
-

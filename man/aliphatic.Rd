@@ -34,4 +34,3 @@ aliphatic(seq)
            J Biochem. 88, 1895-1898 (1980).
 }
 }
-

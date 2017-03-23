@@ -18,4 +18,3 @@ translateStrings(aa, ABBREV_AA)
 
 }
 \keyword{datasets}
-

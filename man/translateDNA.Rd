@@ -32,4 +32,3 @@ translateDNA(ExampleDb$JUNCTION[1:3], trim=TRUE)
 \seealso{
 \code{\link[seqinr]{translate}}.
 }
-

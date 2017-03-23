@@ -52,4 +52,3 @@ calcDiversity(p, q)
 \seealso{
 Used by \link{rarefyDiversity} and \link{testDiversity}.
 }
-

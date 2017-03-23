@@ -55,4 +55,3 @@ plotEdgeTest(x, style="cdf")
 \seealso{
 See \link{testEdges} for performing the test.
 }
-

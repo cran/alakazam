@@ -36,4 +36,3 @@ plot(g, layout=layout_as_tree, vertex.label=V(g)$ISOTYPE,
 \seealso{
 \link{testEdges}.
 }
-

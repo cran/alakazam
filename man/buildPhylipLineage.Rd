@@ -118,4 +118,3 @@ Takes as input a \link{ChangeoClone}.
           See \link{igraph} and \link{igraph.plotting} for working 
           with igraph \code{graph} objects.
 }
-

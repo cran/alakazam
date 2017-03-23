@@ -2,9 +2,9 @@
 % Please edit documentation in R/Data.R
 \docType{data}
 \name{IUPAC_CODES}
-\alias{IUPAC_AA}
 \alias{IUPAC_CODES}
 \alias{IUPAC_DNA}
+\alias{IUPAC_AA}
 \title{IUPAC ambiguous characters}
 \format{A list with single character codes as names and values containing character 
          vectors that define the set of standard characters that match to each each 
@@ -23,4 +23,3 @@ A translation list mapping IUPAC ambiguous characters code to corresponding nucl
 amino acid characters.
 }
 \keyword{datasets}
-

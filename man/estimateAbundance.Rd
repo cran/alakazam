@@ -70,4 +70,3 @@ abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 See \link{plotAbundance} for plotting of the abundance distribution.
 See \link{rarefyDiversity} for a similar application to clonal diversity.
 }
-

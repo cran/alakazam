@@ -47,4 +47,3 @@ gravy(seq, hydropathy=x)
 \seealso{
 For additional hydrophobicity indices see \code{\link[seqinr]{aaindex}}.
 }
-

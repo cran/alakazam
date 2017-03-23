@@ -47,4 +47,3 @@ plotAbundance(abund)
 See \link{estimateAbundance} for generating the input abundance distribution.
 Plotting is performed with \link{ggplot}.
 }
-

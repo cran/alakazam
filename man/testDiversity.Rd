@@ -99,4 +99,3 @@ See \link{calcDiversity} for the basic calculation and
           See \link{ecdf} for computation of the empirical cumulative 
           distribution function.
 }
-

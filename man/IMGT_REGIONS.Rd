@@ -19,4 +19,3 @@ according to the IMGT numbering scheme.
 \url{http://imgt.org}
 }
 \keyword{datasets}
-

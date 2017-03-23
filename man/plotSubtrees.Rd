@@ -85,4 +85,3 @@ plotSubtrees(graphs,  "ISOTYPE", "depth", style="b")
 \seealso{
 Subtree statistics are calculated with \link{summarizeSubtrees}.
 }
-

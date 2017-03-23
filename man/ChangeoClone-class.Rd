@@ -2,8 +2,8 @@
 % Please edit documentation in R/Classes.R
 \docType{class}
 \name{ChangeoClone-class}
-\alias{ChangeoClone}
 \alias{ChangeoClone-class}
+\alias{ChangeoClone}
 \title{S4 class defining a clone}
 \description{
 \code{ChangeoClone} defines a common data structure for perform lineage recontruction
@@ -26,7 +26,7 @@ sequence-specific annotation columns.}
 
 \item{\code{junc_len}}{numeric junction length (nucleotide count).}
 }}
+
 \seealso{
 See \link{makeChangeoClone} and \link{buildPhylipLineage} for use.
 }
-

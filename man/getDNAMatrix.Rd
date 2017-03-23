@@ -33,4 +33,3 @@ getDNAMatrix(gap=0)
 Creates DNA distance matrix for \link{seqDist}.
           See \link{getAAMatrix} for amino acid distances.
 }
-

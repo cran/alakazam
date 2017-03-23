@@ -46,4 +46,3 @@ clones <- countClones(ExampleDb, groups="SAMPLE")
 clones <- countClones(ExampleDb, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
 
 }
-

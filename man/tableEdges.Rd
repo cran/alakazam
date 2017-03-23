@@ -49,4 +49,3 @@ tableEdges(graph, "ISOTYPE", indirect=TRUE, exclude=c("Germline", NA))
 \seealso{
 See \link{testEdges} for performed a permutation test on edge relationships.
 }
-

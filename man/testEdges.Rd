@@ -47,4 +47,3 @@ print(x)
 Uses \link{tableEdges} and \link{permuteLabels}. 
           See \link{plotEdgeTest} for plotting the permutation distributions.
 }
-

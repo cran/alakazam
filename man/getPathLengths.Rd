@@ -43,4 +43,3 @@ getPathLengths(graph, root="Germline", field="ISOTYPE", exclude=NA)
 \seealso{
 See \link{buildPhylipLineage} for generating input trees.
 }
-

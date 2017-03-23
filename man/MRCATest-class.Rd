@@ -2,11 +2,12 @@
 % Please edit documentation in R/Classes.R
 \docType{class}
 \name{MRCATest-class}
-\alias{MRCATest}
 \alias{MRCATest-class}
+\alias{MRCATest}
+\alias{print,MRCATest-method}
 \alias{MRCATest-method}
 \alias{plot,MRCATest,missing-method}
-\alias{print,MRCATest-method}
+\alias{MRCATest-method}
 \title{S4 class defining edge significance}
 \usage{
 \S4method{print}{MRCATest}(x)

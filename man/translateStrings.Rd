@@ -41,4 +41,3 @@ translateStrings(strings, translation)
 \seealso{
 See \link{gsub} for single value replacement in the base package.
 }
-

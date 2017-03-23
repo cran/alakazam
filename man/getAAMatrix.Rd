@@ -25,4 +25,3 @@ getAAMatrix()
 Creates an amino acid distance matrix for \link{seqDist}.
           See \link{getDNAMatrix} for nucleotide distances.
 }
-

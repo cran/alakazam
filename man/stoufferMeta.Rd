@@ -31,4 +31,3 @@ stoufferMeta(p)
 stoufferMeta(p, w)
 
 }
-

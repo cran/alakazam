@@ -12,7 +12,7 @@ writeChangeoDb(data, file)
 \item{file}{output file name.}
 }
 \description{
-\code{writeChangeoDb} is a simple wrapper around \link{write.table} with defaults 
+\code{writeChangeoDb} is a simple wrapper around \link[readr]{write_delim} with defaults 
 appropriate for writing a Change-O tab-delimited database file from a data.frame.
 }
 \examples{
@@ -23,6 +23,5 @@ appropriate for writing a Change-O tab-delimited database file from a data.frame
 
 }
 \seealso{
-Wraps \link{write.table}. See \link{readChangeoDb} for reading to Change-O files.
+Wraps \link[readr]{write_delim}. See \link{readChangeoDb} for reading to Change-O files.
 }
-

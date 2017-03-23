@@ -46,4 +46,3 @@ Nucleotide distance matrix may be built with \link{getDNAMatrix}.
           Uses \link{seqDist} for calculating distances between pairs.
           See \link{pairwiseEqual} for generating an equivalence matrix.
 }
-

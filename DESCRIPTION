@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 0.2.5
-Date: 2016-08-05
+Version: 0.2.6
+Date: 2017-03-21
 Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
                     email="jason.vanderheiden@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -16,9 +16,8 @@ Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"),
                     email="steven.kleinstein@yale.edu"))
 Title: Immunoglobulin Clonal Lineage and Diversity Analysis
 Description: Provides immunoglobulin (Ig) sequence lineage reconstruction,
-    diversity profiling, and amino acid property analysis. Also provides
-    core functionality for other tools in the Change-O suite.
-License: CC BY-NC-SA 4.0
+    diversity profiling, and amino acid property analysis.
+License: CC BY-SA 4.0
 URL: http://alakazam.readthedocs.org
 BugReports: https://bitbucket.org/kleinstein/alakazam/issues
 LazyData: true
@@ -26,17 +25,17 @@ BuildVignettes: true
 VignetteBuilder: knitr
 SystemRequirements: C++11
 Depends: R (>= 3.1.2), ggplot2 (>= 2.0.0)
-Imports: data.table (>= 1.9.4), dplyr, graphics, grid, igraph (>=
-        1.0.0), lazyeval, methods, Rcpp (>= 0.12.3), scales, seqinr,
-        stats, stringi, utils
+Imports: dplyr (>= 0.5.0), graphics, grid, igraph (>= 1.0.0), lazyeval,
+        methods, Rcpp (>= 0.12.10), readr, scales, seqinr, stats,
+        stringi, utils
 LinkingTo: Rcpp
 Suggests: knitr, rmarkdown, testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Gene.R' 'Lineage.R' 'RcppExports.R' 'Sequence.R'
         'Topology.R'
 NeedsCompilation: yes
-Packaged: 2016-08-05 16:20:49 UTC; jason
+Packaged: 2017-03-22 22:47:37 UTC; jason
 Author: Jason Vander Heiden [aut, cre],
   Namita Gupta [aut],
   Susanna Marquez [ctb],
@@ -45,4 +44,4 @@ Author: Jason Vander Heiden [aut, cre],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
 Repository: CRAN
-Date/Publication: 2016-08-06 00:19:53
+Date/Publication: 2017-03-23 06:17:53 UTC

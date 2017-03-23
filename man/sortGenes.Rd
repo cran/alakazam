@@ -43,4 +43,3 @@ sortGenes(genes, method="pos")
 See \code{getAllele}, \code{getGene} and \code{getFamily} for parsing
           gene names.
 }
-

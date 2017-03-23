@@ -29,4 +29,3 @@ maskSeqGaps("--ATG-C-", outer_only=TRUE)
 \seealso{
 See \link{maskSeqEnds} for masking ragged edges.
 }
-

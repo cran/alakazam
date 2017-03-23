@@ -118,4 +118,3 @@ Executes in order \link{maskSeqGaps}, \link{maskSeqEnds}
           Returns a \link{ChangeoClone} object which serves as input to
           \link{buildPhylipLineage}.
 }
-

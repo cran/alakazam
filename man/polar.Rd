@@ -46,4 +46,3 @@ polar(seq, polarity=x)
 \seealso{
 For additional size related indices see \code{\link[seqinr]{aaindex}}.
 }
-

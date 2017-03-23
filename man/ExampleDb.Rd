@@ -42,4 +42,3 @@ A small example database subset from Laserson and Vigneault et al, 2014.
 \link{ExampleTrees}
 }
 \keyword{datasets}
-

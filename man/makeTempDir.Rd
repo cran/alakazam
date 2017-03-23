@@ -24,4 +24,3 @@ makeTempDir("Clone50")
 This is just a wrapper for \link{tempfile} and 
           \link{dir.create}.
 }
-

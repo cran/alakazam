@@ -43,4 +43,3 @@ plot(1:4, 1:4, col=colors, pch=16, cex=6)
 
 }
 \keyword{datasets}
-

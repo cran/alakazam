@@ -114,4 +114,3 @@ collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT",
 Equality is tested with \link{seqEqual} and \link{pairwiseEqual}. 
           For IUPAC ambiguous character codes see \link{IUPAC_DNA}.
 }
-

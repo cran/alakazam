@@ -45,4 +45,3 @@ maskSeqEnds(seq, max_mask=1, trim=TRUE)
 \seealso{
 See \link{maskSeqGaps} for masking internal gaps.
 }
-

@@ -2,11 +2,12 @@
 % Please edit documentation in R/Classes.R
 \docType{class}
 \name{DiversityCurve-class}
-\alias{DiversityCurve}
 \alias{DiversityCurve-class}
+\alias{DiversityCurve}
+\alias{print,DiversityCurve-method}
 \alias{DiversityCurve-method}
 \alias{plot,DiversityCurve,missing-method}
-\alias{print,DiversityCurve-method}
+\alias{DiversityCurve-method}
 \title{S4 class defining diversity curve}
 \usage{
 \S4method{print}{DiversityCurve}(x)

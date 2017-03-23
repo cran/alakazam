@@ -45,4 +45,3 @@ print(x)
 Uses \link{getMRCA} and \link{getPathLengths}. 
           See \link{plotMRCATest} for plotting the permutation distributions.
 }
-

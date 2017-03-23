@@ -58,4 +58,3 @@ plotDiversityCurve(div, legend_title="Sample")
 See \link{rarefyDiversity} for generating \link{DiversityCurve}
           objects for input. Plotting is performed with \link{ggplot}.
 }
-

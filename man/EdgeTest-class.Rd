@@ -2,11 +2,12 @@
 % Please edit documentation in R/Classes.R
 \docType{class}
 \name{EdgeTest-class}
-\alias{EdgeTest}
 \alias{EdgeTest-class}
+\alias{EdgeTest}
+\alias{print,EdgeTest-method}
 \alias{EdgeTest-method}
 \alias{plot,EdgeTest,missing-method}
-\alias{print,EdgeTest-method}
+\alias{EdgeTest-method}
 \title{S4 class defining edge significance}
 \usage{
 \S4method{print}{EdgeTest}(x)

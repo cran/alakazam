@@ -50,4 +50,3 @@ summarizeSubtrees(graph, fields="ISOTYPE", root="Germline")
 See \link{buildPhylipLineage} for generating input trees. 
           See \link{getPathLengths} for calculating path length to nodes.
 }
-
