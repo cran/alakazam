@@ -8,7 +8,7 @@ makeChangeoClone(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
   germ = "GERMLINE_IMGT_D_MASK", vcall = "V_CALL", jcall = "J_CALL",
   junc_len = "JUNCTION_LENGTH", clone = "CLONE", max_mask = 0,
   text_fields = NULL, num_fields = NULL, seq_fields = NULL,
-  add_count = TRUE)
+  add_count = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{data}{data.frame containing the Change-O data for a clone. See Details
@@ -52,8 +52,12 @@ arguments, which contain the primary sequence data for the clone
 and should not be repeated in this argument.}
 
 \item{add_count}{if \code{TRUE} add an additional annotation column called 
-COLLAPSE_COUNT during duplicate removal that indicates the 
+\code{COLLAPSE_COUNT} during duplicate removal that indicates the 
 number of sequences that were collapsed.}
+
+\item{verbose}{passed on to \code{collapseDuplicates}. If \code{TRUE}, report the 
+numbers of input, discarded and output sequences; otherwise, process
+sequences silently.}
 }
 \value{
 A \link{ChangeoClone} object containing the modified clone.

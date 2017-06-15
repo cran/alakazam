@@ -64,7 +64,7 @@ readChangeoDb <- function(file, select=NULL, drop=NULL, seq_upper=TRUE) {
     select_columns <- colnames(db)
     if(!is.null(select)) { select_columns <- intersect(select_columns, select) }
     if(!is.null(drop)) { select_columns <- setdiff(select_columns, drop) }
-    select_(db, .dots=select_columns)
+    db <- select_(db, .dots=select_columns)
     
     # Convert sequence fields to upper case
     upper_cols <- intersect(seq_columns, names(db))
@@ -236,7 +236,19 @@ checkColumns <- function(data, columns, logic=c("all", "any")) {
     return(TRUE)
 }
 
-#### Plotting functions ####
+#### Plotting and progress functions ####
+
+# Define a progress bar
+# 
+# @param   n  maximum number of ticks
+# @return  a  a progress_bar object
+progressBar <- function(n) {
+    pb <- progress::progress_bar$new(format="  PROGRESS> [:bar] :percent :elapsed",
+                                     width=40, clear=FALSE, stream=stdout(), force=TRUE,
+                                     total=n)
+    return(pb)
+}
+
 
 # Define universal plot settings
 #

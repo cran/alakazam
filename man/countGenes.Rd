@@ -5,13 +5,14 @@
 \title{Tabulates V(D)J allele, gene or family usage.}
 \usage{
 countGenes(data, gene, groups = NULL, copy = NULL, clone = NULL,
-  mode = c("gene", "allele", "family"))
+  mode = c("gene", "allele", "family", "asis"))
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns.}
 
 \item{gene}{column containing allele assignments. Only the first allele in the
-column will be considered.}
+column will be considered when \code{mode} is "gene", "family" or 
+"allele". The value will be used as it is with \code{mode="asis"}.}
 
 \item{groups}{columns containing grouping variables. If \code{NULL} do not group.}
 
@@ -26,24 +27,30 @@ once for each clone. Note, this is accomplished by using the most
 common gene within each \code{clone} identifier. As such,
 ambiguous alleles within a clone will not be accurately represented.}
 
-\item{mode}{one of \code{c("gene", "family", "allele")} defining
+\item{mode}{one of \code{c("gene", "family", "allele", "asis")} defining
 the degree of specificity regarding allele calls. Determines whether 
-to return counts for genes, families or alleles.}
+to return counts for genes (calling \code{getGene}), 
+families (calling \code{getFamily}), alleles (calling 
+\code{getAllele}) or using the value as it is in the column
+\code{gene}, without any processing.}
 }
 \value{
 A data.frame summarizing family, gene or allele counts and frequencies 
           with columns:
           \itemize{
-            \item \code{GENE}:        name of the family, gene or allele
-            \item \code{SEQ_COUNT}:   total number of sequences, or clones, for the gene.
-            \item \code{SEQ_FREQ}:    frequency of the gene as a fraction of the total
-                                      number of sequences, or clones, within each grouping.
-            \item \code{COPY_COUNT}:  sum of the copy counts in the \code{copy} column.
-                                      for each gene. Only present if the \code{copy} 
-                                      argument is specified.
-            \item \code{COPY_FREQ}:   frequency of the gene as a fraction of the total
-                                      copy number within each group. Only present if 
-                                      the \code{copy} argument is specified.
+            \item \code{GENE}:         name of the family, gene or allele
+            \item \code{SEQ_COUNT}:    total number of sequences for the gene.
+            \item \code{SEQ_FREQ}:     frequency of the gene as a fraction of the total
+                                       number of sequences within each grouping.
+            \item \code{COPY_COUNT}:   sum of the copy counts in the \code{copy} column.
+                                       for each gene. Only present if the \code{copy} 
+                                       argument is specified.
+            \item \code{COPY_FREQ}:    frequency of the gene as a fraction of the total
+                                       copy number within each group. Only present if 
+                                       the \code{copy} argument is specified.
+            \item \code{CLONE_COUNT}:  total number of clones for the gene.
+            \item \code{CLONE_FREQ}:   frequency of the gene as a fraction of the total
+                                       number of clones within each grouping.
           }
           Additional columns defined by the \code{groups} argument will also be present.
 }

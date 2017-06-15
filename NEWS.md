@@ -1,3 +1,19 @@
+Version 0.2.7:  Jun 12, 2017
+-------------------------------------------------------------------------------
+
+General:
+
++ Fixed a bug in `readChangeoDb` causing the `select` argument to do nothing.
++ Added progress package dependency.
++ Internal changes to support Rcpp 0.12.11.
+
+Gene Usage:
+
++ Renamed the count/frequency columns output by `countGenes` when the `clone` argument
+  is specified to `CLONE_COUNT`/`CLONE_FREQ`.
++ Added a vignette describing basic gene usage analysis.
+
+
 Version 0.2.6:  March 21, 2017
 -------------------------------------------------------------------------------
 
