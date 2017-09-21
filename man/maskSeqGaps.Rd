@@ -4,10 +4,12 @@
 \alias{maskSeqGaps}
 \title{Masks gap characters in DNA sequences}
 \usage{
-maskSeqGaps(seq, outer_only = FALSE)
+maskSeqGaps(seq, mask_char = "N", outer_only = FALSE)
 }
 \arguments{
-\item{seq}{a character vector of DNA sequence strings.}
+\item{seq}{character vector of DNA sequence strings.}
+
+\item{mask_char}{character to use for masking.}
 
 \item{outer_only}{if \code{TRUE} replace only contiguous leading and trailing gaps;
 if \code{FALSE} replace all gap characters.}
@@ -21,9 +23,13 @@ A modified \code{seq} vector with \code{"N"} in place of \code{c("-", ".")}
 in a vector of DNA sequences.
 }
 \examples{
+# Mask with Ns
 maskSeqGaps(c("ATG-C", "CC..C"))
 maskSeqGaps("--ATG-C-")
 maskSeqGaps("--ATG-C-", outer_only=TRUE)
+
+# Mask with dashes
+maskSeqGaps(c("ATG-C", "CC..C"), mask_char="-")
 
 }
 \seealso{

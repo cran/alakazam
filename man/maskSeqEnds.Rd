@@ -4,10 +4,12 @@
 \alias{maskSeqEnds}
 \title{Masks ragged leading and trailing edges of aligned DNA sequences}
 \usage{
-maskSeqEnds(seq, max_mask = NULL, trim = FALSE)
+maskSeqEnds(seq, mask_char = "N", max_mask = NULL, trim = FALSE)
 }
 \arguments{
-\item{seq}{a character vector of DNA sequence strings.}
+\item{seq}{character vector of DNA sequence strings.}
+
+\item{mask_char}{character to use for masking.}
 
 \item{max_mask}{the maximum number of characters to mask. If set to 0 then
 no masking will be performed. If set to \code{NULL} then the upper 
@@ -40,6 +42,10 @@ maskSeqEnds(seq, trim=TRUE)
 # Set max_mask to limit extent of masking and trimming
 maskSeqEnds(seq, max_mask=1)
 maskSeqEnds(seq, max_mask=1, trim=TRUE)
+
+# Mask dashes instead of Ns
+seq <- c("CCCCTGGG", "-AACTGG-", "---CTG--")
+maskSeqEnds(seq, mask_char="-")
 
 }
 \seealso{

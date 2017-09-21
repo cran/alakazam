@@ -137,7 +137,8 @@ translateDNA <- function (seq, trim=FALSE) {
 #' \code{maskSeqGaps} substitutes gap characters, \code{c("-", ".")}, with \code{"N"} 
 #' in a vector of DNA sequences.
 #'
-#' @param    seq         a character vector of DNA sequence strings.
+#' @param    seq         character vector of DNA sequence strings.
+#' @param    mask_char   character to use for masking.
 #' @param    outer_only  if \code{TRUE} replace only contiguous leading and trailing gaps;
 #'                       if \code{FALSE} replace all gap characters.
 #'                       
@@ -147,29 +148,33 @@ translateDNA <- function (seq, trim=FALSE) {
 #' @seealso  See \link{maskSeqEnds} for masking ragged edges.
 #'           
 #' @examples
+#' # Mask with Ns
 #' maskSeqGaps(c("ATG-C", "CC..C"))
 #' maskSeqGaps("--ATG-C-")
 #' maskSeqGaps("--ATG-C-", outer_only=TRUE)
 #' 
+#' # Mask with dashes
+#' maskSeqGaps(c("ATG-C", "CC..C"), mask_char="-")
+#' 
 #' @export
-maskSeqGaps <- function(seq, outer_only=FALSE) {
+maskSeqGaps <- function(seq, mask_char="N", outer_only=FALSE) {
     if (outer_only) {
         for (i in 1:length(seq)) {
-            head_match <- attr(regexpr('^[-\\.]+', seq[i]), 'match.length')
-            tail_match <- attr(regexpr('[-\\.]+$', seq[i]), 'match.length')
+            head_match <- attr(regexpr("^[-\\.]+", seq[i]), "match.length")
+            tail_match <- attr(regexpr("[-\\.]+$", seq[i]), "match.length")
             if (head_match > 0) { 
-                seq[i] <- gsub('^[-\\.]+', 
-                                     paste(rep('N', head_match), collapse=''), 
-                                     seq[i]) 
+                seq[i] <- gsub("^[-\\.]+", 
+                               paste(rep(mask_char, head_match), collapse=""), 
+                               seq[i]) 
             }
             if (tail_match > 0) { 
-                seq[i] <- gsub('[-\\.]+$', 
-                                     paste(rep('N', tail_match), collapse=''), 
-                                     seq[i]) 
+                seq[i] <- gsub("[-\\.]+$", 
+                               paste(rep(mask_char, tail_match), collapse=""), 
+                               seq[i]) 
             }
         }
     } else {
-        seq <- gsub('[-\\.]', 'N', seq)
+        seq <- gsub("[-\\.]", mask_char, seq)
     }
     
     return(seq)
@@ -182,14 +187,15 @@ maskSeqGaps <- function(seq, outer_only=FALSE) {
 #' and replaces the leading and trailing characters with \code{"N"} characters to create 
 #' a sequence vector with uniformly masked outer sequence segments.
 #' 
-#' @param    seq       a character vector of DNA sequence strings.
-#' @param    max_mask  the maximum number of characters to mask. If set to 0 then
-#'                     no masking will be performed. If set to \code{NULL} then the upper 
-#'                     masking bound will be automatically determined from the maximum 
-#'                     number of observed leading or trailing \code{"N"} characters amongst 
-#'                     all strings in \code{seq}. 
-#' @param    trim      if \code{TRUE} leading and trailing characters will be cut rather 
-#'                     than masked with \code{"N"} characters.
+#' @param    seq        character vector of DNA sequence strings.
+#' @param    mask_char  character to use for masking.
+#' @param    max_mask   the maximum number of characters to mask. If set to 0 then
+#'                      no masking will be performed. If set to \code{NULL} then the upper 
+#'                      masking bound will be automatically determined from the maximum 
+#'                      number of observed leading or trailing \code{"N"} characters amongst 
+#'                      all strings in \code{seq}. 
+#' @param    trim       if \code{TRUE} leading and trailing characters will be cut rather 
+#'                      than masked with \code{"N"} characters.
 #' @return   A modified \code{seq} vector with masked (or optionally trimmed) sequences.
 #' 
 #' @seealso   See \link{maskSeqGaps} for masking internal gaps.
@@ -209,11 +215,15 @@ maskSeqGaps <- function(seq, outer_only=FALSE) {
 #' maskSeqEnds(seq, max_mask=1)
 #' maskSeqEnds(seq, max_mask=1, trim=TRUE)
 #' 
+#' # Mask dashes instead of Ns
+#' seq <- c("CCCCTGGG", "-AACTGG-", "---CTG--")
+#' maskSeqEnds(seq, mask_char="-")
+#' 
 #' @export
-maskSeqEnds <- function(seq, max_mask=NULL, trim=FALSE) {
+maskSeqEnds <- function(seq, mask_char="N", max_mask=NULL, trim=FALSE) {
     # Find length of leading and trailing Ns
-    left_lengths <- attr(regexpr('(^N*)', seq, perl=T), 'capture.length')
-    right_lengths <- attr(regexpr('(N*$)', seq, perl=T), 'capture.length')
+    left_lengths <- attr(regexpr(paste0("(^", mask_char, "*)"), seq, perl=T), "capture.length")
+    right_lengths <- attr(regexpr(paste0("(", mask_char, "*$)"), seq, perl=T), "capture.length")
     
     # Mask to minimal inner sequence length
     left_mask <- min(max(left_lengths[, 1]), max_mask)
@@ -222,9 +232,9 @@ maskSeqEnds <- function(seq, max_mask=NULL, trim=FALSE) {
     if (trim) {
         seq <- substr(seq, left_mask + 1, seq_lengths - right_mask)
     } else {
-        substr(seq, 0, left_mask) <- paste(rep('N', left_mask), collapse='')
+        substr(seq, 0, left_mask) <- paste(rep(mask_char, left_mask), collapse='')
         substr(seq, seq_lengths - right_mask + 1, seq_lengths + 1) <- 
-            paste(rep('N', right_mask), collapse='')
+            paste(rep(mask_char, right_mask), collapse='')
     }
     
     return(seq)
@@ -259,12 +269,16 @@ maskSeqEnds <- function(seq, max_mask=NULL, trim=FALSE) {
 #' @param    sep          character to use for delimiting collapsed annotations in the 
 #'                        \code{text_fields} columns. Defines both the input and output 
 #'                        delimiter.
+#' @param    dry          if \code{TRUE} perform dry run. Only labels the sequences without 
+#'                        collapsing them.
 #' @param    verbose      if \code{TRUE} report the number input, discarded and output 
 #'                        sequences; if \code{FALSE} process sequences silently.
 #'                        
 #' @return   A modified \code{data} data.frame with duplicate sequences removed and 
-#'           annotation fields collapsed. 
-#' 
+#'           annotation fields collapsed if \code{dry=FALSE}. If \code{dry=TRUE}, 
+#'           sequences will be labeled with the collapse action, but the input will be
+#'           otherwise unmodifed (see Details).
+#'           
 #' @details
 #' \code{collapseDuplicates} identifies duplicate sequences in the \code{seq} column by
 #' testing for character identity, with consideration of IUPAC ambiguous nucleotide codes. 
@@ -284,10 +298,24 @@ maskSeqEnds <- function(seq, max_mask=NULL, trim=FALSE) {
 #' An ambiguous sequence is one that can be assigned to two different clusters, wherein
 #' the ambiguous sequence is equivalent to two sequences which are themselves 
 #' non-equivalent. Ambiguous sequences arise due to ambiguous characters at positions that
-#' vary across sequences, and are discarded along with their annotations. Thus, ambiguous
-#' sequences are removed as duplicates of some sequence, but do not create a potential
+#' vary across sequences, and are discarded along with their annotations when \code{dry=FALSE}. 
+#' Thus, ambiguous sequences are removed as duplicates of some sequence, but do not create a potential
 #' false-positive annotation merger. Ambiguous sequences are not included in the 
 #' \code{COLLAPSE_COUNT} annotation that is added when \code{add_count=TRUE}.
+#' 
+#' If \code{dry=TRUE} sequences will not be removed from the input. Instead, the following columns
+#' will be appended to the input defining the collapse action that would have been performed in the
+#' \code{dry=FALSE} case.
+#' 
+#' \itemize{
+#'   \item  \code{COLLAPSE_ID}:     an identifer for the group of identical sequences.
+#'   \item  \code{COLLAPSE_CLASS}:  string defining how the sequence matches to the other in the set.
+#'                                  one of \code{"duplicated"} (has duplicates),
+#'                                  \code{"unique"} (no duplicates), \code{"ambiguous_duplicate"} 
+#'                                  (no duplicates after ambiguous sequences are removed), 
+#'                                  or \code{"ambiguous"} (matches multiple non-duplicate sequences).
+#'   \item  \code{COLLAPSE_PASS}:   \code{TRUE} for the sequences that would be retained.
+#' }
 #' 
 #' @seealso  Equality is tested with \link{seqEqual} and \link{pairwiseEqual}. 
 #'           For IUPAC ambiguous character codes see \link{IUPAC_DNA}.
@@ -328,7 +356,7 @@ maskSeqEnds <- function(seq, max_mask=NULL, trim=FALSE) {
 collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                                text_fields=NULL, num_fields=NULL, seq_fields=NULL,
                                add_count=FALSE, ignore=c("N", "-", ".", "?"), 
-                               sep=",", verbose=FALSE) {
+                               sep=",", dry=FALSE, verbose=FALSE) {
     # Verify column classes and exit if they are incorrect
     if (!is.null(text_fields)) {
         if (!all(sapply(subset(data, select=text_fields), is.character))) {
@@ -365,16 +393,28 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         stri_length(gsub("[N\\-\\.\\?]", "", x, perl=TRUE))
     }
     
-    # Intialize COLLAPSE_COUNT with 1 for each sequence
+    # Initialize COLLAPSE_COUNT with 1 for each sequence
     if(add_count) {
         data[["COLLAPSE_COUNT"]] <- rep(1, nrow(data))
         num_fields <- c(num_fields, "COLLAPSE_COUNT")
+    }
+    
+    # Initialize dry run columns 
+    if (dry) {
+        data$COLLAPSE_ID <- NA
+        data$COLLAPSE_CLASS <- NA
+        data$COLLAPSE_PASS <- TRUE
     }
     
     # Return input if there are no sequences to collapse
     nseq <- nrow(data)
     if (nseq <= 1) { 
         if (verbose) { .printVerbose(nseq, 1, 0) }
+        if (dry) {
+            data$COLLAPSE_ID <- 1
+            data$COLLAPSE_CLASS <- "unique"
+            data$COLLAPSE_PASS <- TRUE            
+        }
         return(data)
     }
     
@@ -385,6 +425,11 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     # Return input if no sequences are equal
     if (!any(d_mat[lower.tri(d_mat, diag=F)])) {
         if (verbose) { .printVerbose(nseq, nseq, 0) }
+        if (dry) {
+            data$COLLAPSE_ID <- 1:nrow(data)
+            data$COLLAPSE_CLASS <- "unique"
+            data$COLLAPSE_PASS <- TRUE            
+        }
         return(data)
     }        
     
@@ -399,16 +444,37 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     }
     discard_count <- length(ambig_rows)
     
+    if (dry & length(ambig_rows)>0) {
+        data[["COLLAPSE_CLASS"]][ambig_rows] <- "ambiguous"
+        data[["COLLAPSE_PASS"]][ambig_rows] <- FALSE
+    }
+    
     # Return single sequence if all sequence belong to ambiguous clusters
     if (discard_count == nrow(d_mat)) {
-        inform_len <- .informativeLength(data[[seq]])
+        inform_len <- data.frame(list("inform_len"=.informativeLength(data[[seq]])))
+        # For each ambiguous cluster, return the best sequence
+        g <- igraph::simplify(igraph::graph_from_adjacency_matrix(d_mat))
+        inform_len$clusters <- igraph::components(g)$membership[data[[id]]]
+        inform_len$select_id <- 1:nrow(inform_len)
+        selected <- inform_len %>%
+            dplyr::group_by_("clusters") %>%
+            dplyr::slice(which.max(inform_len)) %>%
+            dplyr::ungroup() %>%
+            dplyr::select_("select_id") %>% unlist() 
+        
         if (verbose) { .printVerbose(nseq, 0, discard_count - 1) }
-        return(data[which.max(inform_len), ])
+        if (dry) {
+            data[["COLLAPSE_ID"]] <- inform_len$clusters
+            data[["COLLAPSE_PASS"]][selected] <- TRUE
+        } else {
+            return(data[selected, ])
+        }
     }
     
     # Exclude ambiguous sequences from clustering
-    if (discard_count > 0) {
-        d_mat <- d_mat[-ambig_rows, -ambig_rows]
+    if (!dry & discard_count > 0) {
+            d_mat <- d_mat[-ambig_rows, -ambig_rows]
+            data <- data[-ambig_rows,]
     }
     
     # Cluster remaining sequences into unique and duplicate sets
@@ -416,24 +482,69 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     uniq_taxa <- character()
     done_taxa <- character()
     taxa_names <- rownames(d_mat)
-    for (taxa in taxa_names) {
+    collapse_id <- 1
+    
+    for (taxa_i in 1:length(taxa_names)) {
+        
+        taxa <- taxa_names[taxa_i]
+        
         # Skip taxa if previously assigned to a cluster
+        # or if ambiguous
+        # (ambiguous taxa don't get their own COLLAPSE_ID)
         if (taxa %in% done_taxa) { next }
+        if (dry & taxa_i %in% ambig_rows) { next }
         
         # Find all zero distance taxa
         idx <- which(d_mat[taxa, ])
+        
+        # Update vector of clustered taxa
+        done_taxa <- c(done_taxa, taxa_names[idx])
+        
+        # Update collapse group
+        if (dry) {
+            data[["COLLAPSE_ID"]][idx] <- paste(data[["COLLAPSE_ID"]][idx], collapse_id, sep=",")
+        }
+        
+        if (dry) {
+            idx_copy <- idx
+            idx <- idx[idx %in% ambig_rows == FALSE]
+        }
+        
         if (length(idx) == 1) {
             # Assign unique sequences to unique vector
             uniq_taxa <- append(uniq_taxa, taxa_names[idx])
+            if (dry) {
+                if (length(idx_copy)==1) {
+                    ## 'truly' unique
+                    data[["COLLAPSE_CLASS"]][taxa_i] <- "unique"    
+                } else {
+                    ## unique after ambiguous removal
+                    data[["COLLAPSE_CLASS"]][taxa_i] <- "unique2"
+                }
+                data[["COLLAPSE_PASS"]][taxa_i] <- TRUE
+            }
         } else if (length(idx) > 1) {
             # Assign clusters of duplicates to duplicate list            
             dup_taxa <- c(dup_taxa, list(taxa_names[idx]))    
+            if (dry) {
+                # Keep COLLAPSE_PASS==TRUE for the sequence with the
+                # larger number of informative positions 
+                # (the first one if ties)
+                max_info_idx <- which.max(.informativeLength(data[[seq]][idx]))[1]
+                data[["COLLAPSE_CLASS"]][idx] <- "duplicated"
+                data[["COLLAPSE_PASS"]][idx[-max_info_idx]] <- FALSE
+            }
         } else {
             # Report error (should never occur)
-            stop("Error in distance matrix of collapseDuplicates")
+                stop("Error in distance matrix of collapseDuplicates")
         }
-        # Update vector of clustered taxa
-        done_taxa <- c(done_taxa, taxa_names[idx])
+        
+        collapse_id <- collapse_id+1
+    }
+   
+    if (dry) {
+        data[["COLLAPSE_ID"]] <-  sub("^NA,","",data[["COLLAPSE_ID"]])
+        return(data)
     }
     
     # Collapse duplicate sets and append entries to unique data.frame
@@ -442,8 +553,15 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         # Define row indices of identical sequences
         idx <- which(data[[id]] %in% taxa)
         tmp_df <- data[idx[1], ]
-        
+
         if (length(idx) > 1) {
+
+            # Initialize with data from most informative sequence
+            seq_set <- data[idx, c(id, seq)]
+            inform_len <- .informativeLength(seq_set[[seq]])
+            max_inform <- which.max(inform_len)[1] # if ties, pick first
+            tmp_df <- data[idx[max_inform],]
+
             # Define set of text fields for row
             for (f in text_fields) {
                 f_set <- na.omit(data[[f]][idx])
@@ -456,18 +574,18 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                 }
                 tmp_df[, f] <- f_val
             }
-            
+
             # Sum numeric fields
             for (f in num_fields) {
                 f_set <- na.omit(data[[f]][idx])
-                if (length(f_set) > 0) { 
-                    f_val <- sum(f_set) 
-                } else { 
-                    f_val <- NA 
+                if (length(f_set) > 0) {
+                    f_val <- sum(f_set)
+                } else {
+                    f_val <- NA
                 }
                 tmp_df[, f] <- f_val
             }
-            
+
             # Select sequence fields with fewest Ns
             for (f in seq_fields) {
                 f_set <- na.omit(data[[f]][idx])
@@ -479,17 +597,13 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                 }
                 tmp_df[, f] <- f_val
             }
-            
-            # Assign id and sequence with least number of Ns
-            seq_set <- data[idx, c(id, seq)]
-            inform_len <- .informativeLength(seq_set[[seq]])
-            tmp_df[, c(id, seq)] <- seq_set[which.max(inform_len), c(id, seq)]
+
         }
-        
+
         # Add row to unique list
         unique_list <- c(unique_list, list(tmp_df))
     }
-    
+
     # Combine all rows into unique data.frame
     unique_df <- as.data.frame(bind_rows(unique_list))
     
@@ -634,7 +748,6 @@ seqDist <- function(seq1, seq2, dist_mat=getDNAMatrix()) {
 #'           If \code{seq} is a named vector, row and columns names will be added 
 #'           accordingly.
 #' 
-#' @seealso  Nucleotide distance matrix may be built with \link{getDNAMatrix}. 
 #'           Amino acid distance matrix may be built with \link{getAAMatrix}. 
 #'           Uses \link{seqDist} for calculating distances between pairs.
 #'           See \link{pairwiseEqual} for generating an equivalence matrix.

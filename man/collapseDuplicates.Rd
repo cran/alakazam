@@ -7,7 +7,7 @@
 collapseDuplicates(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
   text_fields = NULL, num_fields = NULL, seq_fields = NULL,
   add_count = FALSE, ignore = c("N", "-", ".", "?"), sep = ",",
-  verbose = FALSE)
+  dry = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{data}{data.frame containing Change-O columns. The data.frame 
@@ -42,12 +42,17 @@ each unique entry.}
 \code{text_fields} columns. Defines both the input and output 
 delimiter.}
 
+\item{dry}{if \code{TRUE} perform dry run. Only labels the sequences without 
+collapsing them.}
+
 \item{verbose}{if \code{TRUE} report the number input, discarded and output 
 sequences; if \code{FALSE} process sequences silently.}
 }
 \value{
 A modified \code{data} data.frame with duplicate sequences removed and 
-          annotation fields collapsed.
+          annotation fields collapsed if \code{dry=FALSE}. If \code{dry=TRUE}, 
+          sequences will be labeled with the collapse action, but the input will be
+          otherwise unmodifed (see Details).
 }
 \description{
 \code{collapseDuplicates} identifies duplicate DNA sequences, allowing for ambiguous 
@@ -72,10 +77,24 @@ amongst all sequences in a cluster of duplicates.
 An ambiguous sequence is one that can be assigned to two different clusters, wherein
 the ambiguous sequence is equivalent to two sequences which are themselves 
 non-equivalent. Ambiguous sequences arise due to ambiguous characters at positions that
-vary across sequences, and are discarded along with their annotations. Thus, ambiguous
-sequences are removed as duplicates of some sequence, but do not create a potential
+vary across sequences, and are discarded along with their annotations when \code{dry=FALSE}. 
+Thus, ambiguous sequences are removed as duplicates of some sequence, but do not create a potential
 false-positive annotation merger. Ambiguous sequences are not included in the 
 \code{COLLAPSE_COUNT} annotation that is added when \code{add_count=TRUE}.
+
+If \code{dry=TRUE} sequences will not be removed from the input. Instead, the following columns
+will be appended to the input defining the collapse action that would have been performed in the
+\code{dry=FALSE} case.
+
+\itemize{
+  \item  \code{COLLAPSE_ID}:     an identifer for the group of identical sequences.
+  \item  \code{COLLAPSE_CLASS}:  string defining how the sequence matches to the other in the set.
+                                 one of \code{"duplicated"} (has duplicates),
+                                 \code{"unique"} (no duplicates), \code{"ambiguous_duplicate"} 
+                                 (no duplicates after ambiguous sequences are removed), 
+                                 or \code{"ambiguous"} (matches multiple non-duplicate sequences).
+  \item  \code{COLLAPSE_PASS}:   \code{TRUE} for the sequences that would be retained.
+}
 }
 \examples{
 # Example Change-O data.frame

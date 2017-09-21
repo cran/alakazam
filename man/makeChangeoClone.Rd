@@ -6,9 +6,9 @@
 \usage{
 makeChangeoClone(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
   germ = "GERMLINE_IMGT_D_MASK", vcall = "V_CALL", jcall = "J_CALL",
-  junc_len = "JUNCTION_LENGTH", clone = "CLONE", max_mask = 0,
-  text_fields = NULL, num_fields = NULL, seq_fields = NULL,
-  add_count = TRUE, verbose = FALSE)
+  junc_len = "JUNCTION_LENGTH", clone = "CLONE", mask_char = "N",
+  max_mask = 0, text_fields = NULL, num_fields = NULL,
+  seq_fields = NULL, add_count = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{data}{data.frame containing the Change-O data for a clone. See Details
@@ -35,6 +35,8 @@ for any given clone.}
 
 \item{clone}{name of the column containing the identifier for the clone. All 
 entries in this column should be identical.}
+
+\item{mask_char}{character to use for masking.}
 
 \item{max_mask}{maximum number of characters to mask at the leading and trailing
 sequence ends. If \code{NULL} then the upper masking bound will 

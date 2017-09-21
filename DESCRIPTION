@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 0.2.7
-Date: 2017-06-12
+Version: 0.2.8
+Date: 2017-09-21
 Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
                     email="jason.vanderheiden@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -26,7 +26,7 @@ VignetteBuilder: knitr
 SystemRequirements: C++11
 Depends: R (>= 3.1.2), ggplot2 (>= 2.0.0)
 Imports: dplyr (>= 0.5.0), graphics, grid, igraph (>= 1.0.0), lazyeval,
-        methods, progress, Rcpp (>= 0.12.11), readr, scales, seqinr,
+        methods, progress, Rcpp (>= 0.12.12), readr, scales, seqinr,
         stats, stringi, utils
 LinkingTo: Rcpp
 Suggests: knitr, rmarkdown, testthat
@@ -35,7 +35,7 @@ Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Gene.R' 'Lineage.R' 'RcppExports.R' 'Sequence.R'
         'Topology.R'
 NeedsCompilation: yes
-Packaged: 2017-06-12 16:46:07 UTC; jason
+Packaged: 2017-09-21 18:07:44 UTC; jason
 Author: Jason Vander Heiden [aut, cre],
   Namita Gupta [aut],
   Susanna Marquez [ctb],
@@ -44,4 +44,4 @@ Author: Jason Vander Heiden [aut, cre],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
 Repository: CRAN
-Date/Publication: 2017-06-15 15:47:47 UTC
+Date/Publication: 2017-09-21 19:29:06 UTC

@@ -22,6 +22,10 @@ return a distance that does not consider indels as a special case.}
 A matrix of numerical distance between each entry in \code{seq}. 
           If \code{seq} is a named vector, row and columns names will be added 
           accordingly.
+
+          Amino acid distance matrix may be built with \link{getAAMatrix}. 
+          Uses \link{seqDist} for calculating distances between pairs.
+          See \link{pairwiseEqual} for generating an equivalence matrix.
 }
 \description{
 \code{pairwiseDist} calculates all pairwise distance between a set of sequences.
@@ -39,10 +43,4 @@ pairwiseDist(c(A="ATGGC", B="ATGGG", C="ATGGG", D="AT--C"),
 pairwiseDist(c(A="ATGGC", B="ATGGG", C="ATGGG", D="AT--C"), 
              dist_mat=getDNAMatrix(gap=-1))
 
-}
-\seealso{
-Nucleotide distance matrix may be built with \link{getDNAMatrix}. 
-          Amino acid distance matrix may be built with \link{getAAMatrix}. 
-          Uses \link{seqDist} for calculating distances between pairs.
-          See \link{pairwiseEqual} for generating an equivalence matrix.
 }
