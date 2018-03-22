@@ -7,7 +7,7 @@
 makeChangeoClone(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
   germ = "GERMLINE_IMGT_D_MASK", vcall = "V_CALL", jcall = "J_CALL",
   junc_len = "JUNCTION_LENGTH", clone = "CLONE", mask_char = "N",
-  max_mask = 0, text_fields = NULL, num_fields = NULL,
+  max_mask = 0, pad_end = FALSE, text_fields = NULL, num_fields = NULL,
   seq_fields = NULL, add_count = TRUE, verbose = FALSE)
 }
 \arguments{
@@ -36,13 +36,16 @@ for any given clone.}
 \item{clone}{name of the column containing the identifier for the clone. All 
 entries in this column should be identical.}
 
-\item{mask_char}{character to use for masking.}
+\item{mask_char}{character to use for masking and padding.}
 
 \item{max_mask}{maximum number of characters to mask at the leading and trailing
 sequence ends. If \code{NULL} then the upper masking bound will 
 be automatically determined from the maximum number of observed 
 leading or trailing Ns amongst all sequences. If set to \code{0} 
 (default) then masking will not be performed.}
+
+\item{pad_end}{if \code{TRUE} pad the end of each sequence with \code{mask_char}
+to make every sequence the same length.}
 
 \item{text_fields}{text annotation columns to retain and merge during duplicate removal.}
 
@@ -119,8 +122,8 @@ makeChangeoClone(db, max_mask=3, text_fields="TYPE", num_fields="COUNT")
 
 }
 \seealso{
-Executes in order \link{maskSeqGaps}, \link{maskSeqEnds}
-          and \link{collapseDuplicates}. 
+Executes in order \link{maskSeqGaps}, \link{maskSeqEnds}, 
+          \link{padSeqEnds}, and \link{collapseDuplicates}. 
           Returns a \link{ChangeoClone} object which serves as input to
           \link{buildPhylipLineage}.
 }

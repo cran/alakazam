@@ -6,12 +6,20 @@
 \alias{DiversityTest}
 \alias{print,DiversityTest-method}
 \alias{DiversityTest-method}
+\alias{plot,DiversityTest,missing-method}
+\alias{DiversityTest-method}
 \title{S4 class defining diversity significance}
 \usage{
 \S4method{print}{DiversityTest}(x)
+
+\S4method{plot}{DiversityTest,missing}(x, y, ...)
 }
 \arguments{
 \item{x}{DiversityTest object.}
+
+\item{y}{ignored.}
+
+\item{...}{arguments to pass to \link{plotDiversityTest}.}
 }
 \description{
 \code{DiversityTest} defines the signifance of diversity (\eqn{D}) differences at a 

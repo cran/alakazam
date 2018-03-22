@@ -55,7 +55,7 @@
 #'                                       confidence intervals.
 #'   \item  \link{rarefyDiversity}:      Generate clonal diversity curves.
 #'   \item  \link{testDiversity}:        Test significance of clonal diversity scores.
-#'   \item  \link{plotAbundance}:        Plot clone size distribution as a rank-abundance 
+#'   \item  \link{plotAbundanceCurve}:   Plot clone size distribution as a rank-abundance 
 #'                                       curve.
 #'   \item  \link{plotDiversityCurve}:   Plot clonal diversity curves.
 #' }
@@ -129,7 +129,7 @@
 #'                          degree shortest_paths all_shortest_paths distances
 #' @importFrom  lazyeval    interp
 #' @importFrom  progress    progress_bar
-#' @importFrom  readr       read_delim read_tsv write_delim write_tsv
+#' @importFrom  readr       read_delim read_tsv write_delim write_tsv cols
 #' @importFrom  scales      log2_trans log10_trans trans_breaks trans_format
 #'                          math_format percent scientific pretty_breaks
 #' @importFrom  seqinr      translate
@@ -141,6 +141,7 @@
 #'                          stri_count_boundaries stri_count_regex 
 #'                          stri_extract_all_regex stri_extract_first_regex  
 #'                          stri_replace_all_regex stri_replace_first_regex
+#'                          stri_pad_left stri_pad_right
 #' @importFrom  Rcpp evalCpp
 #' @useDynLib   alakazam, .registration=TRUE
 NULL

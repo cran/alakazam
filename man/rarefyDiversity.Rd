@@ -6,7 +6,7 @@
 \usage{
 rarefyDiversity(data, group, clone = "CLONE", copy = NULL, min_q = 0,
   max_q = 4, step_q = 0.05, min_n = 30, max_n = NULL, ci = 0.95,
-  nboot = 2000, progress = FALSE)
+  nboot = 2000, uniform = TRUE, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -30,12 +30,16 @@ copy numbers within each clonal group.}
 \item{min_n}{minimum number of observations to sample.
 A group with less observations than the minimum is excluded.}
 
-\item{max_n}{maximum number of observations to sample. If \code{NULL} the maximum
-if automatically determined from the size of the largest group.}
+\item{max_n}{maximum number of observations to sample. If \code{NULL} then no 
+maximum is set.}
 
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
 
 \item{nboot}{number of bootstrap realizations to generate.}
+
+\item{uniform}{if \code{TRUE} then uniformly resample each group to the same 
+number of observations. If \code{FALSE} then allow each group to
+be resampled to its original size or, if specified, \code{max_size}.}
 
 \item{progress}{if \code{TRUE} show a progress bar.}
 }
@@ -44,7 +48,7 @@ A \link{DiversityCurve} object summarizing the diversity scores.
 }
 \description{
 \code{rarefyDiversity} divides a set of clones by a group annotation,
-uniformly resamples the sequences from each group, and calculates diversity
+resamples the sequences from each group, and calculates diversity
 scores (\eqn{D}) over an interval of diversity orders (\eqn{q}).
 }
 \details{
@@ -57,9 +61,9 @@ of seen clones, and applying the relative abundance correction and unseen clone
 frequency described in Chao et al, 2015.
 
 To generate a smooth curve, \eqn{D} is calculated for each value of \eqn{q} from
-\code{min_q} to \code{max_q} incremented by \code{step_q}.  Variability in total 
-sequence counts across unique values in the \code{group} column is corrected by
-repeated resampling from the estimated complete clonal distribution to a 
+\code{min_q} to \code{max_q} incremented by \code{step_q}.  When \code{uniform=TRUE}
+variability in total sequence counts across unique values in the \code{group} column 
+is corrected by repeated resampling from the estimated complete clonal distribution to a 
 common number of sequences.
 
 The diversity index (\eqn{D}) for each group is the mean value of over all resampling 

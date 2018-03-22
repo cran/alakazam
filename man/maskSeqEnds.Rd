@@ -50,4 +50,5 @@ maskSeqEnds(seq, mask_char="-")
 }
 \seealso{
 See \link{maskSeqGaps} for masking internal gaps.
+          See \link{padSeqEnds} for padding sequence of unequal length.
 }

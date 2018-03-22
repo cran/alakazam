@@ -9,7 +9,7 @@ extractVRegion(sequences, region = c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3"))
 \arguments{
 \item{sequences}{character vector of IMGT-gapped nucleotide sequences.}
 
-\item{region}{string defining the region(s) of the V-segment to extract. 
+\item{region}{string defining the region(s) of the V segment to extract. 
 May be a single region or multiple regions (as a vector) from
 \code{c("FWR1", "CDR1", "FWR2", "CDR2" ,"FWR3")}.  By default, all
 regions will be returned.}
@@ -23,7 +23,7 @@ If only one region is specified in the \code{region} argument, a character
 }
 \description{
 \code{extractVRegion} extracts the framework and complementarity determining regions of 
-the V-segment for IMGT-gapped immunoglobulin (Ig) nucleotide sequences according to the 
+the V segment for IMGT-gapped immunoglobulin (Ig) nucleotide sequences according to the 
 IMGT numbering scheme.
 }
 \examples{

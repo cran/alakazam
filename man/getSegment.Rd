@@ -8,16 +8,16 @@
 \title{Get Ig segment allele, gene and family names}
 \usage{
 getSegment(segment_call, segment_regex, first = TRUE, collapse = TRUE,
-  strip_d = TRUE, sep = ",")
+  strip_d = TRUE, omit_nl = FALSE, sep = ",")
 
 getAllele(segment_call, first = TRUE, collapse = TRUE, strip_d = TRUE,
-  sep = ",")
+  omit_nl = FALSE, sep = ",")
 
 getGene(segment_call, first = TRUE, collapse = TRUE, strip_d = TRUE,
-  sep = ",")
+  omit_nl = FALSE, sep = ",")
 
 getFamily(segment_call, first = TRUE, collapse = TRUE, strip_d = TRUE,
-  sep = ",")
+  omit_nl = FALSE, sep = ",")
 }
 \arguments{
 \item{segment_call}{character vector containing segment calls delimited by commas.}
@@ -36,6 +36,9 @@ segment assignments; if \code{FALSE} return all assignments
 (denoting a duplicate gene in the locus); 
 if \code{FALSE} do not alter gene names.}
 
+\item{omit_nl}{if \code{TRUE} remove non-localized (NL) genes from the result.
+Only applies at the gene or allele level.}
+
 \item{sep}{character defining both the input and output segment call 
 delimiter.}
 }
@@ -49,6 +52,7 @@ the allele, gene and family names, respectively, from a character vector of
 immunoglobulin (Ig) or TCR segment allele calls in IMGT format.
 }
 \examples{
+# Light chain examples
 kappa_call <- c("Homsap IGKV1D-39*01 F,Homsap IGKV1-39*02 F,Homsap IGKV1-39*01",
                 "Homsap IGKJ5*01 F")
 
@@ -65,6 +69,7 @@ getFamily(kappa_call, first=FALSE)
 getFamily(kappa_call, first=FALSE, collapse=FALSE)
 getFamily(kappa_call, first=FALSE, strip_d=FALSE)
 
+# Heavy chain examples
 heavy_call <- c("Homsap IGHV1-69*01 F,Homsap IGHV1-69D*01 F", 
                 "Homsap IGHD1-1*01 F", 
                 "Homsap IGHJ1*01 F")
@@ -74,6 +79,15 @@ getAllele(heavy_call, first=FALSE, strip_d=FALSE)
 
 getGene(heavy_call, first=FALSE)
 getGene(heavy_call, first=FALSE, strip_d=FALSE)
+
+# Filtering non-localized genes
+nl_call <- c("IGHV3-NL1*01,IGHV3-30-3*01,IGHV3-30*01", 
+             "Homosap IGHV3-30*01 F,Homsap IGHV3-NL1*01 F",
+             "IGHV1-NL1*01")
+             
+getAllele(nl_call, first=FALSE, omit_nl=TRUE)
+getGene(nl_call, first=FALSE, omit_nl=TRUE)
+getFamily(nl_call, first=FALSE, omit_nl=TRUE)
 
 }
 \references{

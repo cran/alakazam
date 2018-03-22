@@ -53,29 +53,30 @@
 #' @export
 readChangeoDb <- function(file, select=NULL, drop=NULL, seq_upper=TRUE) {
     # Define column data types
-    seq_columns <- c("SEQUENCE_INPUT", "SEQUENCE_VDJ", "SEQUENCE_IMGT", "JUNCTION", 
-                     "GERMLINE_IMGT", "GERMLINE_IMGT_D_MASK")
-    text_columns <- c("SEQUENCE_ID", "CLONE", "SAMPLE")
+    seq_columns <- c("SEQUENCE_INPUT", "SEQUENCE_VDJ", "SEQUENCE_IMGT", 
+                     "JUNCTION", "JUNCTION_AA", "CDR3_IGBLAST_NT", "CDR3_IGBLAST_AA",
+                     "GERMLINE_VDJ", "GERMLINE_VDJ_V_REGION", "GERMLINE_VDJ_D_MASK",
+                     "GERMLINE_IMGT", "GERMLINE_IMGT_V_REGION", "GERMLINE_IMGT_D_MASK",
+                     "FWR1_IMGT", "FWR2_IMGT", "FWR3_IMGT", "FWR4_IMGT",
+                     "CDR1_IMGT", "CDR2_IMGT", "CDR3_IMGT")
+
+    # Define types
+    header <- names(suppressMessages(readr::read_tsv(file, n_max=1)))
+    types <- do.call(readr::cols, CHANGEO[intersect(names(CHANGEO), header)])
     
     # Read file    
-    db <- suppressMessages(readr::read_tsv(file, na=c("", "NA", "None")))
+    db <- suppressMessages(readr::read_tsv(file, col_types=types, na=c("", "NA", "None")))
 
     # Select columns
     select_columns <- colnames(db)
     if(!is.null(select)) { select_columns <- intersect(select_columns, select) }
     if(!is.null(drop)) { select_columns <- setdiff(select_columns, drop) }
-    db <- select_(db, .dots=select_columns)
+    db <- select_(db, .dots=paste("`",select_columns,"`", sep=""))
     
     # Convert sequence fields to upper case
     upper_cols <- intersect(seq_columns, names(db))
     if (seq_upper & length(upper_cols) > 0) {
         db <- mutate_at(db, upper_cols, toupper)
-    }
-    
-    # Convert text fields to character
-    char_cols <- intersect(text_columns, names(db))
-    if (length(char_cols) > 0) {
-        db <- mutate_at(db, char_cols, as.character)
     }
     
     return(db)

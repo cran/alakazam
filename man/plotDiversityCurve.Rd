@@ -5,8 +5,9 @@
 \title{Plot the results of rarefyDiversity}
 \usage{
 plotDiversityCurve(data, colors = NULL, main_title = "Diversity",
-  legend_title = "Group", log_q = TRUE, log_d = TRUE, xlim = NULL,
-  ylim = NULL, annotate = c("none", "depth"), silent = FALSE, ...)
+  legend_title = "Group", log_x = FALSE, log_y = FALSE, xlim = NULL,
+  ylim = NULL, annotate = c("none", "depth"), score = c("diversity",
+  "evenness"), silent = FALSE, ...)
 }
 \arguments{
 \item{data}{\link{DiversityCurve} object returned by 
@@ -20,10 +21,10 @@ and whose values are colors to assign to those group names.}
 
 \item{legend_title}{string specifying the legend title.}
 
-\item{log_q}{if \code{TRUE} then plot \eqn{q} on a log scale;
+\item{log_x}{if \code{TRUE} then plot \eqn{q} on a log scale;
 if \code{FALSE} plot on a linear scale.}
 
-\item{log_d}{if \code{TRUE} then plot the diversity scores \eqn{D} 
+\item{log_y}{if \code{TRUE} then plot the diversity/evenness scores 
 on a log scale; if \code{FALSE} plot on a linear scale.}
 
 \item{xlim}{numeric vector of two values specifying the 
@@ -37,6 +38,9 @@ of the legend. When \code{"none"} (default) is specified no
 annotations are added. Specifying (\code{"depth"}) adds 
 sequence counts to the labels.}
 
+\item{score}{one of \code{"diversity"} or \code{"evenness"} specifying which
+score to plot on the y-asis.}
+
 \item{silent}{if \code{TRUE} do not draw the plot and just return the ggplot2 
 object; if \code{FALSE} draw the plot.}
 
@@ -49,9 +53,14 @@ A \code{ggplot} object defining the plot.
 \code{plotDiversityCurve} plots a \code{DiversityCurve} object.
 }
 \examples{
-# All groups pass default minimum sampling threshold of 10 sequences
-div <- rarefyDiversity(ExampleDb, "SAMPLE", step_q=0.1, max_q=10, nboot=100)
+# Calculate diversity
+div <- rarefyDiversity(ExampleDb, "SAMPLE", nboot=100)
+
+# Plot diversity
 plotDiversityCurve(div, legend_title="Sample")
+
+#' # Plot diversity
+plotDiversityCurve(div, legend_title="Sample", score="evenness")
 
 }
 \seealso{

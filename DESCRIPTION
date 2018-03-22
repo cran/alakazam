@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 0.2.8
-Date: 2017-09-21
+Version: 0.2.9
+Date: 2018-03-21
 Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
                     email="jason.vanderheiden@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -17,6 +17,9 @@ Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"),
 Title: Immunoglobulin Clonal Lineage and Diversity Analysis
 Description: Provides immunoglobulin (Ig) sequence lineage reconstruction,
     diversity profiling, and amino acid property analysis.
+    Citations: 
+    Gupta and Vander Heiden, et al (2017) <doi:10.1093/bioinformatics/btv359>,
+    Stern, Yaari and Vander Heiden, et al (2014) <doi:10.1126/scitranslmed.3008879>.
 License: CC BY-SA 4.0
 URL: http://alakazam.readthedocs.org
 BugReports: https://bitbucket.org/kleinstein/alakazam/issues
@@ -35,7 +38,7 @@ Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Gene.R' 'Lineage.R' 'RcppExports.R' 'Sequence.R'
         'Topology.R'
 NeedsCompilation: yes
-Packaged: 2017-09-21 18:07:44 UTC; jason
+Packaged: 2018-03-21 20:32:52 UTC; jason
 Author: Jason Vander Heiden [aut, cre],
   Namita Gupta [aut],
   Susanna Marquez [ctb],
@@ -44,4 +47,4 @@ Author: Jason Vander Heiden [aut, cre],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
 Repository: CRAN
-Date/Publication: 2017-09-21 19:29:06 UTC
+Date/Publication: 2018-03-22 20:16:07 UTC

@@ -8,7 +8,7 @@
 \alias{DiversityCurve-method}
 \alias{plot,DiversityCurve,missing-method}
 \alias{DiversityCurve-method}
-\title{S4 class defining diversity curve}
+\title{S4 class defining a diversity curve}
 \usage{
 \S4method{print}{DiversityCurve}(x)
 

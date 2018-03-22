@@ -198,7 +198,8 @@ maskSeqGaps <- function(seq, mask_char="N", outer_only=FALSE) {
 #'                      than masked with \code{"N"} characters.
 #' @return   A modified \code{seq} vector with masked (or optionally trimmed) sequences.
 #' 
-#' @seealso   See \link{maskSeqGaps} for masking internal gaps.
+#' @seealso  See \link{maskSeqGaps} for masking internal gaps.
+#'           See \link{padSeqEnds} for padding sequence of unequal length.
 #' 
 #' @examples
 #' # Default behavior uniformly masks ragged ends
@@ -237,6 +238,50 @@ maskSeqEnds <- function(seq, mask_char="N", max_mask=NULL, trim=FALSE) {
             paste(rep(mask_char, right_mask), collapse='')
     }
     
+    return(seq)
+}
+
+
+#' Pads ragged ends of aligned DNA sequences
+#' 
+#' \code{padSeqEnds} takes a vector of DNA sequences, as character strings,
+#' and appends the ends of each sequence with an appropriate number of \code{"N"} 
+#' characters to create a sequence vector with uniform lengths.
+#' 
+#' @param    seq       character vector of DNA sequence strings.
+#' @param    len       length to pad to. Only applies if longer than the maximum length of
+#'                     the data in \code{seq}.
+#' @param    start     if \code{TRUE} pad the beginning of each sequence instead of the end. 
+#' @param    pad_char  character to use for padding.
+#' 
+#' @return   A modified \code{seq} vector with padded sequences.
+#' 
+#' @seealso  See \link{maskSeqEnds} for creating uniform masking from existing masking.
+#' 
+#' @examples
+#' # Default behavior uniformly pads ragged ends
+#' seq <- c("CCCCTGGG", "ACCCTG", "CCCC")
+#' padSeqEnds(seq)
+#'
+#' # Pad to fixed length
+#' padSeqEnds(seq, len=15)
+#'
+#' # Add padding to the beginning of the sequences instead of the ends
+#' padSeqEnds(seq, start=TRUE)
+#' padSeqEnds(seq, len=15, start=TRUE)
+#' 
+#' @export
+padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
+    # Set length to max input length
+    width <- max(stri_length(seq),len)
+    
+    # Pad
+    if (!start) { 
+        seq <- stri_pad_right(seq, width=width, pad="N")
+    } else {
+        seq <- stri_pad_left(seq, width=width, pad="N")
+    }
+
     return(seq)
 }
 
@@ -357,6 +402,10 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                                text_fields=NULL, num_fields=NULL, seq_fields=NULL,
                                add_count=FALSE, ignore=c("N", "-", ".", "?"), 
                                sep=",", dry=FALSE, verbose=FALSE) {
+    # Stop if ids are not unique
+    if (any(duplicated(data[[id]]))) {
+        stop("All values in the id column are not unique")
+    }
     # Verify column classes and exit if they are incorrect
     if (!is.null(text_fields)) {
         if (!all(sapply(subset(data, select=text_fields), is.character))) {
@@ -375,12 +424,14 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     }
     seq_len <- stri_length(data[[seq]])
     if (any(seq_len != seq_len[1])) {
-        warning("All sequences are not the same length")
+        warning("All sequences are not the same length for data with first ", 
+                id, " = ", data[[id]][1])
     }
     
     # Define verbose reporting function
     .printVerbose <- function(n_total, n_unique, n_discard) {
         cat(" FUNCTION> collapseDuplicates\n", sep="")
+        cat(" FIRST_ID> ", data[[id]][1], "\n", sep="")
         cat("    TOTAL> ", n_total, "\n", sep="")
         cat("   UNIQUE> ", n_unique, "\n", sep="")
         cat("COLLAPSED> ", n_total - n_unique - n_discard, "\n", sep="")
@@ -519,7 +570,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                     data[["COLLAPSE_CLASS"]][taxa_i] <- "unique"    
                 } else {
                     ## unique after ambiguous removal
-                    data[["COLLAPSE_CLASS"]][taxa_i] <- "unique2"
+                    data[["COLLAPSE_CLASS"]][taxa_i] <- "ambiguous_duplicate"
                 }
                 data[["COLLAPSE_PASS"]][taxa_i] <- TRUE
             }
@@ -539,7 +590,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
                 stop("Error in distance matrix of collapseDuplicates")
         }
         
-        collapse_id <- collapse_id+1
+        collapse_id <- collapse_id + 1
     }
    
     if (dry) {
@@ -560,7 +611,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
             seq_set <- data[idx, c(id, seq)]
             inform_len <- .informativeLength(seq_set[[seq]])
             max_inform <- which.max(inform_len)[1] # if ties, pick first
-            tmp_df <- data[idx[max_inform],]
+            tmp_df <- data[idx[max_inform], ]
 
             # Define set of text fields for row
             for (f in text_fields) {
@@ -616,11 +667,11 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
 #' Extracts FWRs and CDRs from IMGT-gapped sequences
 #' 
 #' \code{extractVRegion} extracts the framework and complementarity determining regions of 
-#' the V-segment for IMGT-gapped immunoglobulin (Ig) nucleotide sequences according to the 
+#' the V segment for IMGT-gapped immunoglobulin (Ig) nucleotide sequences according to the 
 #' IMGT numbering scheme.
 #'
 #' @param     sequences  character vector of IMGT-gapped nucleotide sequences.
-#' @param     region     string defining the region(s) of the V-segment to extract. 
+#' @param     region     string defining the region(s) of the V segment to extract. 
 #'                       May be a single region or multiple regions (as a vector) from
 #'                       \code{c("FWR1", "CDR1", "FWR2", "CDR2" ,"FWR3")}.  By default, all
 #'                       regions will be returned.
@@ -657,7 +708,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
 #' extractVRegion(clone$SEQUENCE_IMGT, c("FWR1", "FWR2", "FWR3"))
 #'
 #' @export
-extractVRegion <- function(sequences, region=c("FWR1", "CDR1", "FWR2", "CDR2" ,"FWR3")) {
+extractVRegion <- function(sequences, region=c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3")) {
     # Check region argument
     region <- match.arg(region, several.ok=TRUE)
     
