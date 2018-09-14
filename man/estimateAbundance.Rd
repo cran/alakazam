@@ -4,13 +4,15 @@
 \alias{estimateAbundance}
 \title{Estimates the complete clonal relative abundance distribution}
 \usage{
-estimateAbundance(data, group, clone = "CLONE", copy = NULL, ci = 0.95,
-  nboot = 2000, progress = FALSE)
+estimateAbundance(data, group = NULL, clone = "CLONE", copy = NULL,
+  ci = 0.95, nboot = 2000, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
 
-\item{group}{name of the \code{data} column containing group identifiers.}
+\item{group}{name of the \code{data} column containing group identifiers. 
+If \code{NULL} then no grouping is performed and the \code{GROUP} 
+column of the output will contain the value \code{NA} for each row.}
 
 \item{clone}{name of the \code{data} column containing clone identifiers.}
 
@@ -30,7 +32,7 @@ copy numbers within each clonal group.}
 A data.frame with relative clonal abundance data and confidence intervals,
           containing the following columns:
           \itemize{
-            \item  \code{GROUP}:  group identifier.
+            \item  \code{GROUP}:  group identifier. Will be code{NA} if \code{group=NULL}.
             \item  \code{CLONE}:  clone identifier.
             \item  \code{P}:      relative abundance of the clone.
             \item  \code{LOWER}:  lower confidence inverval bound.

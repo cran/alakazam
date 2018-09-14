@@ -1,4 +1,33 @@
-Version 0.2.10:  March 10, 2018
+Version 0.2.11:  September 12, 2018
+-------------------------------------------------------------------------------
+
+General:
+
++ Added `nonsquareDist` function to calculate the non-square distance matrix of 
+  sequences.
++ Exported some internal utility functions to make them available to dependent 
+  packages: `progressBar`, `baseTheme`, `checkColumns` and `cpuCount`.
+
+Diversity:
+
++ `estimateAbundance`, and `plotAbundanceCurve`, will now allow `group=NULL`
+  to be specified to performance abundance calculations on ungrouped data.
+
+Gene Usage:
+
++ Added `fill` argument to `countGenes`. When set `TRUE` this adds zeroes 
+  to the `group` pairs that do not exist in the data.
++ Added new function `groupGenes` to group sequences sharing same V and J gene.
+  
+Toplogy Analysis:
+
++ Fixed a bug in tableEdges causing it to fail when no parent/child 
+  relationships exist when specifying `indirect=TRUE`.
++ `makeChangeoClone` will now issue an error and terminate, instead of 
+  continuing with a warning, when all sequences are not the same length.
+  
+
+Version 0.2.10:  March 30, 2018
 -------------------------------------------------------------------------------
 
 General:

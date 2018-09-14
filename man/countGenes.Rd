@@ -5,7 +5,7 @@
 \title{Tabulates V(D)J allele, gene or family usage.}
 \usage{
 countGenes(data, gene, groups = NULL, copy = NULL, clone = NULL,
-  mode = c("gene", "allele", "family", "asis"))
+  fill = FALSE, mode = c("gene", "allele", "family", "asis"))
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns.}
@@ -26,6 +26,9 @@ sequence. If this value is specified, then genes will be counted only
 once for each clone. Note, this is accomplished by using the most 
 common gene within each \code{clone} identifier. As such,
 ambiguous alleles within a clone will not be accurately represented.}
+
+\item{fill}{logical of \code{c(TRUE, FALSE)} specifying when if groups (when specified)
+lacking a particular gene should be counted as 0 if TRUE or not (omitted)}
 
 \item{mode}{one of \code{c("gene", "family", "allele", "asis")} defining
 the degree of specificity regarding allele calls. Determines whether 
@@ -71,5 +74,9 @@ genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"),
 # Count by clone
 genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"), 
                     clone="CLONE", mode="family")
+
+# Count absent genes 
+genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", 
+                    mode="allele", fill=TRUE)
 
 }

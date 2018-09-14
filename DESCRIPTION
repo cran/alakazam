@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 0.2.10
-Date: 2018-03-30
+Version: 0.2.11
+Date: 2018-09-12
 Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"), 
                     email="jason.vanderheiden@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -10,15 +10,18 @@ Authors@R: c(person("Jason", "Vander Heiden", role=c("aut", "cre"),
                     email="susanna.marquez@yale.edu"),
              person("Daniel", "Gadala-Maria", role=c("ctb"), 
                     email="daniel.gadala-maria@yale.edu"),
-             person("Rouyi", "Jiang", role=c("ctb"), 
+             person("Ruoyi", "Jiang", role=c("ctb"), 
                     email="ruoyi.jiang@yale.edu"),
              person("Nima", "Nouri", role=c("ctb"), 
                     email="nima.nouri@yale.edu"),
              person("Steven", "Kleinstein", role=c("aut", "cph"), 
                     email="steven.kleinstein@yale.edu"))
 Title: Immunoglobulin Clonal Lineage and Diversity Analysis
-Description: Provides immunoglobulin (Ig) sequence lineage reconstruction,
-    diversity profiling, and amino acid property analysis.
+Description: Provides methods for high-throughput adaptive immune 
+    receptor repertoire sequencing (AIRR-Seq; Rep-Seq) analysis. In 
+    particular, immunoglobulin (Ig) sequence lineage reconstruction, 
+    lineage topology analysis, diversity profiling, amino acid property 
+    analysis and gene usage.
     Citations: 
     Gupta and Vander Heiden, et al (2017) <doi:10.1093/bioinformatics/btv359>,
     Stern, Yaari and Vander Heiden, et al (2014) <doi:10.1126/scitranslmed.3008879>.
@@ -28,26 +31,27 @@ BugReports: https://bitbucket.org/kleinstein/alakazam/issues
 LazyData: true
 BuildVignettes: true
 VignetteBuilder: knitr
+Encoding: UTF-8
 SystemRequirements: C++11
 Depends: R (>= 3.1.2), ggplot2 (>= 2.0.0)
 Imports: dplyr (>= 0.5.0), graphics, grid, igraph (>= 1.0.0), lazyeval,
         methods, progress, Rcpp (>= 0.12.12), readr, scales, seqinr,
-        stats, stringi, utils
+        stats, stringi, tidyr, utils
 LinkingTo: Rcpp
 Suggests: knitr, rmarkdown, testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Gene.R' 'Lineage.R' 'RcppExports.R' 'Sequence.R'
         'Topology.R'
 NeedsCompilation: yes
-Packaged: 2018-03-30 14:52:52 UTC; jason
+Packaged: 2018-09-13 18:37:22 UTC; jason
 Author: Jason Vander Heiden [aut, cre],
   Namita Gupta [aut],
   Susanna Marquez [ctb],
   Daniel Gadala-Maria [ctb],
-  Rouyi Jiang [ctb],
+  Ruoyi Jiang [ctb],
   Nima Nouri [ctb],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@yale.edu>
 Repository: CRAN
-Date/Publication: 2018-03-30 17:29:22 UTC
+Date/Publication: 2018-09-14 16:10:03 UTC

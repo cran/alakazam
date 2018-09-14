@@ -4,8 +4,8 @@
 \alias{testDiversity}
 \title{Pairwise test of the diversity index}
 \usage{
-testDiversity(data, q, group, clone = "CLONE", copy = NULL, min_n = 30,
-  max_n = NULL, nboot = 2000, progress = FALSE)
+testDiversity(data, q, group, clone = "CLONE", copy = NULL,
+  min_n = 30, max_n = NULL, nboot = 2000, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}

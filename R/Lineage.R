@@ -126,6 +126,20 @@ makeChangeoClone <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         tmp_df[[seq]] <- padSeqEnds(tmp_df[[seq]], pad_char=mask_char)
     }
     
+    seq_len <- stri_length(tmp_df[[seq]])
+    if (any(seq_len != seq_len[1])) {
+        len_message <- paste0("All sequences are not the same length for data with first ", 
+                              id, " = ", tmp_df[[id]][1], ".")
+        if (!pad_end) {
+            len_message <- paste(len_message, 
+                                 "Consider specifying pad_end=TRUE and verify the multiple alignment.")
+        } else {
+            len_message <- paste(len_message,
+                                 "Verify that all sequences are properly multiple-aligned.")
+        }
+        stop(len_message)
+    }
+    
     # Remove duplicates
     tmp_df <- collapseDuplicates(tmp_df, id=id, seq=seq, text_fields=text_fields, 
                                  num_fields=num_fields, seq_fields=seq_fields,
@@ -417,7 +431,7 @@ phylipToGraph <- function(edges, clone) {
 #' dnapars application of the PHYLIP package.
 #' 
 #' @param    clone         \link{ChangeoClone} object containing clone data.
-#' @param    dnapars_exec  path to the PHYLIP dnapars executable.
+#' @param    dnapars_exec  absolute path to the PHYLIP dnapars executable.
 #' @param    dist_mat      Character distance matrix to use for reassigning edge weights. 
 #'                         Defaults to a Hamming distance matrix returned by \link{getDNAMatrix} 
 #'                         with \code{gap=0}. If gap characters, \code{c("-", ".")}, are assigned 

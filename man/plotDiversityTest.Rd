@@ -5,8 +5,8 @@
 \title{Plot the results of TestDiversity}
 \usage{
 plotDiversityTest(data, colors = NULL, main_title = "Diversity",
-  legend_title = "Group", log_d = FALSE, annotate = c("none", "depth"),
-  silent = FALSE, ...)
+  legend_title = "Group", log_d = FALSE, annotate = c("none",
+  "depth"), silent = FALSE, ...)
 }
 \arguments{
 \item{data}{\link{DiversityTest} object returned by 

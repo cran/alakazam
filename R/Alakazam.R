@@ -108,7 +108,7 @@
 #'            J Allergy Clin Immunol. 2014 134(3):604-12.
 #'   \item  Gupta NT, Vander Heiden JA, et al. Change-O: a toolkit for analyzing 
 #'            large-scale B cell immunoglobulin repertoire sequencing data.
-#'            Under review.
+#'            Bioinformatics. 2015 Oct 15;31(20):3356-8.
 #' }
 #' 
 #' @import      ggplot2
@@ -142,6 +142,7 @@
 #'                          stri_extract_all_regex stri_extract_first_regex  
 #'                          stri_replace_all_regex stri_replace_first_regex
 #'                          stri_pad_left stri_pad_right
+#' @importFrom  tidyr       complete_
 #' @importFrom  Rcpp evalCpp
 #' @useDynLib   alakazam, .registration=TRUE
 NULL

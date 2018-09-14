@@ -67,3 +67,7 @@ pairwiseDistRcpp <- function(seq, dist_mat) {
     .Call(`_alakazam_pairwiseDistRcpp`, seq, dist_mat)
 }
 
+nonsquareDistRcpp <- function(seq, indx, dist_mat) {
+    .Call(`_alakazam_nonsquareDistRcpp`, seq, indx, dist_mat)
+}
+

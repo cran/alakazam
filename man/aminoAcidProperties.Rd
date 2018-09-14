@@ -4,9 +4,9 @@
 \alias{aminoAcidProperties}
 \title{Calculates amino acid chemical properties for sequence data}
 \usage{
-aminoAcidProperties(data, property = c("length", "gravy", "bulk", "aliphatic",
-  "polarity", "charge", "basic", "acidic", "aromatic"), seq = "JUNCTION",
-  nt = FALSE, trim = FALSE, label = NULL, ...)
+aminoAcidProperties(data, property = c("length", "gravy", "bulk",
+  "aliphatic", "polarity", "charge", "basic", "acidic", "aromatic"),
+  seq = "JUNCTION", nt = FALSE, trim = FALSE, label = NULL, ...)
 }
 \arguments{
 \item{data}{\code{data.frame} containing sequence data.}

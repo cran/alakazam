@@ -5,8 +5,8 @@
 \title{Plots a clonal abundance distribution}
 \usage{
 plotAbundanceCurve(data, colors = NULL, main_title = "Rank Abundance",
-  legend_title = NULL, xlim = NULL, ylim = NULL, annotate = c("none",
-  "depth"), silent = FALSE, ...)
+  legend_title = NULL, xlim = NULL, ylim = NULL,
+  annotate = c("none", "depth"), silent = FALSE, ...)
 }
 \arguments{
 \item{data}{\link{AbundanceCurve} object returned by \link{estimateAbundance}.}

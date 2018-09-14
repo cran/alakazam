@@ -4,7 +4,8 @@
 \alias{getPathLengths}
 \title{Calculate path lengths from the tree root}
 \usage{
-getPathLengths(graph, root = "Germline", field = NULL, exclude = NULL)
+getPathLengths(graph, root = "Germline", field = NULL,
+  exclude = NULL)
 }
 \arguments{
 \item{graph}{igraph object containing an annotated lineage tree.}

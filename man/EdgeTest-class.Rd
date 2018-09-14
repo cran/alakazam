@@ -7,7 +7,6 @@
 \alias{print,EdgeTest-method}
 \alias{EdgeTest-method}
 \alias{plot,EdgeTest,missing-method}
-\alias{EdgeTest-method}
 \title{S4 class defining edge significance}
 \usage{
 \S4method{print}{EdgeTest}(x)

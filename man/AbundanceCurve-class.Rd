@@ -7,7 +7,6 @@
 \alias{print,AbundanceCurve-method}
 \alias{AbundanceCurve-method}
 \alias{plot,AbundanceCurve,missing-method}
-\alias{AbundanceCurve-method}
 \title{S4 class defining a clonal abundance curve}
 \usage{
 \S4method{print}{AbundanceCurve}(x)

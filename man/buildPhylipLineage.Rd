@@ -10,7 +10,7 @@ buildPhylipLineage(clone, dnapars_exec, dist_mat = getDNAMatrix(gap = 0),
 \arguments{
 \item{clone}{\link{ChangeoClone} object containing clone data.}
 
-\item{dnapars_exec}{path to the PHYLIP dnapars executable.}
+\item{dnapars_exec}{absolute path to the PHYLIP dnapars executable.}
 
 \item{dist_mat}{Character distance matrix to use for reassigning edge weights. 
 Defaults to a Hamming distance matrix returned by \link{getDNAMatrix} 

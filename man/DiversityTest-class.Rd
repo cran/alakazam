@@ -7,7 +7,6 @@
 \alias{print,DiversityTest-method}
 \alias{DiversityTest-method}
 \alias{plot,DiversityTest,missing-method}
-\alias{DiversityTest-method}
 \title{S4 class defining diversity significance}
 \usage{
 \S4method{print}{DiversityTest}(x)

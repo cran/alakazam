@@ -7,7 +7,6 @@
 \alias{print,MRCATest-method}
 \alias{MRCATest-method}
 \alias{plot,MRCATest,missing-method}
-\alias{MRCATest-method}
 \title{S4 class defining edge significance}
 \usage{
 \S4method{print}{MRCATest}(x)

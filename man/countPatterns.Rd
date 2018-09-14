@@ -4,7 +4,8 @@
 \alias{countPatterns}
 \title{Count sequence patterns}
 \usage{
-countPatterns(seq, patterns, nt = FALSE, trim = FALSE, label = "REGION")
+countPatterns(seq, patterns, nt = FALSE, trim = FALSE,
+  label = "REGION")
 }
 \arguments{
 \item{seq}{character vector of either DNA or amino acid sequences.}

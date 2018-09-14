@@ -4,7 +4,8 @@
 \alias{extractVRegion}
 \title{Extracts FWRs and CDRs from IMGT-gapped sequences}
 \usage{
-extractVRegion(sequences, region = c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3"))
+extractVRegion(sequences, region = c("FWR1", "CDR1", "FWR2", "CDR2",
+  "FWR3"))
 }
 \arguments{
 \item{sequences}{character vector of IMGT-gapped nucleotide sequences.}
