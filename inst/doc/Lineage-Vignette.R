@@ -87,3 +87,32 @@ graphs[sapply(graphs, is.null)] <- NULL
 # analysis, if desired.
 graphs <- graphs[sapply(graphs, vcount) >= 5]
 
+## ---- eval=TRUE, show=FALSE----------------------------------------------
+# Modify graph and plot attributes
+V(graph)$color <- categorical_pal(8)[1]
+V(graph)$label <- V(graph)$name
+E(graph)$label <- E(graph)$weight
+
+## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+##plot lineage tree using igraph
+plot(graph, layout=layout_as_tree)
+
+# convert to phylo
+phylo <- graphToPhylo(graph)
+
+#plot using ape
+plot(phylo, show.node.label=TRUE)
+
+#write tree file in Newick format
+ape::write.tree(phylo, file="example.tree")
+
+## ---- eval=TRUE----------------------------------------------------------
+#read in tree as phylo object
+phylo_r <- ape::read.tree("example.tree")
+
+#convert to graph object
+graph_r <- phyloToGraph(phylo_r, germline="Germline")
+
+#plot converted form using igraph - it's the same as before
+plot(graph_r,layout=layout_as_tree)
+

@@ -508,10 +508,10 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         inform_len$clusters <- igraph::components(g)$membership[data[[id]]]
         inform_len$select_id <- 1:nrow(inform_len)
         selected <- inform_len %>%
-            dplyr::group_by_("clusters") %>%
-            dplyr::slice(which.max(inform_len)) %>%
+            dplyr::group_by(!!rlang::sym("clusters")) %>%
+            dplyr::slice(which.max(!!rlang::sym("inform_len"))) %>%
             dplyr::ungroup() %>%
-            dplyr::select_("select_id") %>% unlist() 
+            dplyr::select(!!rlang::sym("select_id")) %>% unlist() 
         
         if (verbose) { .printVerbose(nseq, 0, discard_count - 1) }
         if (dry) {
@@ -826,7 +826,8 @@ pairwiseDist <- function(seq, dist_mat=getDNAMatrix()) {
 #' 
 #' \code{nonsquareDist} calculates all pairwise distance between a set of sequences and a subset of it.
 #'
-#' @param    seq       character vector containing a DNA sequences.
+#' @param    seq       character vector containing a DNA sequences. The sequence vector needs to
+#'                     be named.
 #' @param    indx      numeric vector contating the indices (a subset of indices of \code{seq}).
 #' @param    dist_mat  Character distance matrix. Defaults to a Hamming distance 
 #'                     matrix returned by \link{getDNAMatrix}. If gap 
@@ -839,8 +840,10 @@ pairwiseDist <- function(seq, dist_mat=getDNAMatrix()) {
 #'
 #' @return   A matrix of numerical distance between each entry in \code{seq} and 
 #'           sequences specified by \code{indx} indices. 
-#'           If \code{seq} is a named vector, row and columns names will be added 
-#'           accordingly.
+#'           
+#'           Note that the input subsampled indices will be ordered ascendingly. Therefore, 
+#'           it is necassary to assign unique names to the input sequences, \code{seq}, 
+#'           to recover the input order later. Row and columns names will be added accordingly.
 #' 
 #'           Amino acid distance matrix may be built with \link{getAAMatrix}. 
 #'           Uses \link{seqDist} for calculating distances between pairs.

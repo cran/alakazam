@@ -4,15 +4,12 @@
 \alias{estimateAbundance}
 \title{Estimates the complete clonal relative abundance distribution}
 \usage{
-estimateAbundance(data, group = NULL, clone = "CLONE", copy = NULL,
-  ci = 0.95, nboot = 2000, progress = FALSE)
+estimateAbundance(data, clone = "CLONE", copy = NULL, group = NULL,
+  min_n = 30, max_n = NULL, uniform = TRUE, ci = 0.95,
+  nboot = 200, progress = FALSE)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
-
-\item{group}{name of the \code{data} column containing group identifiers. 
-If \code{NULL} then no grouping is performed and the \code{GROUP} 
-column of the output will contain the value \code{NA} for each row.}
 
 \item{clone}{name of the \code{data} column containing clone identifiers.}
 
@@ -22,6 +19,20 @@ is determined by the number of sequences. If a \code{copy} column
 is specified, then clone abundances is determined by the sum of 
 copy numbers within each clonal group.}
 
+\item{group}{name of the \code{data} column containing group identifiers. 
+If \code{NULL} then no grouping is performed and the \code{GROUP} 
+column of the output will contain the value \code{NA} for each row.}
+
+\item{min_n}{minimum number of observations to sample.
+A group with less observations than the minimum is excluded.}
+
+\item{max_n}{maximum number of observations to sample. If \code{NULL} then no 
+maximum is set.}
+
+\item{uniform}{if \code{TRUE} then uniformly resample each group to the same 
+number of observations. If \code{FALSE} then allow each group to
+be resampled to its original size or, if specified, \code{max_size}.}
+
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
 
 \item{nboot}{number of bootstrap realizations to generate.}
@@ -29,31 +40,14 @@ copy numbers within each clonal group.}
 \item{progress}{if \code{TRUE} show a progress bar.}
 }
 \value{
-A data.frame with relative clonal abundance data and confidence intervals,
-          containing the following columns:
-          \itemize{
-            \item  \code{GROUP}:  group identifier. Will be code{NA} if \code{group=NULL}.
-            \item  \code{CLONE}:  clone identifier.
-            \item  \code{P}:      relative abundance of the clone.
-            \item  \code{LOWER}:  lower confidence inverval bound.
-            \item  \code{UPPER}:  upper confidence interval bound.
-            \item  \code{RANK}:   the rank of the clone abundance.
-          }
+A \link{AbundanceCurve} object summarizing the abundances.
 }
 \description{
 \code{estimateAbundance} estimates the complete clonal relative abundance distribution 
 and confidence intervals on clone sizes using bootstrapping.
 }
-\details{
-The complete clonal abundance distribution determined inferred by using the Chao1 
-estimator to estimate the number of seen clones, and then applying the relative abundance 
-correction and unseen clone frequencies described in Chao et al, 2015.
-
-Confidence intervals are derived using the standard deviation of the resampling 
-realizations, as described in Chao et al, 2015.
-}
 \examples{
-abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
+abund <- estimateAbundance(ExampleDb, group="SAMPLE", nboot=100)
 
 }
 \references{
@@ -70,5 +64,5 @@ abund <- estimateAbundance(ExampleDb, "SAMPLE", nboot=100)
 }
 \seealso{
 See \link{plotAbundanceCurve} for plotting of the abundance distribution.
-See \link{rarefyDiversity} for a similar application to clonal diversity.
+See \link{alphaDiversity} for a similar application to clonal diversity.
 }

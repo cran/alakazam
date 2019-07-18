@@ -7,18 +7,21 @@
 \alias{print,DiversityCurve-method}
 \alias{DiversityCurve-method}
 \alias{plot,DiversityCurve,missing-method}
+\alias{plot,DiversityCurve,numeric-method}
 \title{S4 class defining a diversity curve}
 \usage{
 \S4method{print}{DiversityCurve}(x)
 
 \S4method{plot}{DiversityCurve,missing}(x, y, ...)
+
+\S4method{plot}{DiversityCurve,numeric}(x, y, ...)
 }
 \arguments{
 \item{x}{DiversityCurve object}
 
-\item{y}{ignored.}
+\item{y}{diversity order to plot (q).}
 
-\item{...}{arguments to pass to \link{plotDiversityCurve}.}
+\item{...}{arguments to pass to \link{plotDiversityCurve} or \link{plotDiversityTest}.}
 }
 \description{
 \code{DiversityCurve} defines diversity (\eqn{D}) scores over multiple diversity 
@@ -27,7 +30,7 @@ orders (\eqn{Q}).
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{data.frame defining the diversity curve with the following columns:
+\item{\code{diversity}}{data.frame defining the diversity curve with the following columns:
 \itemize{
   \item  \code{GROUP}:    group label.
   \item  \code{Q}:        diversity order.
@@ -43,11 +46,25 @@ orders (\eqn{Q}).
   \item  \code{E_UPPER}:  eveness upper confidence interval bound.
 }}
 
-\item{\code{groups}}{character vector of groups retained in the diversity calculation.}
+\item{\code{tests}}{data.frame describing the significance test results with columns:
+\itemize{
+  \item  \code{TEST}:        string listing the two groups tested.
+  \item  \code{DELTA_MEAN}:  mean of the \eqn{D} bootstrap delta 
+                             distribution for the test.
+  \item  \code{DELTA_SD}:    standard deviation of the \eqn{D} 
+                             bootstrap delta distribution for the test.
+  \item  \code{PVALUE}:      p-value for the test.
+}}
 
-\item{\code{n}}{numeric vector indication the number of sequences sampled from each group.}
+\item{\code{group_by}}{string specifying the name of the grouping column in diversity calculation.}
 
-\item{\code{nboot}}{number of bootstrap realizations performed.}
+\item{\code{groups}}{vector specifying the names of unique groups in group column in diversity calculation.}
+
+\item{\code{method}}{string specifying the type of diversity calculated.}
+
+\item{\code{q}}{vector of diversity hill diversity indices used for computing diversity.}
+
+\item{\code{n}}{numeric vector indication the number of sequences sampled in each group.}
 
 \item{\code{ci}}{confidence interval defining the upper and lower bounds 
 (a value between 0 and 1).}

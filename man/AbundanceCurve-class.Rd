@@ -26,7 +26,7 @@
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{data.frame with relative clonal abundance data and confidence intervals,
+\item{\code{abundance}}{data.frame with relative clonal abundance data and confidence intervals,
 containing the following columns:
 \itemize{
   \item  \code{GROUP}:  group identifier.
@@ -37,11 +37,17 @@ containing the following columns:
   \item  \code{RANK}:   the rank of the clone abundance.
 }}
 
-\item{\code{groups}}{character vector of group values.}
+\item{\code{bootstrap}}{data.frame of bootstrapped clonal distributions.}
 
-\item{\code{n}}{numeric vector indication the number of sequences in each group.}
+\item{\code{clone_by}}{string specifying the name of the clone column.}
 
-\item{\code{nboot}}{number of bootstrap realizations performed.}
+\item{\code{group_by}}{string specifying the name of the grouping column.}
+
+\item{\code{groups}}{vector specifying the names of unique groups in group column.}
+
+\item{\code{n}}{numeric vector indication the number of sequences sampled in each group.}
+
+\item{\code{nboot}}{numeric specifying the number of bootstrap iterations to use.}
 
 \item{\code{ci}}{confidence interval defining the upper and lower bounds 
 (a value between 0 and 1).}

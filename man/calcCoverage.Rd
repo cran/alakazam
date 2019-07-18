@@ -37,5 +37,5 @@ calcCoverage(clones$SEQ_COUNT[clones$SAMPLE == "+7d"])
 }
 }
 \seealso{
-Used by \link{rarefyDiversity}.
+Used by \link{alphaDiversity}.
 }

@@ -1,3 +1,44 @@
+Version 0.3.0:  July 17, 2019
+-------------------------------------------------------------------------------
+
+Deprecated:
+
++ `rarefyDiversity` is deprecated in favor of `alphaDiversity`, which includes
+  the same functionality.
++ `testDiversity` is deprecated. The test calculation have been added to the 
+   normal output of `alphaDiversity`.
+
+General:
+
++ Added `ape` and `tibble` dependencies.
+
+Lineage:
+
++ Added `readIgphyml` to read in IgPhyML output and `combineIgphyml` to 
+  combine parameter estimates across samples.
++ Added `graphToPhylo` and `phyloToGraph` to allow conversion between 
+  graph and phylo formats.
+
+Diversity:
+
++ Fixed a bug in `estimateAbundance` where setting the `clone` column to a 
+  non-default value produced an error.
++ Added rarefaction options to `estimateAbundance` through the `min_n`, 
+  `max_n`, and `uniform` arguments.
++ Moved the rarefaction calculation for the diversity functions into 
+  `estimateAbundance`. `alphaDiversity` will call `estimateAbundance` for 
+  bootstrapping if not provided an existing `AbundanceCurve` object.
++ Restructured the `DiversityCurve` and `AbundanceCurve` objects to accomodate
+  the new diversity methods.
+
+Gene Usage:
+
++ `groupGenes` now supports grouping by V gene, J gene, and junction length 
+   (`junc_len`) as well, in addition to grouping by V gene and J gene without 
+   junction length. Also added support for single-cell input data with the addition
+   of new arguments `cell_id`, `locus`, and `only_igh`.
+
+
 Version 0.2.11:  September 12, 2018
 -------------------------------------------------------------------------------
 

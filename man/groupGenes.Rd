@@ -4,14 +4,31 @@
 \alias{groupGenes}
 \title{Group sequences by gene assignment}
 \usage{
-groupGenes(data, v_call = "V_CALL", j_call = "J_CALL", first = FALSE)
+groupGenes(data, v_call = "V_CALL", j_call = "J_CALL",
+  junc_len = NULL, cell_id = NULL, locus = NULL, only_igh = TRUE,
+  first = FALSE)
 }
 \arguments{
 \item{data}{data.frame containing sequence data.}
 
-\item{v_call}{name of the column containing the V-segment allele calls.}
+\item{v_call}{name of the column containing the heavy chain V-segment 
+allele calls.}
 
-\item{j_call}{name of the column containing the J-segment allele calls.}
+\item{j_call}{name of the column containing the heavy chain J-segment 
+allele calls.}
+
+\item{junc_len}{name of the column containing the heavy chain junction
+length. Optional.}
+
+\item{cell_id}{name of the column containing cell IDs. Only applicable 
+and required for single-cell mode.}
+
+\item{locus}{name of the column containing locus information. Only applicable 
+and required for single-cell mode.}
+
+\item{only_igh}{use only heavy chain (\code{IGH}) sequences for grouping,
+disregarding light chains. Only applicable and required for
+single-cell mode. Default is \code{TRUE}.}
 
 \item{first}{if \code{TRUE} only the first call of the gene assignments 
 is used. if \code{FALSE} the union of ambiguous gene 
@@ -19,23 +36,69 @@ assignments is used to group all sequences with any
 overlapping gene calls.}
 }
 \value{
-Returns a modified \code{data} data.frame with union indices 
-          in the \code{VJ_GROUP} column.
+Returns a modified data.frame with disjoint union indices 
+          in a new \code{VJ_GROUP} column. 
+          
+          Note that if \code{junc_len} is supplied, the grouping this \code{VJ_GROUP} 
+          will have been based on V, J, and L simultaneously despite the column name 
+          being \code{VJ_GROUP}.
 }
 \description{
-\code{groupGenes} will group rows by shared V and J gene assignments. 
-In the case of ambiguous (multiple) gene assignments, the grouping will
-be a union across all ambiguous V and J gene pairs, analagous to 
-single-linkage clustering (i.e., allowing for chaining).
+\code{groupGenes} will group rows by shared V and J gene assignments, 
+and optionally also by junction lengths.
+Both VH:VL paired single-cell BCR-seq and unpaired bulk-seq (heavy chain-only)
+are supported.
+In the case of ambiguous (multiple) gene assignments, the grouping may
+be specified to be a union across all ambiguous V and J gene pairs, 
+analagous to single-linkage clustering (i.e., allowing for chaining).
 }
 \details{
-All rows containing \code{NA} valies in their \code{v_call} or \code{j_call} column will be removed. 
-A warning will be issued when a row containing an \code{NA} is removed.
+To invoke single-cell mode, both \code{cell_id} and \code{locus} must be supplied. Otherwise,
+the function will run under non-single-cell mode, using all input sequences regardless of the
+value in the \code{locus} column.
 
-Ambiguous gene assignments are assumed to be separated by commas.
+Under single-cell mode for VH:VL paired sequences, there is a choice of whether grouping
+should be done using only heavy chain (\code{IGH}) sequences only, or using both heavy chain
+(\code{IGH}) and light chain (\code{IGK}, \code{IGL}) sequences. This is governed by 
+\code{only_igh}.
+
+Values in the \code{locus} column must be one of \code{"IGH"}, \code{"IGK"}, and \code{"IGL"}.
+
+By supplying \code{junc_len}, the call amounts to a 1-stage partitioning of the sequences/cells 
+based on V annotation, J annotation, and junction length simultaneously. Without supplying this 
+columns, the call amounts to the first stage of a 2-stage partitioning, in which sequences/cells 
+are partitioned in the first stage based on V annotation and J annotation, and then in the second 
+stage further split based on junction length.
+
+It is assumed that ambiguous gene assignments are separated by commas.
+
+All rows containing \code{NA} values in their any of the \code{v_call}, \code{j_call}, and, 
+if specified, \code{junc_len}, columns will be removed. A warning will be issued when a row 
+containing an \code{NA} is removed.
 }
+\section{Expectation for single-cell input}{
+
+
+For single-cell BCR data with VH:VL pairing, it is assumed that 
+  \itemize{
+     \item every row represents a sequence (chain)
+     \item heavy and light chains of the same cell are linked by \code{cell_id}
+     \item value in \code{locus} column indicates whether the chain is heavy or light
+     \item each cell possibly contains multiple heavy and/or light chains
+     \item every chain has its own V(D)J annotation, in which ambiguous V(D)J 
+           annotations, if any, are separated by \code{,} (comma)
+  }
+  
+An example:
+  \itemize{
+     \item A cell has 1 heavy chain and 2 light chains 
+     \item There should be 3 rows corresponding to this cell
+     \item One of the light chain has ambiguous V annotation, which looks like \code{Homsap IGKV1-39*01 F,Homsap IGKV1D-39*01 F}.
+  }
+}
+
 \examples{
 # Group by genes
-db <- groupGenes(ExampleDb)
+db <- groupGenes(ExampleDb, v_call="V_CALL", j_call="J_CALL")
  
 }

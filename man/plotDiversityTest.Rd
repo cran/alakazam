@@ -2,15 +2,17 @@
 % Please edit documentation in R/Diversity.R
 \name{plotDiversityTest}
 \alias{plotDiversityTest}
-\title{Plot the results of TestDiversity}
+\title{Plot the results of diversity testing}
 \usage{
-plotDiversityTest(data, colors = NULL, main_title = "Diversity",
+plotDiversityTest(data, q, colors = NULL, main_title = "Diversity",
   legend_title = "Group", log_d = FALSE, annotate = c("none",
   "depth"), silent = FALSE, ...)
 }
 \arguments{
-\item{data}{\link{DiversityTest} object returned by 
-\link{testDiversity}.}
+\item{data}{\link{DiversityCurve} object returned by 
+\link{alphaDiversity}.}
+
+\item{q}{diversity order to plot the test for.}
 
 \item{colors}{named character vector whose names are values in the 
 \code{group} column of the \code{data} slot of \code{data},
@@ -37,16 +39,21 @@ object; if \code{FALSE} draw the plot.}
 A \code{ggplot} object defining the plot.
 }
 \description{
-\code{plotDiversityTest} plots a \code{DiversityTest} object as the mean
-with a line range indicating plus/minus one standard deviation.
+\code{plotDiversityTest} plots summary data for a \code{DiversityCurve} object 
+with mean and a line range indicating plus/minus one standard deviation.
 }
 \examples{
-# All groups pass default minimum sampling threshold of 10 sequences
-div <- testDiversity(ExampleDb, "SAMPLE", q=0, nboot=100)
-plotDiversityTest(div, legend_title="Sample")
+# Calculate diversity
+div <- alphaDiversity(ExampleDb, group="SAMPLE", min_q=0, max_q=2, step_q=1, nboot=100)
+
+# Plot results at q=0 (equivalent to species richness)
+plotDiversityTest(div, 0, legend_title="Sample")
+
+# Plot results at q=2 (equivalent to Simpson's index)
+plotDiversityTest(div, q=2, legend_title="Sample")
 
 }
 \seealso{
-See \link{testDiversity} for generating \link{DiversityTest}
-          objects for input. Plotting is performed with \link{ggplot}.
+See \link{alphaDiversity} for generating input.
+          Plotting is performed with \link{ggplot}.
 }

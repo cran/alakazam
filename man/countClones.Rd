@@ -10,7 +10,7 @@ countClones(data, groups = NULL, copy = NULL, clone = "CLONE")
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
 
 \item{groups}{character vector defining \code{data} columns containing grouping 
-variables. If \code{group=NULL}, then do not group data.}
+variables. If \code{groups=NULL}, then do not group data.}
 
 \item{copy}{name of the \code{data} column containing copy numbers for each 
 sequence. If this value is specified, then total copy abundance

@@ -7,7 +7,8 @@
 nonsquareDist(seq, indx, dist_mat = getDNAMatrix())
 }
 \arguments{
-\item{seq}{character vector containing a DNA sequences.}
+\item{seq}{character vector containing a DNA sequences. The sequence vector needs to
+be named.}
 
 \item{indx}{numeric vector contating the indices (a subset of indices of \code{seq}).}
 
@@ -23,8 +24,10 @@ return a distance that does not consider indels as a special case.}
 \value{
 A matrix of numerical distance between each entry in \code{seq} and 
           sequences specified by \code{indx} indices. 
-          If \code{seq} is a named vector, row and columns names will be added 
-          accordingly.
+          
+          Note that the input subsampled indices will be ordered ascendingly. Therefore, 
+          it is necassary to assign unique names to the input sequences, \code{seq}, 
+          to recover the input order later. Row and columns names will be added accordingly.
 
           Amino acid distance matrix may be built with \link{getAAMatrix}. 
           Uses \link{seqDist} for calculating distances between pairs.

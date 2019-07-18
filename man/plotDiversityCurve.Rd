@@ -2,7 +2,7 @@
 % Please edit documentation in R/Diversity.R
 \name{plotDiversityCurve}
 \alias{plotDiversityCurve}
-\title{Plot the results of rarefyDiversity}
+\title{Plot the results of alphaDiversity}
 \usage{
 plotDiversityCurve(data, colors = NULL, main_title = "Diversity",
   legend_title = "Group", log_x = FALSE, log_y = FALSE,
@@ -11,7 +11,7 @@ plotDiversityCurve(data, colors = NULL, main_title = "Diversity",
 }
 \arguments{
 \item{data}{\link{DiversityCurve} object returned by 
-\link{rarefyDiversity}.}
+\link{alphaDiversity}.}
 
 \item{colors}{named character vector whose names are values in the 
 \code{group} column of the \code{data} slot of \code{data},
@@ -54,7 +54,7 @@ A \code{ggplot} object defining the plot.
 }
 \examples{
 # Calculate diversity
-div <- rarefyDiversity(ExampleDb, "SAMPLE", nboot=100)
+div <- alphaDiversity(ExampleDb, group="SAMPLE", nboot=100)
 
 # Plot diversity
 plotDiversityCurve(div, legend_title="Sample")
@@ -64,6 +64,6 @@ plotDiversityCurve(div, legend_title="Sample", score="evenness")
 
 }
 \seealso{
-See \link{rarefyDiversity} for generating \link{DiversityCurve}
-          objects for input. Plotting is performed with \link{ggplot}.
+See \link{alphaDiversity} and \link{alphaDiversity} for generating 
+          \link{DiversityCurve} objects for input. Plotting is performed with \link{ggplot}.
 }

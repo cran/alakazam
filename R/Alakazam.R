@@ -51,13 +51,11 @@
 #' @section  Diversity analysis:
 #' \itemize{
 #'   \item  \link{countClones}:          Calculate clonal abundance.
-#'   \item  \link{estimateAbundance}:    Infer complete clonal abundance distribution with
-#'                                       confidence intervals.
-#'   \item  \link{rarefyDiversity}:      Generate clonal diversity curves.
-#'   \item  \link{testDiversity}:        Test significance of clonal diversity scores.
+#'   \item  \link{estimateAbundance}:  	 Bootstrap clonal abundance curves.
+#'   \item  \link{alphaDiversity}:  	 Generate clonal alpha diversity curves.
 #'   \item  \link{plotAbundanceCurve}:   Plot clone size distribution as a rank-abundance 
-#'                                       curve.
 #'   \item  \link{plotDiversityCurve}:   Plot clonal diversity curves.
+#'   \item  \link{plotDiversityTest}:    Plot testing at given diversity hill indicex. 
 #' }
 #' 
 #' @section  Ig and TCR sequence annotation:
@@ -115,19 +113,23 @@
 #' @import      graphics
 #' @import      methods
 #' @import      utils
+#' @importFrom	ape 		read.tree di2multi reorder.phylo root ladderize
 #' @importFrom  dplyr       do n desc %>%
-#'                          data_frame data_frame_
-#'                          bind_cols bind_rows combine arrange arrange_ 
-#'                          group_by group_by_ ungroup
-#'                          filter filter_ slice slice_ select select_ 
-#'                          mutate mutate_ mutate_at
-#'                          summarize summarize_ summarize_at
-#'                          transmute transmute_ rename rename_
+#'                          bind_cols bind_rows combine arrange 
+#'                          group_by ungroup
+#'                          filter slice select 
+#'                          mutate mutate_at 
+#' 							one_of if_else
+#'							right_join rowwise
+#'                          summarize summarize_at
+#'                          transmute rename
 #' @importFrom  igraph      V E graph_from_data_frame as_data_frame as_edgelist 
 #'                          make_graph make_directed_graph make_undirected_graph
-#'                          vertex_attr set_vertex_attr 
+#'                          vertex_attr set_vertex_attr
 #'                          degree shortest_paths all_shortest_paths distances
+#'                          graph_from_adjacency_matrix components groups
 #' @importFrom  lazyeval    interp
+#' @importFrom  Matrix      sparseMatrix rowSums
 #' @importFrom  progress    progress_bar
 #' @importFrom  readr       read_delim read_tsv write_delim write_tsv cols
 #' @importFrom  scales      log2_trans log10_trans trans_breaks trans_format
@@ -138,11 +140,14 @@
 #'                          dnorm pnorm qnorm rnorm
 #'                          dmultinom rmultinom
 #' @importFrom  stringi     stri_dup stri_flatten stri_join stri_length 
-#'                          stri_count_boundaries stri_count_regex 
-#'                          stri_extract_all_regex stri_extract_first_regex  
-#'                          stri_replace_all_regex stri_replace_first_regex
+#'                          stri_count_boundaries stri_count_fixed 
+#'                          stri_count_regex stri_extract_all_regex 
+#'                          stri_extract_first_regex stri_replace_all_regex 
+#'                          stri_replace_first_regex stri_split_fixed
 #'                          stri_pad_left stri_pad_right
-#' @importFrom  tidyr       complete_
-#' @importFrom  Rcpp evalCpp
+#'                          stri_detect_fixed stri_paste
+#' @importFrom  tibble      tibble
+#' @importFrom  tidyr       complete gather
+#' @importFrom  Rcpp        evalCpp
 #' @useDynLib   alakazam, .registration=TRUE
 NULL

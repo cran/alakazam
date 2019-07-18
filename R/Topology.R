@@ -79,10 +79,11 @@ summarizeSubtrees <- function(graph, fields=NULL, root="Germline") {
     
     # Normalize
     node_df <- node_df %>%
-        dplyr::mutate_(OUTDEGREE_NORM=interp(~x/sum(x, na.rm=TRUE), x=as.name("OUTDEGREE")),
-                       SIZE_NORM=interp(~x/max(x, na.rm=TRUE), x=as.name("SIZE")),
-                       DEPTH_NORM=interp(~x/max(x, na.rm=TRUE), x=as.name("DEPTH")),
-                       PATHLENGTH_NORM=interp(~x/max(x, na.rm=TRUE), x=as.name("PATHLENGTH")))
+        dplyr::mutate(
+            OUTDEGREE_NORM=!!rlang::sym("OUTDEGREE")/sum(!!rlang::sym("OUTDEGREE"), na.rm=TRUE),
+            SIZE_NORM=!!rlang::sym("SIZE")/max(!!rlang::sym("SIZE"), na.rm=TRUE),
+            DEPTH_NORM=!!rlang::sym("DEPTH")/max(!!rlang::sym("DEPTH"), na.rm=TRUE),
+            PATHLENGTH_NORM=!!rlang::sym("PATHLENGTH")/max(!!rlang::sym("PATHLENGTH"), na.rm=TRUE))
 
     return(node_df)
 }
@@ -314,7 +315,7 @@ tableEdges <- function(graph, field, indirect=FALSE, exclude=NULL) {
     
     # Count edges
     edge_tab <- edge_df %>%
-        group_by_("PARENT", "CHILD") %>%
+        group_by(!!!rlang::syms(c("PARENT", "CHILD"))) %>%
         dplyr::summarize(COUNT=n())
 
     return(edge_tab)
@@ -407,8 +408,8 @@ testMRCA <- function(graphs, field, root="Germline", exclude=c("Germline", NA),
     # @param  x      data.frame from getMRCA
     # @param  field  annotation field
     .resolveMRCA <- function(x, field) {
-        x %>% filter_(interp(~!duplicated(y), y=as.name(field))) %>%
-            filter_(interp(~length(y) == 1, y=as.name(field)))
+        x %>% filter(!duplicated(!!rlang::sym(field))) %>%
+            filter(length(!!rlang::sym(field)) == 1)
     }
     
     # Function to count MRCAs
@@ -423,9 +424,9 @@ testMRCA <- function(graphs, field, root="Germline", exclude=c("Germline", NA),
         mrca_list <- lapply(mrca_list, .resolveMRCA, field=field)
         # Summarize MRCA counts
         mrca_sum <- bind_rows(mrca_list, .id="GRAPH") %>%
-            select_("GRAPH", field) %>%
-            rename_("ANNOTATION"=field) %>%
-            group_by_("ANNOTATION") %>%
+            select(!!!rlang::syms(c("GRAPH", field))) %>%
+            rename("ANNOTATION"=field) %>%
+            group_by(!!rlang::sym("ANNOTATION")) %>%
             dplyr::summarize(COUNT=n())
         
         return(mrca_sum)
@@ -526,8 +527,8 @@ testEdges <- function(graphs, field, indirect=FALSE, exclude=c("Germline", NA), 
     .countEdges <- function(x, field, exclude) {
         edge_list <- lapply(x, tableEdges, field=field, indirect=indirect, exclude=exclude)
         edge_sum <- bind_rows(edge_list) %>%
-            group_by_("PARENT", "CHILD") %>%
-            dplyr::summarize_(COUNT=interp(~sum(x, na.rm=TRUE), x=as.name("COUNT")))
+            group_by(!!!rlang::syms(c("PARENT", "CHILD"))) %>%
+            dplyr::summarize(COUNT=sum(!!rlang::sym("COUNT"), na.rm=TRUE))
         return(edge_sum)
     }
     
@@ -627,8 +628,8 @@ plotEdgeTest <- function(data, color="black", main_title="Edge Test",
     style <- match.arg(style)
     
     # Extract plot data
-    obs_sum <- rename_(data@tests, "Parent"="PARENT", "Child"="CHILD")
-    perm_sum <- rename_(data@permutations, "Parent"="PARENT", "Child"="CHILD")
+    obs_sum <- rename(data@tests, "Parent"="PARENT", "Child"="CHILD")
+    perm_sum <- rename(data@permutations, "Parent"="PARENT", "Child"="CHILD")
 
     if (style == "histogram") {
         # Plot edge null distribution
@@ -713,8 +714,8 @@ plotMRCATest <- function(data, color="black", main_title="MRCA Test",
     style <- match.arg(style)
     
     # Extract plot data
-    obs_sum <- rename_(data@tests, "Annotation"="ANNOTATION")
-    perm_sum <- rename_(data@permutations, "Annotation"="ANNOTATION")
+    obs_sum <- rename(data@tests, "Annotation"="ANNOTATION")
+    perm_sum <- rename(data@permutations, "Annotation"="ANNOTATION")
     
     if (style == "histogram") {
         # Plot MRCA null distribution
@@ -815,7 +816,7 @@ plotSubtrees <- function(graphs, field, stat, root="Germline", exclude=c("Germli
                          colors=NULL, main_title="Subtrees", legend_title="Annotation", 
                          style=c("box", "violin"), silent=FALSE, ...) {
     # Hack for visibility of special ggplot variables
-    ..x.. <- ..y.. <- NULL
+    ..x.. <- NULL
     
     ## DEBUG
     # graphs=ExampleTrees; field="ISOTYPE"; colors=IG_COLORS; main_title="Outdegree"; root="Germline"; exclude=c("Germline", NA); style="box"
@@ -847,8 +848,8 @@ plotSubtrees <- function(graphs, field, stat, root="Germline", exclude=c("Germli
     # Get subtree summarizes and filter excluded annotations
     sum_list <- lapply(graphs, summarizeSubtrees, fields=field, root=root)
     sum_df <- bind_rows(sum_list, .id="GRAPH") %>%
-        filter_(interp(~!(x %in% exclude), x=as.name(field)),
-                interp(~is.finite(x), x=as.name(stat_col)))
+        filter(!(!!rlang::sym(field) %in% exclude),
+                is.finite(!!rlang::sym(stat_col)))
     
     # Set ordering based on color names
     if (!is.null(colors)) {
