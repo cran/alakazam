@@ -4,8 +4,7 @@
 \alias{getPathLengths}
 \title{Calculate path lengths from the tree root}
 \usage{
-getPathLengths(graph, root = "Germline", field = NULL,
-  exclude = NULL)
+getPathLengths(graph, root = "Germline", field = NULL, exclude = NULL)
 }
 \arguments{
 \item{graph}{igraph object containing an annotated lineage tree.}
@@ -21,9 +20,9 @@ If \code{NULL} consider all nodes. This does not affect the weighted
 \value{
 A data.frame with columns:
           \itemize{
-            \item  \code{NAME}:      node name
-            \item  \code{STEPS}:     path length as the number of nodes traversed
-            \item  \code{DISTANCE}:  path length as the sum of edge weights
+            \item  \code{name}:      node name
+            \item  \code{steps}:     path length as the number of nodes traversed
+            \item  \code{distance}:  path length as the sum of edge weights
           }
 }
 \description{
@@ -38,7 +37,7 @@ graph <- ExampleTrees[[24]]
 getPathLengths(graph, root="Germline")
 
 # Exclude nodes without an isotype annotation from step count
-getPathLengths(graph, root="Germline", field="ISOTYPE", exclude=NA)
+getPathLengths(graph, root="Germline", field="c_call", exclude=NA)
 
 }
 \seealso{

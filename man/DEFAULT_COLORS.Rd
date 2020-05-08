@@ -7,15 +7,23 @@
 \alias{IG_COLORS}
 \alias{TR_COLORS}
 \title{Default colors}
-\format{Named character vectors with hexcode colors as values.
+\format{
+Named character vectors with hexcode colors as values.
 \itemize{
   \item  \code{DNA_COLORS}:  DNA character colors 
                              \code{c("A", "C", "G", "T")}.
   \item  \code{IG_COLORS}:   Ig isotype colors 
-                             \code{c("IgA", "IgD", "IgE", "IgG", "IgM", "IgK", "IgL")}.
+                             \code{c("IGHA", "IGHD", "IGHE", "IGHG", "IGHM", "IGHK", "IGHL")}.
   \item  \code{TR_COLORS}:   TCR chain colors 
                              \code{c("TRA", "TRB", "TRD", "TRG")}.
-}}
+}
+
+An object of class \code{character} of length 4.
+
+An object of class \code{character} of length 7.
+
+An object of class \code{character} of length 4.
+}
 \usage{
 DNA_COLORS
 
@@ -28,7 +36,7 @@ Default color palettes for DNA characters, Ig isotypes, and TCR chains.
 }
 \examples{
 # IG_COLORS as an isotype color set for ggplot
-isotype <- c("IgG", "IgM", "IgM", "IgA")
+isotype <- c("IGHG", "IGHM", "IGHM", "IGHA")
 db <- data.frame(x=1:4, y=1:4, iso=isotype)
 g1 <- ggplot(db, aes(x=x, y=y, color=iso)) + 
     scale_color_manual(name="Isotype", values=IG_COLORS) +

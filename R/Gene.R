@@ -7,7 +7,7 @@
 #' Determines the count and relative abundance of V(D)J alleles, genes or families within
 #' groups.
 #'
-#' @param    data    data.frame with Change-O style columns.
+#' @param    data    data.frame with AIRR-format or Change-O style columns.
 #' @param    gene    column containing allele assignments. Only the first allele in the
 #'                   column will be considered when \code{mode} is "gene", "family" or 
 #'                   "allele". The value will be used as it is with \code{mode="asis"}. 
@@ -27,52 +27,52 @@
 #'                   families (calling \code{getFamily}), alleles (calling 
 #'                   \code{getAllele}) or using the value as it is in the column
 #'                   \code{gene}, without any processing.
-#' @param    fill  logical of \code{c(TRUE, FALSE)} specifying when if groups (when specified)
+#' @param    fill    logical of \code{c(TRUE, FALSE)} specifying when if groups (when specified)
 #'                   lacking a particular gene should be counted as 0 if TRUE or not (omitted) 
 #' 
 #' @return   A data.frame summarizing family, gene or allele counts and frequencies 
 #'           with columns:
 #'           \itemize{
-#'             \item \code{GENE}:         name of the family, gene or allele
-#'             \item \code{SEQ_COUNT}:    total number of sequences for the gene.
-#'             \item \code{SEQ_FREQ}:     frequency of the gene as a fraction of the total
+#'             \item \code{gene}:         name of the family, gene or allele
+#'             \item \code{seq_count}:    total number of sequences for the gene.
+#'             \item \code{seq_freq}:     frequency of the gene as a fraction of the total
 #'                                        number of sequences within each grouping.
-#'             \item \code{COPY_COUNT}:   sum of the copy counts in the \code{copy} column.
+#'             \item \code{copy_count}:   sum of the copy counts in the \code{copy} column.
 #'                                        for each gene. Only present if the \code{copy} 
 #'                                        argument is specified.
-#'             \item \code{COPY_FREQ}:    frequency of the gene as a fraction of the total
+#'             \item \code{copy_freq}:    frequency of the gene as a fraction of the total
 #'                                        copy number within each group. Only present if 
 #'                                        the \code{copy} argument is specified.
-#'             \item \code{CLONE_COUNT}:  total number of clones for the gene.
-#'             \item \code{CLONE_FREQ}:   frequency of the gene as a fraction of the total
+#'             \item \code{clone_count}:  total number of clones for the gene.
+#'             \item \code{clone_freq}:   frequency of the gene as a fraction of the total
 #'                                        number of clones within each grouping.
 #'           }
 #'           Additional columns defined by the \code{groups} argument will also be present.
 #'
 #' @examples
 #' # Without copy numbers
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="family")
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="gene")
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="allele")
+#' genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="family")
+#' genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="gene")
+#' genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="allele")
 #'
 #' # With copy numbers and multiple groups
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"), 
-#'                     copy="DUPCOUNT", mode="family")
+#' genes <- countGenes(ExampleDb, gene="v_call", groups=c("sample_id", "c_call"), 
+#'                     copy="duplicate_count", mode="family")
 #' 
 #' # Count by clone
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"), 
-#'                     clone="CLONE", mode="family")
+#' genes <- countGenes(ExampleDb, gene="v_call", groups=c("sample_id", "c_call"), 
+#'                     clone="clone_id", mode="family")
 #'
 #' # Count absent genes 
-#' genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", 
+#' genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", 
 #'                     mode="allele", fill=TRUE)
 #'
 #'@export
 countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALSE,
                        mode=c("gene", "allele", "family", "asis")) {
     ## DEBUG
-    # data=ExampleDb; gene="V_CALL"; groups=NULL; mode="gene"; clone="CLONE"
-    # data=subset(db, CLONE == 3138)
+    # data=ExampleDb; gene="c_call"; groups=NULL; mode="gene"; clone="clone_id"
+    # data=subset(db, clond_id == 3138)
     # Hack for visibility of dplyr variables
     . <- NULL
     
@@ -95,22 +95,22 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
         # Tabulate sequence abundance
         gene_tab <- data %>% 
             group_by(!!!rlang::syms(c(groups, gene))) %>%
-            dplyr::summarize(SEQ_COUNT=n()) %>%
-            mutate(., SEQ_FREQ=!!rlang::sym("SEQ_COUNT")/sum(!!rlang::sym("SEQ_COUNT"), na.rm=TRUE)) %>%
-            arrange(desc(!!rlang::sym("SEQ_COUNT")))
+            dplyr::summarize(seq_count=n()) %>%
+            mutate(., seq_freq=!!rlang::sym("seq_count")/sum(!!rlang::sym("seq_count"), na.rm=TRUE)) %>%
+            arrange(desc(!!rlang::sym("seq_count")))
     } else if (!is.null(clone) & is.null(copy)) {
         # Find count of genes within each clone and keep first with maximum count
         gene_tab <- data %>%
             group_by(!!!rlang::syms(c(groups, clone, gene))) %>%
-            dplyr::mutate(CLONE_GENE_COUNT=n()) %>%
+            dplyr::mutate(clone_gene_count=n()) %>%
             ungroup() %>%
             group_by(!!!rlang::syms(c(groups, clone))) %>%
-            slice(which.max(!!rlang::sym("CLONE_GENE_COUNT"))) %>%
+            slice(which.max(!!rlang::sym("clone_gene_count"))) %>%
             ungroup() %>%
             group_by(!!!rlang::syms(c(groups, gene))) %>%
-            dplyr::summarize(CLONE_COUNT=n()) %>%
-            mutate(CLONE_FREQ=!!rlang::sym("CLONE_COUNT")/sum(!!rlang::sym("CLONE_COUNT"), na.rm=TRUE)) %>%
-            arrange(!!rlang::sym("CLONE_COUNT"))
+            dplyr::summarize(clone_count=n()) %>%
+            mutate(clone_freq=!!rlang::sym("clone_count")/sum(!!rlang::sym("clone_count"), na.rm=TRUE)) %>%
+            arrange(!!rlang::sym("clone_count"))
     } else {
         if (!is.null(clone) & !is.null(copy)) {
             warning("Specifying both 'copy' and 'clone' columns is not meaningful. ",
@@ -119,23 +119,23 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
         # Tabulate copy abundance
         gene_tab <- data %>% 
             group_by(!!!rlang::syms(c(groups, gene))) %>%
-            summarize(SEQ_COUNT=length(!!rlang::sym(gene)),
-                       COPY_COUNT=sum(!!rlang::sym(copy), na.rm=TRUE)) %>%
-            mutate(SEQ_FREQ=!!rlang::sym("SEQ_COUNT")/sum(!!rlang::sym("SEQ_COUNT"), na.rm=TRUE),
-                    COPY_FREQ=!!rlang::sym("COPY_COUNT")/sum(!!rlang::sym("COPY_COUNT"), na.rm=TRUE)) %>%
-            arrange(desc(!!rlang::sym("COPY_COUNT")))
+            summarize(seq_count=length(!!rlang::sym(gene)),
+                       copy_count=sum(!!rlang::sym(copy), na.rm=TRUE)) %>%
+            mutate(seq_freq=!!rlang::sym("seq_count")/sum(!!rlang::sym("seq_count"), na.rm=TRUE),
+                   copy_freq=!!rlang::sym("copy_count")/sum(!!rlang::sym("copy_count"), na.rm=TRUE)) %>%
+            arrange(desc(!!rlang::sym("copy_count")))
     }
 
     # If a gene is present in one GROUP but not another, will fill the COUNT and FREQ with 0s
     if (fill) {
         gene_tab <- gene_tab %>%
             ungroup() %>%
-            tidyr::complete_(as.list(c(groups, gene))) %>%
+            tidyr::complete(!!!rlang::syms(as.list(c(groups, gene)))) %>%
             replace(is.na(.), 0)
     }
 
     # Rename gene column
-    gene_tab <- rename(gene_tab, "GENE"=gene)
+    gene_tab <- rename(gene_tab, "gene"=gene)
     
     return(gene_tab)
 }
@@ -420,16 +420,15 @@ getAllVJL <- function(v, j, l, sep_chain, sep_anno, first) {
 #' analagous to single-linkage clustering (i.e., allowing for chaining).
 #'
 #' @param    data                    data.frame containing sequence data.
-#' @param    v_call                  name of the column containing the heavy chain V-segment 
-#'                                   allele calls.
-#' @param    j_call                  name of the column containing the heavy chain J-segment 
-#'                                   allele calls.
-#' @param    junc_len                name of the column containing the heavy chain junction
-#'                                   length. Optional.
-#' @param    cell_id                 name of the column containing cell IDs. Only applicable 
-#'                                   and required for single-cell mode.
-#' @param    locus                   name of the column containing locus information. Only applicable 
-#'                                   and required for single-cell mode.
+#' @param    v_call                  name of the column containing the heavy chain 
+#'                                   V-segment allele calls.
+#' @param    j_call                  name of the column containing the heavy chain 
+#'                                   J-segment allele calls.
+#' @param    junc_len                name of column containing the junction length. Optional.
+#' @param    cell_id                 name of the column containing cell IDs. Only 
+#'                                   applicable and required for single-cell mode.
+#' @param    locus                   name of the column containing locus information. 
+#'                                   Only applicable and required for single-cell mode.
 #' @param    only_igh                use only heavy chain (\code{IGH}) sequences for grouping,
 #'                                   disregarding light chains. Only applicable and required for
 #'                                   single-cell mode. Default is \code{TRUE}.
@@ -439,11 +438,15 @@ getAllVJL <- function(v, j, l, sep_chain, sep_anno, first) {
 #'                                   overlapping gene calls.
 #'
 #' @return   Returns a modified data.frame with disjoint union indices 
-#'           in a new \code{VJ_GROUP} column. 
+#'           in a new \code{vj_group} column. 
 #'           
-#'           Note that if \code{junc_len} is supplied, the grouping this \code{VJ_GROUP} 
+#'           Note that if \code{junc_len} is supplied, the grouping this \code{vj_group} 
 #'           will have been based on V, J, and L simultaneously despite the column name 
-#'           being \code{VJ_GROUP}.
+#'           being \code{vj_group}.
+#'           
+#'           Note that the output \code{v_call}, \code{j_call}, \code{cell_id}, and \code{locus}
+#'           columns will be converted to \code{character} if they were \code{factor} in the 
+#'           input \code{data}.
 #'
 #' @details
 #' 
@@ -465,6 +468,9 @@ getAllVJL <- function(v, j, l, sep_chain, sep_anno, first) {
 #' stage further split based on junction length.
 #' 
 #' It is assumed that ambiguous gene assignments are separated by commas.
+#' 
+#' In the input \code{data}, the \code{v_call}, \code{j_call}, \code{cell_id}, and \code{locus} 
+#' columns, if present, must be \code{character}, as opposed to \code{factor}.
 #' 
 #' All rows containing \code{NA} values in their any of the \code{v_call}, \code{j_call}, and, 
 #' if specified, \code{junc_len}, columns will be removed. A warning will be issued when a row 
@@ -491,19 +497,19 @@ getAllVJL <- function(v, j, l, sep_chain, sep_anno, first) {
 #' 
 #' @examples
 #' # Group by genes
-#' db <- groupGenes(ExampleDb, v_call="V_CALL", j_call="J_CALL")
+#' db <- groupGenes(ExampleDb, v_call="v_call", j_call="j_call")
 #'  
 #' @export
-groupGenes <- function(data, v_call="V_CALL", j_call="J_CALL", junc_len=NULL,
+groupGenes <- function(data, v_call="v_call", j_call="j_call", junc_len=NULL,
                        cell_id=NULL, locus=NULL, only_igh=TRUE,
                        first=FALSE) {
-    
-    # calling `data` `data` is hugely problematic b/c `data` is a default R function
-    # data_orig <- data will cause downstream errors
-    
     # Check input
     check <- checkColumns(data, c(v_call, j_call, junc_len, cell_id, locus))
     if (check != TRUE) { stop(check) }
+    
+    # if necessary, cast select columns to character (factor not allowed later on)
+    if (!is(data[[v_call]], "character")) { data[[v_call]] <- as.character(data[[v_call]]) }
+    if (!is(data[[j_call]], "character")) { data[[j_call]] <- as.character(data[[j_call]]) }
     
     # e.g.: "Homsap IGHV3-7*01 F,Homsap IGHV3-6*01 F;Homsap IGHV1-4*01 F"
     separator_within_seq <- ","
@@ -512,6 +518,10 @@ groupGenes <- function(data, v_call="V_CALL", j_call="J_CALL", junc_len=NULL,
     # single-cell mode?
     if ( !is.null(cell_id) & !is.null(locus) ) {
         single_cell <- TRUE
+        
+        if (!is(data[[cell_id]], "character")) { data[[cell_id]] <- as.character(data[[cell_id]]) }
+        if (!is(data[[locus]], "character")) { data[[locus]] <- as.character(data[[locus]]) }
+        
         if (!all(data[[locus]] %in% c("IGH", "IGK", "IGL"))) {
             stop("The locus column must be one of {IGH, IGK, IGL}.")
         }
@@ -658,13 +668,13 @@ groupGenes <- function(data, v_call="V_CALL", j_call="J_CALL", junc_len=NULL,
     if (any( sapply(cols_for_grouping_heavy, function(x){class(data[[x]]) == "factor"}) )) {
         stop("one or more of { ", v_call, ", ", j_call,  
              ifelse(is.null(junc_len), " ", ", "), junc_len, 
-             "} is factor. Must be character.\n")
+             "} is factor. Must be character.\nIf using read.table(), make sure to set stringsAsFactors=FALSE.\n")
     }
     if (single_cell & !only_igh) {
         if (any( sapply(cols_for_grouping_light, function(x) {class(data[[x]]) == "factor"}) )) {
             stop("one or more of { ", v_call_light, ", ", j_call_light,  
                  ifelse(is.null(junc_len_light), " ", ", "), junc_len_light, 
-                 "} is factor. Must be character.\n")
+                 "} is factor. Must be character.\nIf using read.table(), make sure to set stringsAsFactors=FALSE.\n")
         }  
     }
     
@@ -1045,16 +1055,16 @@ groupGenes <- function(data, v_call="V_CALL", j_call="J_CALL", junc_len=NULL,
     stopifnot( n_cells_or_seqs == length(unique(unlist(cellIdx_byGroup_lst, use.names=FALSE))) )
     
     # assign
-    data$VJ_GROUP <- NA
+    data$vj_group <- NA
     for (i in 1:length(cellIdx_byGroup_lst)) {
-        data[["VJ_GROUP"]][cellIdx_byGroup_lst[[i]]] <- names(VJL_groups)[i]
+        data[["vj_group"]][cellIdx_byGroup_lst[[i]]] <- names(VJL_groups)[i]
     }
-    stopifnot(!any(is.na(data[["VJ_GROUP"]])))
+    stopifnot(!any(is.na(data[["vj_group"]])))
     
     if (!single_cell) {
         return(data)
     } else {
-        data_orig$VJ_GROUP <- NA
+        data_orig$vj_group <- NA
         
         # map back to data_orig
         for (i_cell in 1:nrow(data)) {
@@ -1064,12 +1074,12 @@ groupGenes <- function(data, v_call="V_CALL", j_call="J_CALL", junc_len=NULL,
             # sanity check
             stopifnot( all( data_orig[[cell_id]][c(i_orig_h, i_orig_l)] == cell_id_uniq[i_cell] ) )
             # grouping
-            data_orig$VJ_GROUP[c(i_orig_h, i_orig_l)] <- data$VJ_GROUP[i_cell]
+            data_orig$vj_group[c(i_orig_h, i_orig_l)] <- data$vj_group[i_cell]
         }
         
-        # remove rows with $VJ_GROUP values of NA
+        # remove rows with $vj_group values of NA
         # these had already been removed by the NA check for `data`
-        data_orig <- data_orig[!is.na(data_orig$VJ_GROUP), ]
+        data_orig <- data_orig[!is.na(data_orig$vj_group), ]
         
         return(data_orig)
     }

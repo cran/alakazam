@@ -23,9 +23,9 @@ be counted. If \code{NULL} count all edges.}
 \value{
 A data.frame defining total annotation connections in the tree with columns:
           \itemize{
-            \item  \code{PARENT}:  parent annotation
-            \item  \code{CHILD}:   child annotation
-            \item  \code{COUNT}:   count of edges for the parent-child relationship
+            \item  \code{parent}:  parent annotation
+            \item  \code{child}:   child annotation
+            \item  \code{count}:   count of edges for the parent-child relationship
           }
 }
 \description{
@@ -37,13 +37,13 @@ unique pair of annotations within a tree over all nodes.
 graph <- ExampleTrees[[23]]
 
 # Count direct edges between isotypes including inferred nodes
-tableEdges(graph, "ISOTYPE")
+tableEdges(graph, "c_call")
 
 # Count direct edges excluding edges to and from germline and inferred nodes
-tableEdges(graph, "ISOTYPE", exclude=c("Germline", NA))
+tableEdges(graph, "c_call", exclude=c("Germline", NA))
 
 # Count indirect edges walking through germline and inferred nodes
-tableEdges(graph, "ISOTYPE", indirect=TRUE, exclude=c("Germline", NA))
+tableEdges(graph, "c_call", indirect=TRUE, exclude=c("Germline", NA))
 
 }
 \seealso{

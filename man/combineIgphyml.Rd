@@ -8,13 +8,13 @@ combineIgphyml(iglist, format = c("wide", "long"))
 }
 \arguments{
 \item{iglist}{list of igphyml objects returned by \link{readIgphyml}. 
-Each must have an \code{ID} column in its \code{param} attribute, 
+Each must have an \code{id} column in its \code{param} attribute, 
 which can be added automatically using the \code{id} option of 
 \code{readIgphyml}.}
 
 \item{format}{string specifying whether each column of the resulting data.frame
 should represent a parameter (\code{wide}) or if 
-there should only be three columns; i.e. ID, varable, and value
+there should only be three columns; i.e. id, varable, and value
 (\code{long}).}
 }
 \value{
@@ -29,7 +29,7 @@ A data.frame containing HLP model parameter estimates for all igphyml objects.
 objects produced by readIgphyml into a dataframe that can be easily used for plotting and 
 other hypothesis testing analyses.
 
-All igphyml objects used must have an "ID" column in their \code{param} attribute, which
+All igphyml objects used must have an "id" column in their \code{param} attribute, which
 can be added automatically from the \code{id} flag of \code{readIgphyml}.
 }
 \examples{

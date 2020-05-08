@@ -15,10 +15,10 @@ character codes. If \code{NULL}, then the Kyte & Doolittle
 scale is used.}
 }
 \value{
-A vector of GRAVY scores for the sequence(s).
+A vector of gravy scores for the sequence(s).
 }
 \description{
-\code{gravy} calculates the Grand Average of Hydrophobicity (GRAVY) index 
+\code{gravy} calculates the Grand Average of Hydrophobicity (gravy) index 
 of amino acid sequences using the method of Kyte & Doolittle. Non-informative
 positions are excluded, where non-informative is defined as any character in 
 \code{c("X", "-", ".", "*")}.

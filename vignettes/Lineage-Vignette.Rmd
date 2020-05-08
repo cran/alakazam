@@ -30,23 +30,25 @@ vignette: >
 
 Reconstruction of an Ig lineage requires the following steps:
 
-1. Load a Change-O tab-delimited database file and select a clone
+1. Load an AIRR tab-delimited database file and select a clone
 2. Preprocess the clone to remove gap characters and duplicate sequences
 3. Run PHYLIP, parse the output, and modify the tree topology
 
 ## Example data
 
-A small example Change-O database, `ExampleDb`, is included in the `alakazam` package. 
+A small example AIRR database, `ExampleDb`, is included in the `alakazam` package. 
 Lineage reconstruction requires the following fields (columns) to be present 
-in the Change-O file: 
+in the AIRR file: 
 
-* `SEQUENCE_ID`
-* `SEQUENCE_IMGT` 
-* `CLONE`
-* `GERMLINE_IMGT_D_MASK`
-* `V_CALL`
-* `J_CALL`
-* `JUNCTION_LENGTH`
+* `sequence_id`
+* `sequence_alignment` 
+* `germline_alignment`
+* `v_call`
+* `j_call`
+* `junction_length`
+* `clone_id`
+
+For details about the AIRR format, visit the AIRR Community documentation site https://docs.airr-community.org/en/latest/datarep/rearrangements.html#fields
 
 ```{r, eval=TRUE, warning=FALSE, message=FALSE}
 # Load required packages
@@ -54,18 +56,18 @@ library(alakazam)
 library(igraph)
 library(dplyr)
 
-# Select clone from example database
+# Select a clone from the example database
 data(ExampleDb)
-sub_db <- subset(ExampleDb, CLONE == 3138)
+sub_db <- subset(ExampleDb, clone_id == 3138)
 ```
 
 ## Preprocess a clone
 
-Before a lineage can be constructed the sequences must first be cleaned of gap
+Before a lineage can be constructed, the sequences must first be cleaned of gap
 (-, .) characters added by IMGT, duplicate sequences must be removed, and
 annotations must be combined for each cluster of duplicate sequences. 
-Optionally, "ragged" ends of sequences, such as may occur from primer template
-switching, may also be cleaned by masking mismatched positions and the leading
+Optionally, "ragged" ends of sequences (such as those that may occur from primer template
+switching) may also be cleaned by masking mismatched positions and the leading
 and trailing ends of each sequence. The function `makeChangeoClone` is a wrapper
 function which combines these steps and returns a `ChangeoClone` object which
 may then be passed into the lineage reconstruction function.
@@ -79,11 +81,11 @@ following duplicate removal. Unique values appearing within columns given by the
 ```{r, eval=TRUE}
 # This example data set does not have ragged ends
 # Preprocess clone without ragged end masking (default)
-clone <- makeChangeoClone(sub_db, text_fields=c("SAMPLE", "ISOTYPE"), 
-                          num_fields="DUPCOUNT")
+clone <- makeChangeoClone(sub_db, text_fields=c("sample_id", "c_call"), 
+                          num_fields="duplicate_count")
 
 # Show combined annotations
-clone@data[, c("SAMPLE", "ISOTYPE", "DUPCOUNT")]
+clone@data[, c("sample_id", "c_call", "duplicate_count")]
 ```
 
 ## Run PHYLIP
@@ -99,13 +101,13 @@ annotations as vertex attributes, and mutations along edges as edge attributes.
 The system call to `dnapars` requires a temporary folder to store input and 
 output. This is created in the system temporary location (according to 
 `base::tempfile`), and is not deleted by default (only because automatically 
-deleting files is somewhat rude).  In most cases, you will want to set 
+deleting files is somewhat rude). In most cases, you will want to set 
 `rm_temp=TRUE` to delete this folder.
 
 ```{r, eval=FALSE}
 # Run PHYLIP and parse output
-dnapars_exec <- "~/apps/phylip-3.69/dnapars"
-graph <- buildPhylipLineage(clone, dnapars_exec, rm_temp=TRUE)
+phylip_exec <- "~/apps/phylip-3.69/dnapars"
+graph <- buildPhylipLineage(clone, phylip_exec, rm_temp=TRUE)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -116,15 +118,15 @@ graph <- ExampleTrees[[23]]
 
 ```{r, eval=TRUE, warning=FALSE, message=FALSE}
 # The graph has shared annotations for the clone
-data.frame(CLONE=graph$clone,
-           JUNCTION_LENGTH=graph$junc_len,
-           V_GENE=graph$v_gene,
-           J_GENE=graph$j_gene)
+data.frame(clone_id=graph$clone,
+           junction_length=graph$junc_len,
+           v_gene=graph$v_gene,
+           j_gene=graph$j_gene)
 
 # The vertices have sequence specific annotations
-data.frame(SEQUENCE_ID=V(graph)$name, 
-           ISOTYPE=V(graph)$ISOTYPE,
-           DUPCOUNT=V(graph)$DUPCOUNT)
+data.frame(sequence_id=V(graph)$name, 
+           c_call=V(graph)$c_call,
+           duplicate_count=V(graph)$duplicate_count)
 ```
 
 ## Plotting of the lineage tree
@@ -149,7 +151,7 @@ germline sequence, which is named "Germline" in the object returned by
 V(graph)$color <- "steelblue"
 V(graph)$color[V(graph)$name == "Germline"] <- "black"
 V(graph)$color[grepl("Inferred", V(graph)$name)] <- "white"
-V(graph)$label <- V(graph)$ISOTYPE
+V(graph)$label <- V(graph)$c_call
 E(graph)$label <- ""
 
 # Remove large default margins
@@ -172,16 +174,16 @@ data.frame on the clone column.
 ```{r, eval=TRUE, warning=FALSE, results="hide"}
 # Preprocess clones
 clones <- ExampleDb %>%
-    group_by(CLONE) %>%
-    do(CHANGEO=makeChangeoClone(., text_fields=c("SAMPLE", "ISOTYPE"), 
-                                num_fields="DUPCOUNT"))
+    group_by(clone_id) %>%
+    do(CHANGEO=makeChangeoClone(., text_fields=c("sample_id", "c_call"), 
+                                num_fields="duplicate_count"))
 ```
 
 ```{r, eval=FALSE}
 # Build lineages
-dnapars_exec <- "~/apps/phylip-3.69/dnapars"
+phylip_exec <- "~/apps/phylip-3.69/dnapars"
 graphs <- lapply(clones$CHANGEO, buildPhylipLineage, 
-                 dnapars_exec=dnapars_exec, rm_temp=TRUE)
+                 phylip_exec=phylip_exec, rm_temp=TRUE)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}

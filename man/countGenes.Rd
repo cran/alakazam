@@ -4,11 +4,18 @@
 \alias{countGenes}
 \title{Tabulates V(D)J allele, gene or family usage.}
 \usage{
-countGenes(data, gene, groups = NULL, copy = NULL, clone = NULL,
-  fill = FALSE, mode = c("gene", "allele", "family", "asis"))
+countGenes(
+  data,
+  gene,
+  groups = NULL,
+  copy = NULL,
+  clone = NULL,
+  fill = FALSE,
+  mode = c("gene", "allele", "family", "asis")
+)
 }
 \arguments{
-\item{data}{data.frame with Change-O style columns.}
+\item{data}{data.frame with AIRR-format or Change-O style columns.}
 
 \item{gene}{column containing allele assignments. Only the first allele in the
 column will be considered when \code{mode} is "gene", "family" or 
@@ -41,18 +48,18 @@ families (calling \code{getFamily}), alleles (calling
 A data.frame summarizing family, gene or allele counts and frequencies 
           with columns:
           \itemize{
-            \item \code{GENE}:         name of the family, gene or allele
-            \item \code{SEQ_COUNT}:    total number of sequences for the gene.
-            \item \code{SEQ_FREQ}:     frequency of the gene as a fraction of the total
+            \item \code{gene}:         name of the family, gene or allele
+            \item \code{seq_count}:    total number of sequences for the gene.
+            \item \code{seq_freq}:     frequency of the gene as a fraction of the total
                                        number of sequences within each grouping.
-            \item \code{COPY_COUNT}:   sum of the copy counts in the \code{copy} column.
+            \item \code{copy_count}:   sum of the copy counts in the \code{copy} column.
                                        for each gene. Only present if the \code{copy} 
                                        argument is specified.
-            \item \code{COPY_FREQ}:    frequency of the gene as a fraction of the total
+            \item \code{copy_freq}:    frequency of the gene as a fraction of the total
                                        copy number within each group. Only present if 
                                        the \code{copy} argument is specified.
-            \item \code{CLONE_COUNT}:  total number of clones for the gene.
-            \item \code{CLONE_FREQ}:   frequency of the gene as a fraction of the total
+            \item \code{clone_count}:  total number of clones for the gene.
+            \item \code{clone_freq}:   frequency of the gene as a fraction of the total
                                        number of clones within each grouping.
           }
           Additional columns defined by the \code{groups} argument will also be present.
@@ -63,20 +70,20 @@ groups.
 }
 \examples{
 # Without copy numbers
-genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="family")
-genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="gene")
-genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", mode="allele")
+genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="family")
+genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="gene")
+genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", mode="allele")
 
 # With copy numbers and multiple groups
-genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"), 
-                    copy="DUPCOUNT", mode="family")
+genes <- countGenes(ExampleDb, gene="v_call", groups=c("sample_id", "c_call"), 
+                    copy="duplicate_count", mode="family")
 
 # Count by clone
-genes <- countGenes(ExampleDb, gene="V_CALL", groups=c("SAMPLE", "ISOTYPE"), 
-                    clone="CLONE", mode="family")
+genes <- countGenes(ExampleDb, gene="v_call", groups=c("sample_id", "c_call"), 
+                    clone="clone_id", mode="family")
 
 # Count absent genes 
-genes <- countGenes(ExampleDb, gene="V_CALL", groups="SAMPLE", 
+genes <- countGenes(ExampleDb, gene="v_call", groups="sample_id", 
                     mode="allele", fill=TRUE)
 
 }

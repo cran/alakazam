@@ -4,8 +4,14 @@
 \alias{testMRCA}
 \title{Tests for MRCA annotation enrichment in lineage trees}
 \usage{
-testMRCA(graphs, field, root = "Germline", exclude = c("Germline", NA),
-  nperm = 200, progress = FALSE)
+testMRCA(
+  graphs,
+  field,
+  root = "Germline",
+  exclude = c("Germline", NA),
+  nperm = 200,
+  progress = FALSE
+)
 }
 \arguments{
 \item{graphs}{list of igraph object containing annotated lineage trees.}
@@ -36,7 +42,7 @@ trees.
 graphs <- ExampleTrees[1-10]
 
 # Perform MRCA test on isotypes
-x <- testMRCA(graphs, "ISOTYPE", nperm=10)
+x <- testMRCA(graphs, "c_call", nperm=10)
 print(x)
 }
 

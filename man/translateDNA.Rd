@@ -23,10 +23,10 @@ A vector of translated sequence strings.
 translateDNA("ACTGACTCGA")
 
 # Translate a vector of sequences
-translateDNA(ExampleDb$JUNCTION[1:3])
+translateDNA(ExampleDb$junction[1:3])
 
 # Remove the first and last codon from the translation
-translateDNA(ExampleDb$JUNCTION[1:3], trim=TRUE)
+translateDNA(ExampleDb$junction[1:3], trim=TRUE)
 
 }
 \seealso{

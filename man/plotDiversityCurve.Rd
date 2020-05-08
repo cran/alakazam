@@ -4,10 +4,20 @@
 \alias{plotDiversityCurve}
 \title{Plot the results of alphaDiversity}
 \usage{
-plotDiversityCurve(data, colors = NULL, main_title = "Diversity",
-  legend_title = "Group", log_x = FALSE, log_y = FALSE,
-  xlim = NULL, ylim = NULL, annotate = c("none", "depth"),
-  score = c("diversity", "evenness"), silent = FALSE, ...)
+plotDiversityCurve(
+  data,
+  colors = NULL,
+  main_title = "Diversity",
+  legend_title = "Group",
+  log_x = FALSE,
+  log_y = FALSE,
+  xlim = NULL,
+  ylim = NULL,
+  annotate = c("none", "depth"),
+  score = c("diversity", "evenness"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{\link{DiversityCurve} object returned by 
@@ -54,7 +64,7 @@ A \code{ggplot} object defining the plot.
 }
 \examples{
 # Calculate diversity
-div <- alphaDiversity(ExampleDb, group="SAMPLE", nboot=100)
+div <- alphaDiversity(ExampleDb, group="sample_id", nboot=100)
 
 # Plot diversity
 plotDiversityCurve(div, legend_title="Sample")

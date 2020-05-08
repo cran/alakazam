@@ -4,9 +4,11 @@
 \name{IMGT_REGIONS}
 \alias{IMGT_REGIONS}
 \title{IMGT V-segment regions}
-\format{A list with regions named one of \code{c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3")} 
+\format{
+A list with regions named one of \code{c("fwr1", "cdr1", "fwr2", "cdr2", "fwr3")} 
          with values containing a numeric vector of length two defining the 
-         \code{c(start, end)} positions of the named region.}
+         \code{c(start, end)} positions of the named region.
+}
 \usage{
 IMGT_REGIONS
 }

@@ -4,9 +4,17 @@
 \alias{plotDiversityTest}
 \title{Plot the results of diversity testing}
 \usage{
-plotDiversityTest(data, q, colors = NULL, main_title = "Diversity",
-  legend_title = "Group", log_d = FALSE, annotate = c("none",
-  "depth"), silent = FALSE, ...)
+plotDiversityTest(
+  data,
+  q,
+  colors = NULL,
+  main_title = "Diversity",
+  legend_title = "Group",
+  log_d = FALSE,
+  annotate = c("none", "depth"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{\link{DiversityCurve} object returned by 
@@ -44,7 +52,7 @@ with mean and a line range indicating plus/minus one standard deviation.
 }
 \examples{
 # Calculate diversity
-div <- alphaDiversity(ExampleDb, group="SAMPLE", min_q=0, max_q=2, step_q=1, nboot=100)
+div <- alphaDiversity(ExampleDb, group="sample_id", min_q=0, max_q=2, step_q=1, nboot=100)
 
 # Plot results at q=0 (equivalent to species richness)
 plotDiversityTest(div, 0, legend_title="Sample")

@@ -4,8 +4,13 @@
 \alias{readIgphyml}
 \title{Read in output from IgPhyML}
 \usage{
-readIgphyml(file, id = NULL, format = c("graph", "phylo"),
-  collapse = TRUE)
+readIgphyml(
+  file,
+  id = NULL,
+  format = c("graph", "phylo"),
+  collapse = FALSE,
+  branches = c("distance", "mutations")
+)
 }
 \arguments{
 \item{file}{IgPhyML output file (.tab).}
@@ -17,7 +22,11 @@ if \code{"phylo"} return trees as ape \code{phylo} objects.}
 
 \item{collapse}{if \code{TRUE} transform branch lengths to units of substitutions, 
 rather than substitutions per site, and collapse internal nodes
-separated by branches < 0.1 substitutions.}
+separated by branches < 0.1 substitutions. Will also remove all
+internal node labels, as it makes them inconsistent.}
+
+\item{branches}{if \code{"distance"} branch lengths are in expected mutations per
+site. If \code{"mutations"} branches are in expected mutations.}
 }
 \value{
 A list containing IgPhyML model parameters and estimated lineage trees. 

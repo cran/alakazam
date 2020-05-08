@@ -4,9 +4,16 @@
 \alias{aminoAcidProperties}
 \title{Calculates amino acid chemical properties for sequence data}
 \usage{
-aminoAcidProperties(data, property = c("length", "gravy", "bulk",
-  "aliphatic", "polarity", "charge", "basic", "acidic", "aromatic"),
-  seq = "JUNCTION", nt = FALSE, trim = FALSE, label = NULL, ...)
+aminoAcidProperties(
+  data,
+  property = c("length", "gravy", "bulk", "aliphatic", "polarity", "charge", "basic",
+    "acidic", "aromatic"),
+  seq = "junction",
+  nt = FALSE,
+  trim = FALSE,
+  label = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{\code{data.frame} containing sequence data.}
@@ -31,17 +38,17 @@ not modify input sequences.}
 \value{
 A modified \code{data} data.frame with the following columns:
          \itemize{
-           \item  \code{*_AA_LENGTH}:     number of amino acids.
-           \item  \code{*_AA_GRAVY}:      grand average of hydrophobicity (GRAVY) index.
-           \item  \code{*_AA_BULK}:       average bulkiness of amino acids.
-           \item  \code{*_AA_ALIPHATIC}:  aliphatic index.
-           \item  \code{*_AA_POLARITY}:   average polarity of amino acids.
-           \item  \code{*_AA_CHARGE}:     net charge.
-           \item  \code{*_AA_BASIC}:      fraction of informative positions that are 
+           \item  \code{*_aa_length}:     number of amino acids.
+           \item  \code{*_aa_gravy}:      grand average of hydrophobicity (gravy) index.
+           \item  \code{*_aa_bulk}:       average bulkiness of amino acids.
+           \item  \code{*_aa_aliphatic}:  aliphatic index.
+           \item  \code{*_aa_polarity}:   average polarity of amino acids.
+           \item  \code{*_aa_charge}:     net charge.
+           \item  \code{*_aa_basic}:      fraction of informative positions that are 
                                           Arg, His or Lys.
-           \item  \code{*_AA_ACIDIC}:     fraction of informative positions that are 
+           \item  \code{*_aa_acidic}:     fraction of informative positions that are 
                                           Asp or Glu.
-           \item  \code{*_AA_AROMATIC}:   fraction of informative positions that are 
+           \item  \code{*_aa_aromatic}:   fraction of informative positions that are 
                                           His, Phe, Trp or Tyr.
            
          }
@@ -58,7 +65,7 @@ content, basic residue content, and aromatic residue content.
 For all properties except for length, non-informative positions are excluded, 
 where non-informative is defined as any character in \code{c("X", "-", ".", "*")}.
 
-The scores for GRAVY, bulkiness and polarity are calculated as simple averages of the 
+The scores for gravy, bulkiness and polarity are calculated as simple averages of the 
 scores for each informative positions. The basic, acid and aromatic indices are 
 calculated as the fraction of informative positions falling into the given category.
 
@@ -78,14 +85,14 @@ The following data sources were used for the default property scores:
 }
 \examples{
 # Subset example data
-db <- ExampleDb[c(1,10,100), c("SEQUENCE_ID", "JUNCTION")]
+db <- ExampleDb[c(1,10,100), c("sequence_id", "junction")]
 
 # Calculate default amino acid properties from amino acid sequences
 # Use a custom output column prefix
-db$JUNCTION_TRANS <- translateDNA(db$JUNCTION)
-aminoAcidProperties(db, seq="JUNCTION_TRANS", label="JUNCTION")
+db$junction_aa <- translateDNA(db$junction)
+aminoAcidProperties(db, seq="junction_aa", label="junction")
 # Calculate default amino acid properties from DNA sequences
-aminoAcidProperties(db, seq="JUNCTION", nt=TRUE)
+aminoAcidProperties(db, seq="junction", nt=TRUE)
 
 # Use the Grantham, 1974 side chain volume scores from the seqinr package
 # Set pH=7.0 for the charge calculation
@@ -97,8 +104,8 @@ x <- aaindex[["GRAR740103"]]$I
 # Rename the score vector to use single-letter codes
 names(x) <- translateStrings(names(x), ABBREV_AA)
 # Calculate properties
-aminoAcidProperties(db, property=c("bulk", "charge"), seq="JUNCTION", nt=TRUE, 
-                    trim=TRUE, label="CDR3", bulkiness=x, pH=7.0)
+aminoAcidProperties(db, property=c("bulk", "charge"), seq="junction", nt=TRUE, 
+                    trim=TRUE, label="cdr3", bulkiness=x, pH=7.0)
 
 }
 \references{

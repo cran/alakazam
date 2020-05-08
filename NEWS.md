@@ -1,3 +1,56 @@
+Version 1.0.0:  May 8, 2020
+-------------------------------------------------------------------------------
+
+Backwards Incompatible Changes:
+
++ Changed default expected data format from the Change-O data format to the
+  AIRR Rearrangement standard. For example: where functions used the column 
+  name `V_CALL` (Change-O) as the default to identify the field that stored 
+  the V gene calls, they now use `v_call` (AIRR). That means, scripts that 
+  relied on default values (previously, `v_call="V_CALL"`), will now fail if 
+  calls to the functions are not updated to reflect the correct value for the 
+  data. If data are in the Change-O format, the current default value 
+  `v_call="v_call"` will fail to identify the column with the V gene calls
+  as the column `v_call` doesn't exist. In this case, `v_call="V_CALL"` needs 
+  to be specified in the function call.
++ `ExampleDb` converted to the AIRR Rearrangement standard and examples updated 
+  accordingly. The legacy Change-O version is available as `ExampleDbChangeo`.
++ For consistency with the style of the new data format default, other field 
+  names have been updated to use the same capitalization. This change affects:
+     - amino acid physicochemical properties (e.g. `GRAVY` to `gravy`); 
+     - `countGenes`, `countClones` (e.g., `SEQ_COUNT` to `seq_count`)
+     - `estimateAbundance` (e.g., `RANK` to `rank`)
+     - `groupGenes` (e.g., `VJ_GROUP` to `vj_group`)
+     - `collapseDuplicates` and `makeChangeoClone` (e.g., `SEQUENCE_ID` to 
+       `sequence_id`, `COLLAPSE_COUNT` to `collapse_count`)
+     - lineage tree functions (`summarizeTrees`, `getPathLengths`, `getMRCA`, 
+       `tableEdges`, `testEdges`) also return columns in lower case (e.g., 
+       `parent`, `child`, `outdegree`, `steps`, `annotation`, `pvalue`)
++ `IG_COLOR` names converted to official C region identifiers 
+   (IGHA, IGHD, IGHE, IGHG, IGHM, IGHK, IGHL).
+
+General:
+
++ License changed to AGPL-3.
++ `baseTheme` looks is now consistent across `sizing` options.
++ `cpuCount` will now return `1` if the core count cannot be determined.
++ Fixed a bug in `padSeqEnds` wherein the `pad_char` argument was being 
+  ignored.
+
+Diversity:
+
++ Fixed documentation error in diversity vignette for viewing test results.
++ `estimateAbundance` slot `clone_by` now contains the name of the column
+   with the clonal group identifier, as specified in the function call. For 
+   example, if the function was called with `clone="clone_id"`, 
+   then the `clone_by` slot will be `clone_id`.
+
+Lineage:
+
++ Renamed the `buildPhylipLineage` arguments `vcall`, `jcall` and 
+  `dnapars_exec` to `v_call`, `j_call` and `phylip_exec`, respectively.
+
+
 Version 0.3.0:  July 17, 2019
 -------------------------------------------------------------------------------
 

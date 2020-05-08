@@ -4,9 +4,18 @@
 \alias{testDiversity}
 \title{Pairwise test of the diversity index}
 \usage{
-testDiversity(data, q, group, clone = "CLONE", copy = NULL,
-  min_n = 30, max_n = NULL, nboot = 2000, progress = FALSE,
-  ci = 0.95)
+testDiversity(
+  data,
+  q,
+  group,
+  clone = "CLONE",
+  copy = NULL,
+  min_n = 30,
+  max_n = NULL,
+  nboot = 2000,
+  progress = FALSE,
+  ci = 0.95
+)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -77,7 +86,7 @@ in such cases. We are currently investigating this potential problem.
  
 \dontrun{
 # Groups under the size threshold are excluded and a warning message is issued.
-testDiversity(ExampleDb, "SAMPLE", q=0, min_n=30, nboot=100)
+testDiversity(ExampleDb, "sample_id", q=0, min_n=30, nboot=100)
 }
 
 }

@@ -4,15 +4,27 @@
 \alias{makeChangeoClone}
 \title{Generate a ChangeoClone object for lineage construction}
 \usage{
-makeChangeoClone(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
-  germ = "GERMLINE_IMGT_D_MASK", vcall = "V_CALL", jcall = "J_CALL",
-  junc_len = "JUNCTION_LENGTH", clone = "CLONE", mask_char = "N",
-  max_mask = 0, pad_end = FALSE, text_fields = NULL,
-  num_fields = NULL, seq_fields = NULL, add_count = TRUE,
-  verbose = FALSE)
+makeChangeoClone(
+  data,
+  id = "sequence_id",
+  seq = "sequence_alignment",
+  germ = "germline_alignment",
+  v_call = "v_call",
+  j_call = "j_call",
+  junc_len = "junction_length",
+  clone = "clone_id",
+  mask_char = "N",
+  max_mask = 0,
+  pad_end = FALSE,
+  text_fields = NULL,
+  num_fields = NULL,
+  seq_fields = NULL,
+  add_count = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{data}{data.frame containing the Change-O data for a clone. See Details
+\item{data}{data.frame containing the AIRR or Change-O data for a clone. See Details
 for the list of required columns and their default values.}
 
 \item{id}{name of the column containing sequence identifiers.}
@@ -24,10 +36,10 @@ sequences in this column must be multiple aligned.}
 in this column should be identical for any given clone, and they
 must be multiple aligned with the data in the \code{seq} column.}
 
-\item{vcall}{name of the column containing V-segment allele assignments. All 
+\item{v_call}{name of the column containing V-segment allele assignments. All 
 entries in this column should be identical to the gene level.}
 
-\item{jcall}{name of the column containing J-segment allele assignments. All 
+\item{j_call}{name of the column containing J-segment allele assignments. All 
 entries in this column should be identical to the gene level.}
 
 \item{junc_len}{name of the column containing the length of the junction as a 
@@ -58,7 +70,7 @@ arguments, which contain the primary sequence data for the clone
 and should not be repeated in this argument.}
 
 \item{add_count}{if \code{TRUE} add an additional annotation column called 
-\code{COLLAPSE_COUNT} during duplicate removal that indicates the 
+\code{collapse_count} during duplicate removal that indicates the 
 number of sequences that were collapsed.}
 
 \item{verbose}{passed on to \code{collapseDuplicates}. If \code{TRUE}, report the 
@@ -69,28 +81,28 @@ sequences silently.}
 A \link{ChangeoClone} object containing the modified clone.
 }
 \description{
-\code{makeChangeoClone} takes a data.frame with Change-O style columns as input and 
+\code{makeChangeoClone} takes a data.frame with AIRR or Change-O style columns as input and 
 masks gap positions, masks ragged ends, removes duplicates sequences, and merges 
 annotations associated with duplicate sequences. It returns a \code{ChangeoClone} 
 object which serves as input for lineage reconstruction.
 }
 \details{
 The input data.frame (\code{data}) must columns for each of the required column name 
-arguments: \code{id}, \code{seq}, \code{germ}, \code{vcall}, \code{jcall}, 
+arguments: \code{id}, \code{seq}, \code{germ}, \code{v_call}, \code{j_call}, 
 \code{junc_len}, and \code{clone}.  The default values are as follows:
 \itemize{
-  \item  \code{id       = "SEQUENCE_ID"}:           unique sequence identifier.
-  \item  \code{seq      = "SEQUENCE_IMGT"}:         IMGT-gapped sample sequence.
-  \item  \code{germ     = "GERMLINE_IMGT_D_MASK"}:  IMGT-gapped germline sequence.
-  \item  \code{vcall    = "V_CALL"}:                V-segment allele call.
-  \item  \code{jcall    = "J_CALL"}:                J-segment allele call.
-  \item  \code{junc_len = "JUNCTION_LENGTH"}:       junction sequence length.
-  \item  \code{clone    = "CLONE"}:                 clone identifier.
+  \item  \code{id       = "sequence_id"}:         unique sequence identifier.
+  \item  \code{seq      = "sequence_alignment"}:  IMGT-gapped sample sequence.
+  \item  \code{germ     = "germline_alignment"}:  IMGT-gapped germline sequence.
+  \item  \code{v_call   = "v_call"}:              V segment allele call.
+  \item  \code{j_call   = "j_call"}:              J segment allele call.
+  \item  \code{junc_len = "junction_length"}:     junction sequence length.
+  \item  \code{clone    = "clone_id"}:            clone identifier.
 }
 Additional annotation columns specified in the \code{text_fields}, \code{num_fields} 
 or \code{seq_fields} arguments will be retained in the \code{data} slot of the return 
 object, but are not required. If the input data.frame \code{data} already contains a 
-column named \code{SEQUENCE}, which is not used as the \code{seq} argument, then that 
+column named \code{sequence}, which is not used as the \code{seq} argument, then that 
 column will not be retained.
 
 The default columns are IMGT-gapped sequence columns, but this is not a requirement. 
@@ -99,27 +111,28 @@ some scheme for both proper duplicate removal and lineage reconstruction.
 
 The value for the germline sequence, V-segment gene call, J-segment gene call, 
 junction length, and clone identifier are determined from the first entry in the 
-\code{germ}, \code{vcall}, \code{jcall}, \code{junc_len} and \code{clone} columns, 
+\code{germ}, \code{v_call}, \code{j_call}, \code{junc_len} and \code{clone} columns, 
 respectively. For any given clone, each value in these columns should be identical.
 }
 \examples{
-# Example Change-O data.frame
-db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
-                 SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
-                 V_CALL="Homsap IGKV1-39*01 F",
-                 J_CALL="Homsap IGKJ5*01 F",
-                 JUNCTION_LENGTH=2,
-                 GERMLINE_IMGT_D_MASK="CCCCAGGG",
-                 CLONE=1,
-                 TYPE=c("IgM", "IgG", "IgG", "IgA"),
-                 COUNT=1:4,
+# Example data
+db <- data.frame(sequence_id=LETTERS[1:4],
+                 sequence_alignment=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
+                 germline_alignment="CCCCAGGG",
+                 v_call="Homsap IGKV1-39*01 F",
+                 j_call="Homsap IGKJ5*01 F",
+                 junction_length=2,
+                 clone_id=1,
+                 c_call=c("IGHM", "IGHG", "IGHG", "IGHA"),
+                 duplicate_count=1:4,
                  stringsAsFactors=FALSE)
 
-# Without end masking
-makeChangeoClone(db, text_fields="TYPE", num_fields="COUNT")
 
-# With end masking
-makeChangeoClone(db, max_mask=3, text_fields="TYPE", num_fields="COUNT")
+ # Without end masking
+ makeChangeoClone(db, text_fields="c_call", num_fields="duplicate_count")
+
+ # With end masking
+ makeChangeoClone(db, max_mask=3, text_fields="c_call", num_fields="duplicate_count")
 
 }
 \seealso{

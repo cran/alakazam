@@ -4,8 +4,7 @@
 \alias{alphaDiversity}
 \title{Calculate clonal alpha diversity}
 \usage{
-alphaDiversity(data, min_q = 0, max_q = 4, step_q = 0.1, ci = 0.95,
-  ...)
+alphaDiversity(data, min_q = 0, max_q = 4, step_q = 0.1, ci = 0.95, ...)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments or
@@ -55,12 +54,12 @@ correction and unseen clone frequencies described in Chao et al, 2015.
 }
 \examples{
 # Group by sample identifier in two steps
-abund <- estimateAbundance(ExampleDb, group="SAMPLE", nboot=100)
+abund <- estimateAbundance(ExampleDb, group="sample_id", nboot=100)
 div <- alphaDiversity(abund, step_q=1, max_q=10)
 plotDiversityCurve(div, legend_title="Sample")
                    
 # Grouping by isotype rather than sample identifier in one step
-div <- alphaDiversity(ExampleDb, group="ISOTYPE", min_n=40, step_q=1, max_q=10, 
+div <- alphaDiversity(ExampleDb, group="c_call", min_n=40, step_q=1, max_q=10, 
                       nboot=100)
 plotDiversityCurve(div, legend_title="Isotype")
 

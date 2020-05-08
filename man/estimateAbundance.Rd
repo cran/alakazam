@@ -4,9 +4,18 @@
 \alias{estimateAbundance}
 \title{Estimates the complete clonal relative abundance distribution}
 \usage{
-estimateAbundance(data, clone = "CLONE", copy = NULL, group = NULL,
-  min_n = 30, max_n = NULL, uniform = TRUE, ci = 0.95,
-  nboot = 200, progress = FALSE)
+estimateAbundance(
+  data,
+  clone = "clone_id",
+  copy = NULL,
+  group = NULL,
+  min_n = 30,
+  max_n = NULL,
+  uniform = TRUE,
+  ci = 0.95,
+  nboot = 200,
+  progress = FALSE
+)
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -20,7 +29,7 @@ is specified, then clone abundances is determined by the sum of
 copy numbers within each clonal group.}
 
 \item{group}{name of the \code{data} column containing group identifiers. 
-If \code{NULL} then no grouping is performed and the \code{GROUP} 
+If \code{NULL} then no grouping is performed and the \code{group} 
 column of the output will contain the value \code{NA} for each row.}
 
 \item{min_n}{minimum number of observations to sample.
@@ -47,7 +56,7 @@ A \link{AbundanceCurve} object summarizing the abundances.
 and confidence intervals on clone sizes using bootstrapping.
 }
 \examples{
-abund <- estimateAbundance(ExampleDb, group="SAMPLE", nboot=100)
+abund <- estimateAbundance(ExampleDb, group="sample_id", nboot=100)
 
 }
 \references{

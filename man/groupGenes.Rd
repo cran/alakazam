@@ -4,27 +4,33 @@
 \alias{groupGenes}
 \title{Group sequences by gene assignment}
 \usage{
-groupGenes(data, v_call = "V_CALL", j_call = "J_CALL",
-  junc_len = NULL, cell_id = NULL, locus = NULL, only_igh = TRUE,
-  first = FALSE)
+groupGenes(
+  data,
+  v_call = "v_call",
+  j_call = "j_call",
+  junc_len = NULL,
+  cell_id = NULL,
+  locus = NULL,
+  only_igh = TRUE,
+  first = FALSE
+)
 }
 \arguments{
 \item{data}{data.frame containing sequence data.}
 
-\item{v_call}{name of the column containing the heavy chain V-segment 
-allele calls.}
+\item{v_call}{name of the column containing the heavy chain 
+V-segment allele calls.}
 
-\item{j_call}{name of the column containing the heavy chain J-segment 
-allele calls.}
+\item{j_call}{name of the column containing the heavy chain 
+J-segment allele calls.}
 
-\item{junc_len}{name of the column containing the heavy chain junction
-length. Optional.}
+\item{junc_len}{name of column containing the junction length. Optional.}
 
-\item{cell_id}{name of the column containing cell IDs. Only applicable 
-and required for single-cell mode.}
+\item{cell_id}{name of the column containing cell IDs. Only 
+applicable and required for single-cell mode.}
 
-\item{locus}{name of the column containing locus information. Only applicable 
-and required for single-cell mode.}
+\item{locus}{name of the column containing locus information. 
+Only applicable and required for single-cell mode.}
 
 \item{only_igh}{use only heavy chain (\code{IGH}) sequences for grouping,
 disregarding light chains. Only applicable and required for
@@ -37,11 +43,15 @@ overlapping gene calls.}
 }
 \value{
 Returns a modified data.frame with disjoint union indices 
-          in a new \code{VJ_GROUP} column. 
+          in a new \code{vj_group} column. 
           
-          Note that if \code{junc_len} is supplied, the grouping this \code{VJ_GROUP} 
+          Note that if \code{junc_len} is supplied, the grouping this \code{vj_group} 
           will have been based on V, J, and L simultaneously despite the column name 
-          being \code{VJ_GROUP}.
+          being \code{vj_group}.
+          
+          Note that the output \code{v_call}, \code{j_call}, \code{cell_id}, and \code{locus}
+          columns will be converted to \code{character} if they were \code{factor} in the 
+          input \code{data}.
 }
 \description{
 \code{groupGenes} will group rows by shared V and J gene assignments, 
@@ -72,6 +82,9 @@ stage further split based on junction length.
 
 It is assumed that ambiguous gene assignments are separated by commas.
 
+In the input \code{data}, the \code{v_call}, \code{j_call}, \code{cell_id}, and \code{locus} 
+columns, if present, must be \code{character}, as opposed to \code{factor}.
+
 All rows containing \code{NA} values in their any of the \code{v_call}, \code{j_call}, and, 
 if specified, \code{junc_len}, columns will be removed. A warning will be issued when a row 
 containing an \code{NA} is removed.
@@ -99,6 +112,6 @@ An example:
 
 \examples{
 # Group by genes
-db <- groupGenes(ExampleDb, v_call="V_CALL", j_call="J_CALL")
+db <- groupGenes(ExampleDb, v_call="v_call", j_call="j_call")
  
 }

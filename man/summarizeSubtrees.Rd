@@ -16,21 +16,21 @@ summarizeSubtrees(graph, fields = NULL, root = "Germline")
 \value{
 A data.frame with columns: 
           \itemize{
-            \item  \code{NAME}:             node name.
-            \item  \code{PARENT}:           name of the parent node.
-            \item  \code{OUTDEGREE}:        number of edges leading from the node.
-            \item  \code{SIZE}:             total number of nodes within the subtree rooted 
+            \item  \code{name}:             node name.
+            \item  \code{parent}:           name of the parent node.
+            \item  \code{outdegree}:        number of edges leading from the node.
+            \item  \code{size}:             total number of nodes within the subtree rooted 
                                             at the node.
-            \item  \code{DEPTH}:            the depth of the subtree that is rooted at 
+            \item  \code{depth}:            the depth of the subtree that is rooted at 
                                             the node.
-            \item  \code{PATHLENGTH}:       the maximum pathlength beneath the node.
-            \item  \code{OUTDEGREE_NORM}:   \code{OUTDEGREE} normalized by the total 
+            \item  \code{pathlength}:       the maximum pathlength beneath the node.
+            \item  \code{outdegree_norm}:   \code{outdegree} normalized by the total 
                                             number of edges.
-            \item  \code{SIZE_NORM}:        \code{SIZE} normalized by the largest
+            \item  \code{size_norm}:        \code{size} normalized by the largest
                                             subtree size (the germline).
-            \item  \code{DEPTH_NORM}:       \code{DEPTH} normalized by the largest
+            \item  \code{depth_norm}:       \code{depth} normalized by the largest
                                             subtree depth (the germline).
-            \item  \code{PATHLENGTH_NORM}:  \code{PATHLEGNTH} normalized by the largest
+            \item  \code{pathlength_norm}:  \code{pathlength} normalized by the largest
                                             subtree pathlength (the germline).
           }
           An additional column corresponding to the value of \code{field} is added when
@@ -43,7 +43,7 @@ both node properties and subtree properties.
 \examples{
 # Summarize a tree
 graph <- ExampleTrees[[23]]
-summarizeSubtrees(graph, fields="ISOTYPE", root="Germline")
+summarizeSubtrees(graph, fields="c_call", root="Germline")
 
 }
 \seealso{

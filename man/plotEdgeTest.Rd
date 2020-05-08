@@ -4,8 +4,14 @@
 \alias{plotEdgeTest}
 \title{Plot the results of an edge permutation test}
 \usage{
-plotEdgeTest(data, color = "black", main_title = "Edge Test",
-  style = c("histogram", "cdf"), silent = FALSE, ...)
+plotEdgeTest(
+  data,
+  color = "black",
+  main_title = "Edge Test",
+  style = c("histogram", "cdf"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{\link{EdgeTest} object returned by \link{testEdges}.}
@@ -44,7 +50,7 @@ A \code{ggplot} object defining the plot.
 graphs <- ExampleTrees[1-10]
 
 # Perform edge test on isotypes
-x <- testEdges(graphs, "ISOTYPE", nperm=10)
+x <- testEdges(graphs, "c_call", nperm=10)
 
 # Plot
 plotEdgeTest(x, color="steelblue", style="hist")

@@ -29,22 +29,22 @@ the MRCA of the tree.
 \describe{
 \item{\code{tests}}{data.frame describing the significance test results with columns:
 \itemize{
-  \item  \code{ANNOTATION}:  annotation value.
-  \item  \code{COUNT}:       observed count of MRCA positions 
+  \item  \code{annotation}:  annotation value.
+  \item  \code{count}:       observed count of MRCA positions 
                              with the given annotation.
-  \item  \code{EXPECTED}:    expected mean count of MRCA occurance
+  \item  \code{expected}:    expected mean count of MRCA occurance
                              for the annotation.
-  \item  \code{PVALUE}:      one-sided p-value for the hypothesis that 
+  \item  \code{pvalue}:      one-sided p-value for the hypothesis that 
                              the observed annotation abundance is greater 
                              than expected.
 }}
 
 \item{\code{permutations}}{data.frame containing the raw permutation test data with columns:
 \itemize{
-  \item  \code{ANNOTATION}:  annotation value.
-  \item  \code{COUNT}:       count of MRCA positions with the 
+  \item  \code{annotation}:  annotation value.
+  \item  \code{count}:       count of MRCA positions with the 
                              given annotation.
-  \item  \code{ITER}:        numerical index define which 
+  \item  \code{iter}:        numerical index define which 
                              permutation realization each 
                              observation corresponds to.
 }}

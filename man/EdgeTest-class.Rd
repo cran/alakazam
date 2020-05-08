@@ -28,24 +28,24 @@
 \describe{
 \item{\code{tests}}{data.frame describing the significance test results with columns:
 \itemize{
-  \item  \code{PARENT}:    parent node annotation.
-  \item  \code{CHILD}:     child node annotation
-  \item  \code{COUNT}:     count of observed edges with the given 
+  \item  \code{parent}:    parent node annotation.
+  \item  \code{child}:     child node annotation
+  \item  \code{count}:     count of observed edges with the given 
                            parent-child annotation set.
-  \item  \code{EXPECTED}:  mean count of expected edges for the 
+  \item  \code{expected}:  mean count of expected edges for the 
                            given parent-child relationship.
-  \item  \code{PVALUE}:    one-sided p-value for the hypothesis that 
+  \item  \code{pvalue}:    one-sided p-value for the hypothesis that 
                             the observed edge abundance is greater 
                             than expected.
 }}
 
 \item{\code{permutations}}{data.frame containing the raw permutation test data with columns:
 \itemize{
-  \item  \code{PARENT}:  parent node annotation.
-  \item  \code{CHILD}:   child node annotation
-  \item  \code{COUNT}:   count of edges with the given parent-child 
+  \item  \code{parent}:  parent node annotation.
+  \item  \code{child}:   child node annotation
+  \item  \code{count}:   count of edges with the given parent-child 
                          annotation set.
-  \item  \code{ITER}:    numerical index define which permutation
+  \item  \code{iter}:    numerical index define which permutation
                          realization each observation corresponds 
                          to.
 }}

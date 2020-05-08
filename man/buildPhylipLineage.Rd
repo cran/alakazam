@@ -4,13 +4,18 @@
 \alias{buildPhylipLineage}
 \title{Infer an Ig lineage using PHYLIP}
 \usage{
-buildPhylipLineage(clone, dnapars_exec, dist_mat = getDNAMatrix(gap = 0),
-  rm_temp = FALSE, verbose = FALSE)
+buildPhylipLineage(
+  clone,
+  phylip_exec,
+  dist_mat = getDNAMatrix(gap = 0),
+  rm_temp = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{clone}{\link{ChangeoClone} object containing clone data.}
 
-\item{dnapars_exec}{absolute path to the PHYLIP dnapars executable.}
+\item{phylip_exec}{absolute path to the PHYLIP dnapars executable.}
 
 \item{dist_mat}{Character distance matrix to use for reassigning edge weights. 
 Defaults to a Hamming distance matrix returned by \link{getDNAMatrix} 
@@ -36,12 +41,12 @@ An igraph \code{graph} object defining the Ig lineage tree. Each unique input
           
           Vertex attributes:
           \itemize{
-            \item  \code{name}:      value in the \code{SEQUENCE_ID} column of the \code{data} 
+            \item  \code{name}:      value in the \code{sequence_id} column of the \code{data} 
                                      slot of the input \code{clone} for observed sequences. 
                                      The germline (root) vertex is assigned the name 
                                      "Germline" and inferred intermediates are assigned
                                      names with the format {"Inferred1", "Inferred2", ...}.
-            \item  \code{sequence}:  value in the \code{SEQUENCE} column of the \code{data} 
+            \item  \code{sequence}:  value in the \code{sequence} column of the \code{data} 
                                      slot of the input \code{clone} for observed sequences.
                                      The germline (root) vertex is assigned the sequence
                                      in the \code{germline} slot of the input \code{clone}.
@@ -98,24 +103,24 @@ as the distance between each sequence.
 \examples{
 \dontrun{
 # Preprocess clone
-db <- subset(ExampleDb, CLONE == 3138)
-clone <- makeChangeoClone(db, text_fields=c("SAMPLE", "ISOTYPE"), 
-                          num_fields="DUPCOUNT")
+db <- subset(ExampleDb, clone_id == 3138)
+clone <- makeChangeoClone(db, text_fields=c("sample_id", "c_call"), 
+                          num_fields="duplicate_count")
 
 # Run PHYLIP and process output
-dnapars_exec <- "~/apps/phylip-3.69/dnapars"
-graph <- buildPhylipLineage(clone, dnapars_exec, rm_temp=TRUE)
+phylip_exec <- "~/apps/phylip-3.695/bin/dnapars"
+graph <- buildPhylipLineage(clone, phylip_exec, rm_temp=TRUE)
 
 # Plot graph with a tree layout
 library(igraph)
-plot(graph, layout=layout_as_tree, vertex.label=V(graph)$ISOTYPE, 
+plot(graph, layout=layout_as_tree, vertex.label=V(graph)$c_call, 
      vertex.size=50, edge.arrow.mode=0, vertex.color="grey80")
 
 # To consider each indel event as a mutation, change the masking character 
 # and distance matrix
-clone <- makeChangeoClone(db, text_fields=c("SAMPLE", "ISOTYPE"), 
-                          num_fields="DUPCOUNT", mask_char="-")
-graph <- buildPhylipLineage(clone, dnapars_exec, dist_mat=getDNAMatrix(gap=-1), 
+clone <- makeChangeoClone(db, text_fields=c("sample_id", "c_call"), 
+                          num_fields="duplicate_count", mask_char="-")
+graph <- buildPhylipLineage(clone, phylip_exec, dist_mat=getDNAMatrix(gap=-1), 
                             rm_temp=TRUE)
 }
 

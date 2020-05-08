@@ -16,6 +16,43 @@
 
 #### Data ####
 
+#' Example AIRR database
+#'
+#' A small example database subset from Laserson and Vigneault et al, 2014.
+#'
+#' @format   A data.frame with the following AIRR style columns:
+#'   \itemize{
+#'     \item  \code{sequence_id}:                Sequence identifier
+#'     \item  \code{sequence_alignment}:         IMGT-gapped observed sequence.
+#'     \item  \code{germline_alignment}:         IMGT-gapped germline sequence.
+#'     \item  \code{germline_alignment_d_mask}:  IMGT-gapped germline sequence with N, P and 
+#'                                               D regions masked.
+#'     \item  \code{v_call}:                     V region allele assignments.
+#'     \item  \code{v_call_genotyped}:           TIgGER corrected V region allele assignment.
+#'     \item  \code{d_call}:                     D region allele assignments.
+#'     \item  \code{j_call}:                     J region allele assignments.
+#'     \item  \code{c_call}:                     Isotype (C region) assignment.
+#'     \item  \code{junction}:                   Junction region sequence.
+#'     \item  \code{junction_length}:            Length of the junction region in nucleotides.
+#'     \item  \code{np1_length}:                 Combined length of the N and P regions proximal
+#'                                               to the V region.
+#'     \item  \code{np2_length}:                 Combined length of the N and P regions proximal
+#'                                               to the J region.
+#'     \item  \code{duplicate_count}:            Copy count (number of duplicates) of the sequence.
+#'     \item  \code{clone_id}:                   Change-O assignment clonal group identifier.
+#'     \item  \code{sample_id}:                  Sample identifier. Time in relation to vaccination.
+#' }
+#' 
+#' @seealso \link{ExampleDbChangeo} \link{ExampleTrees}
+#' 
+#' @references
+#' \enumerate{
+#'   \item  Laserson U and Vigneault F, et al. High-resolution antibody dynamics of 
+#'            vaccine-induced immune responses. 
+#'            Proc Natl Acad Sci USA. 2014 111:4928-33.
+#' }
+"ExampleDb"
+
 #' Example Change-O database
 #'
 #' A small example database subset from Laserson and Vigneault et al, 2014.
@@ -42,7 +79,7 @@
 #'     \item  \code{CLONE}:                 Change-O assignment clonal group identifier.
 #' }
 #' 
-#' @seealso \link{ExampleTrees}
+#' @seealso \link{ExampleDb} \link{ExampleTrees}
 #' 
 #' @references
 #' \enumerate{
@@ -50,7 +87,7 @@
 #'            vaccine-induced immune responses. 
 #'            Proc Natl Acad Sci USA. 2014 111:4928-33.
 #' }
-"ExampleDb"
+"ExampleDbChangeo"
 
 
 #' Example Ig lineage trees
@@ -61,9 +98,9 @@
 #' @format   A list of igraph objects output by \link{buildPhylipLineage}.
 #'           Each node of each tree has the following annotations (vertex attributes):
 #'   \itemize{
-#'     \item  \code{SAMPLE}:    Sample identifier(s). Time in relation to vaccination.
-#'     \item  \code{ISOTYPE}:   Isotype assignment(s). 
-#'     \item  \code{DUPCOUNT}:  Copy count (number of duplicates) of the sequence.
+#'     \item  \code{sample_id}:          Sample identifier(s). Time in relation to vaccination.
+#'     \item  \code{c_call}:             Isotype assignment(s). 
+#'     \item  \code{duplication_count}:  Copy count (number of duplicates) of the sequence.
 #'   }
 #'   
 #' @seealso \link{ExampleTrees}
@@ -81,14 +118,14 @@
 #'   \item  \code{DNA_COLORS}:  DNA character colors 
 #'                              \code{c("A", "C", "G", "T")}.
 #'   \item  \code{IG_COLORS}:   Ig isotype colors 
-#'                              \code{c("IgA", "IgD", "IgE", "IgG", "IgM", "IgK", "IgL")}.
+#'                              \code{c("IGHA", "IGHD", "IGHE", "IGHG", "IGHM", "IGHK", "IGHL")}.
 #'   \item  \code{TR_COLORS}:   TCR chain colors 
 #'                              \code{c("TRA", "TRB", "TRD", "TRG")}.
 #' }
 #' 
 #' @examples 
 #' # IG_COLORS as an isotype color set for ggplot
-#' isotype <- c("IgG", "IgM", "IgM", "IgA")
+#' isotype <- c("IGHG", "IGHM", "IGHM", "IGHA")
 #' db <- data.frame(x=1:4, y=1:4, iso=isotype)
 #' g1 <- ggplot(db, aes(x=x, y=y, color=iso)) + 
 #'     scale_color_manual(name="Isotype", values=IG_COLORS) +
@@ -113,13 +150,13 @@ DNA_COLORS <- c("A"="#64F73F",
 
 #' @rdname DEFAULT_COLORS
 #' @export
-IG_COLORS <- c("IgA"="#377EB8", 
-               "IgD"="#FF7F00", 
-               "IgE"="#E41A1C", 
-               "IgG"="#4DAF4A", 
-               "IgM"="#984EA3",
-               "IgK"="#E5C494",
-               "IgL"="#FFD92F")
+IG_COLORS <- c("IGHA"="#377EB8", 
+               "IGHD"="#FF7F00", 
+               "IGHE"="#E41A1C", 
+               "IGHG"="#4DAF4A", 
+               "IGHM"="#984EA3",
+               "IGHK"="#E5C494",
+               "IGHL"="#FFD92F")
 
 #' @rdname DEFAULT_COLORS
 #' @export
@@ -236,7 +273,7 @@ ABBREV_AA <- c("A"="Ala",
 #' determining regions (CDRs) for IMGT-gapped immunoglobulin (Ig) nucleotide sequences 
 #' according to the IMGT numbering scheme.
 #' 
-#' @format  A list with regions named one of \code{c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3")} 
+#' @format  A list with regions named one of \code{c("fwr1", "cdr1", "fwr2", "cdr2", "fwr3")} 
 #'          with values containing a numeric vector of length two defining the 
 #'          \code{c(start, end)} positions of the named region.
 #'          
@@ -244,8 +281,8 @@ ABBREV_AA <- c("A"="Ala",
 #'   \url{http://imgt.org}
 #' 
 #' @export
-IMGT_REGIONS <- list("FWR1"=c(1, 78),
-                     "CDR1"=c(79, 114),
-                     "FWR2"=c(115, 165),
-                     "CDR2"=c(166, 195),
-                     "FWR3"=c(196, 312))
+IMGT_REGIONS <- list("fwr1"=c(1, 78),
+                     "cdr1"=c(79, 114),
+                     "fwr2"=c(115, 165),
+                     "cdr2"=c(166, 195),
+                     "fwr3"=c(196, 312))

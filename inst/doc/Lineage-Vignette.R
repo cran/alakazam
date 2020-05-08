@@ -1,54 +1,54 @@
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 # Load required packages
 library(alakazam)
 library(igraph)
 library(dplyr)
 
-# Select clone from example database
+# Select a clone from the example database
 data(ExampleDb)
-sub_db <- subset(ExampleDb, CLONE == 3138)
+sub_db <- subset(ExampleDb, clone_id == 3138)
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 # This example data set does not have ragged ends
 # Preprocess clone without ragged end masking (default)
-clone <- makeChangeoClone(sub_db, text_fields=c("SAMPLE", "ISOTYPE"), 
-                          num_fields="DUPCOUNT")
+clone <- makeChangeoClone(sub_db, text_fields=c("sample_id", "c_call"), 
+                          num_fields="duplicate_count")
 
 # Show combined annotations
-clone@data[, c("SAMPLE", "ISOTYPE", "DUPCOUNT")]
+clone@data[, c("sample_id", "c_call", "duplicate_count")]
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Run PHYLIP and parse output
-#  dnapars_exec <- "~/apps/phylip-3.69/dnapars"
-#  graph <- buildPhylipLineage(clone, dnapars_exec, rm_temp=TRUE)
+#  phylip_exec <- "~/apps/phylip-3.69/dnapars"
+#  graph <- buildPhylipLineage(clone, phylip_exec, rm_temp=TRUE)
 
-## ---- echo=FALSE, warning=FALSE, message=FALSE---------------------------
+## ---- echo=FALSE, warning=FALSE, message=FALSE--------------------------------
 # Load data insted of running phylip
 # Clone 3138 is at index 23
 graph <- ExampleTrees[[23]]
 
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 # The graph has shared annotations for the clone
-data.frame(CLONE=graph$clone,
-           JUNCTION_LENGTH=graph$junc_len,
-           V_GENE=graph$v_gene,
-           J_GENE=graph$j_gene)
+data.frame(clone_id=graph$clone,
+           junction_length=graph$junc_len,
+           v_gene=graph$v_gene,
+           j_gene=graph$j_gene)
 
 # The vertices have sequence specific annotations
-data.frame(SEQUENCE_ID=V(graph)$name, 
-           ISOTYPE=V(graph)$ISOTYPE,
-           DUPCOUNT=V(graph)$DUPCOUNT)
+data.frame(sequence_id=V(graph)$name, 
+           c_call=V(graph)$c_call,
+           duplicate_count=V(graph)$duplicate_count)
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 # Plot graph with defaults
 plot(graph)
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 # Modify graph and plot attributes
 V(graph)$color <- "steelblue"
 V(graph)$color[V(graph)$name == "Germline"] <- "black"
 V(graph)$color[grepl("Inferred", V(graph)$name)] <- "white"
-V(graph)$label <- V(graph)$ISOTYPE
+V(graph)$label <- V(graph)$c_call
 E(graph)$label <- ""
 
 # Remove large default margins
@@ -60,24 +60,24 @@ plot(graph, layout=layout_as_tree, edge.arrow.mode=0, vertex.frame.color="black"
 legend("topleft", c("Germline", "Inferred", "Sample"), 
        fill=c("black", "white", "steelblue"), cex=0.75)
 
-## ---- eval=TRUE, warning=FALSE, results="hide"---------------------------
+## ---- eval=TRUE, warning=FALSE, results="hide"--------------------------------
 # Preprocess clones
 clones <- ExampleDb %>%
-    group_by(CLONE) %>%
-    do(CHANGEO=makeChangeoClone(., text_fields=c("SAMPLE", "ISOTYPE"), 
-                                num_fields="DUPCOUNT"))
+    group_by(clone_id) %>%
+    do(CHANGEO=makeChangeoClone(., text_fields=c("sample_id", "c_call"), 
+                                num_fields="duplicate_count"))
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Build lineages
-#  dnapars_exec <- "~/apps/phylip-3.69/dnapars"
+#  phylip_exec <- "~/apps/phylip-3.69/dnapars"
 #  graphs <- lapply(clones$CHANGEO, buildPhylipLineage,
-#                   dnapars_exec=dnapars_exec, rm_temp=TRUE)
+#                   phylip_exec=phylip_exec, rm_temp=TRUE)
 
-## ---- echo=FALSE, warning=FALSE, message=FALSE---------------------------
+## ---- echo=FALSE, warning=FALSE, message=FALSE--------------------------------
 # Load data insted of running phylip
 graphs <- ExampleTrees
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 # Note, clones with only a single sequence will not be processed.
 # A warning will be generated and NULL will be returned by buildPhylipLineage
 # These entries may be removed for clarity
@@ -87,13 +87,13 @@ graphs[sapply(graphs, is.null)] <- NULL
 # analysis, if desired.
 graphs <- graphs[sapply(graphs, vcount) >= 5]
 
-## ---- eval=TRUE, show=FALSE----------------------------------------------
+## ---- eval=TRUE, show=FALSE---------------------------------------------------
 # Modify graph and plot attributes
 V(graph)$color <- categorical_pal(8)[1]
 V(graph)$label <- V(graph)$name
 E(graph)$label <- E(graph)$weight
 
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 ##plot lineage tree using igraph
 plot(graph, layout=layout_as_tree)
 
@@ -106,7 +106,7 @@ plot(phylo, show.node.label=TRUE)
 #write tree file in Newick format
 ape::write.tree(phylo, file="example.tree")
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 #read in tree as phylo object
 phylo_r <- ape::read.tree("example.tree")
 

@@ -4,8 +4,14 @@
 \alias{testEdges}
 \title{Tests for parent-child annotation enchrichment in lineage trees}
 \usage{
-testEdges(graphs, field, indirect = FALSE, exclude = c("Germline", NA),
-  nperm = 200, progress = FALSE)
+testEdges(
+  graphs,
+  field,
+  indirect = FALSE,
+  exclude = c("Germline", NA),
+  nperm = 200,
+  progress = FALSE
+)
 }
 \arguments{
 \item{graphs}{list of igraph objects with vertex annotations.}
@@ -38,7 +44,7 @@ the significance of an annotation's association with parent-child relationships.
 graphs <- ExampleTrees[1-10]
 
 # Perform edge test on isotypes
-x <- testEdges(graphs, "ISOTYPE", nperm=10)
+x <- testEdges(graphs, "c_call", nperm=10)
 print(x)
 }
 

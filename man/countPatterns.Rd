@@ -4,8 +4,7 @@
 \alias{countPatterns}
 \title{Count sequence patterns}
 \usage{
-countPatterns(seq, patterns, nt = FALSE, trim = FALSE,
-  label = "REGION")
+countPatterns(seq, patterns, nt = FALSE, trim = FALSE, label = "region")
 }
 \arguments{
 \item{seq}{character vector of either DNA or amino acid sequences.}
@@ -37,7 +36,7 @@ seq <- c("TGTCAACAGGCTAACAGTTTCCGGACGTTC",
          "TGTCAGCAATATTATATTGCTCCCTTCACTTTC",
          "TGTCAAAAGTATAACAGTGCCCCCTGGACGTTC")
 patterns <- c("A", "V", "[LI]")
-names(patterns) <- c("ARG", "VAL", "ISO_LEU")
-countPatterns(seq, patterns, nt=TRUE, trim=TRUE, label="CDR3")
+names(patterns) <- c("arg", "val", "iso_leu")
+countPatterns(seq, patterns, nt=TRUE, trim=TRUE, label="cdr3")
             
 }

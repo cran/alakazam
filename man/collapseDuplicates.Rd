@@ -4,10 +4,19 @@
 \alias{collapseDuplicates}
 \title{Remove duplicate DNA sequences and combine annotations}
 \usage{
-collapseDuplicates(data, id = "SEQUENCE_ID", seq = "SEQUENCE_IMGT",
-  text_fields = NULL, num_fields = NULL, seq_fields = NULL,
-  add_count = FALSE, ignore = c("N", "-", ".", "?"), sep = ",",
-  dry = FALSE, verbose = FALSE)
+collapseDuplicates(
+  data,
+  id = "sequence_id",
+  seq = "sequence_alignment",
+  text_fields = NULL,
+  num_fields = NULL,
+  seq_fields = NULL,
+  add_count = FALSE,
+  ignore = c("N", "-", ".", "?"),
+  sep = ",",
+  dry = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{data}{data.frame containing Change-O columns. The data.frame 
@@ -32,7 +41,7 @@ retained. Where a non-informative character is one of
 \code{c("N", "-", ".", "?")}. Note, this is distinct from the 
 \code{seq} parameter which is used to determine duplicates.}
 
-\item{add_count}{if \code{TRUE} add the column \code{COLLAPSE_COUNT} that 
+\item{add_count}{if \code{TRUE} add the column \code{collpase_count} that 
 indicates the number of sequences that were collapsed to build 
 each unique entry.}
 
@@ -80,29 +89,29 @@ non-equivalent. Ambiguous sequences arise due to ambiguous characters at positio
 vary across sequences, and are discarded along with their annotations when \code{dry=FALSE}. 
 Thus, ambiguous sequences are removed as duplicates of some sequence, but do not create a potential
 false-positive annotation merger. Ambiguous sequences are not included in the 
-\code{COLLAPSE_COUNT} annotation that is added when \code{add_count=TRUE}.
+\code{collapse_count} annotation that is added when \code{add_count=TRUE}.
 
 If \code{dry=TRUE} sequences will not be removed from the input. Instead, the following columns
 will be appended to the input defining the collapse action that would have been performed in the
 \code{dry=FALSE} case.
 
 \itemize{
-  \item  \code{COLLAPSE_ID}:     an identifer for the group of identical sequences.
-  \item  \code{COLLAPSE_CLASS}:  string defining how the sequence matches to the other in the set.
+  \item  \code{collapse_id}:     an identifer for the group of identical sequences.
+  \item  \code{collapse_class}:  string defining how the sequence matches to the other in the set.
                                  one of \code{"duplicated"} (has duplicates),
                                  \code{"unique"} (no duplicates), \code{"ambiguous_duplicate"} 
                                  (no duplicates after ambiguous sequences are removed), 
                                  or \code{"ambiguous"} (matches multiple non-duplicate sequences).
-  \item  \code{COLLAPSE_PASS}:   \code{TRUE} for the sequences that would be retained.
+  \item  \code{collapse_pass}:   \code{TRUE} for the sequences that would be retained.
 }
 }
 \examples{
-# Example Change-O data.frame
-db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
-                 SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
-                 TYPE=c("IgM", "IgG", "IgG", "IgA"),
-                 SAMPLE=c("S1", "S1", "S2", "S2"),
-                 COUNT=1:4,
+# Example data.frame
+db <- data.frame(sequence_id=LETTERS[1:4],
+                 sequence_alignment=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
+                 c_call=c("IGHM", "IGHG", "IGHG", "IGHA"),
+                 sample_id=c("S1", "S1", "S2", "S2"),
+                 duplicate_count=1:4,
                  stringsAsFactors=FALSE)
 
 # Annotations are not parsed if neither text_fields nor num_fields is specified
@@ -112,20 +121,20 @@ collapseDuplicates(db, verbose=TRUE)
 # Unique text_fields annotations are combined into a single string with ","
 # num_fields annotations are summed
 # Ambiguous duplicates are discarded
-collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
                    verbose=TRUE)
 
 # Use alternate delimiter for collapsing textual annotations
-collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
                    sep="/", verbose=TRUE)
 
 # Add count of duplicates
-collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
                    add_count=TRUE, verbose=TRUE)
 
 # Masking ragged ends may impact duplicate removal
-db$SEQUENCE_IMGT <- maskSeqEnds(db$SEQUENCE_IMGT)
-collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+db$sequence_alignment <- maskSeqEnds(db$sequence_alignment)
+collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
                    add_count=TRUE, verbose=TRUE)
 
 }

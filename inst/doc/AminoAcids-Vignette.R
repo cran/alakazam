@@ -1,55 +1,55 @@
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 # Load required packages
 library(alakazam)
 library(dplyr)
 
 # Subset example data
 data(ExampleDb)
-db <- ExampleDb[ExampleDb$SAMPLE == "+7d", ]
+db <- ExampleDb[ExampleDb$sample_id == "+7d", ]
 
-## ---- eval=TRUE, warning=FALSE, fig.width=7.5, fig.height=6--------------
-db_props <- aminoAcidProperties(db, seq="JUNCTION", nt=TRUE, trim=TRUE, 
-                                label="CDR3")
+## ---- eval=TRUE, warning=FALSE, fig.width=7.5, fig.height=6-------------------
+db_props <- aminoAcidProperties(db, seq="junction", nt=TRUE, trim=TRUE, 
+                                label="cdr3")
 
 # The full set of properties are calculated by default
-dplyr::select(db_props[1:3, ], starts_with("CDR3"))
+dplyr::select(db_props[1:3, ], starts_with("cdr3"))
 
 # Define a ggplot theme for all plots
 tmp_theme <- theme_bw() + theme(legend.position="bottom")
 
-# Generate plots for a four of the properties
-g1 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_LENGTH)) + tmp_theme +
+# Generate plots for all four of the properties
+g1 <- ggplot(db_props, aes(x=c_call, y=cdr3_aa_length)) + tmp_theme +
     ggtitle("CDR3 length") + 
     xlab("Isotype") + ylab("Amino acids") +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
-    geom_boxplot(aes(fill=ISOTYPE))
-g2 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_GRAVY)) + tmp_theme + 
+    geom_boxplot(aes(fill=c_call))
+g2 <- ggplot(db_props, aes(x=c_call, y=cdr3_aa_gravy)) + tmp_theme + 
     ggtitle("CDR3 hydrophobicity") + 
     xlab("Isotype") + ylab("GRAVY") +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
-    geom_boxplot(aes(fill=ISOTYPE))
-g3 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_BASIC)) + tmp_theme +
+    geom_boxplot(aes(fill=c_call))
+g3 <- ggplot(db_props, aes(x=c_call, y=cdr3_aa_basic)) + tmp_theme +
     ggtitle("CDR3 basic residues") + 
     xlab("Isotype") + ylab("Basic residues") +
     scale_y_continuous(labels=scales::percent) +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
-    geom_boxplot(aes(fill=ISOTYPE))
-g4 <- ggplot(db_props, aes(x=ISOTYPE, y=CDR3_AA_ACIDIC)) + tmp_theme +
+    geom_boxplot(aes(fill=c_call))
+g4 <- ggplot(db_props, aes(x=c_call, y=cdr3_aa_acidic)) + tmp_theme +
     ggtitle("CDR3 acidic residues") + 
     xlab("Isotype") + ylab("Acidic residues") +
     scale_y_continuous(labels=scales::percent) +
     scale_fill_manual(name="Isotype", values=IG_COLORS) +
-    geom_boxplot(aes(fill=ISOTYPE))
+    geom_boxplot(aes(fill=c_call))
 
 # Plot in a 2x2 grid
 gridPlot(g1, g2, g3, g4, ncol=2)
 
-## ---- eval=TRUE, warning=FALSE-------------------------------------------
-db_props <- aminoAcidProperties(db, seq="JUNCTION", property=c("gravy", "charge"),
-                                nt=TRUE, trim=TRUE, label="CDR3")
-dplyr::select(db_props[1:3, ], starts_with("CDR3"))
+## ---- eval=TRUE, warning=FALSE------------------------------------------------
+db_props <- aminoAcidProperties(db, seq="junction", property=c("gravy", "charge"),
+                                nt=TRUE, trim=TRUE, label="cdr3")
+dplyr::select(db_props[1:3, ], starts_with("cdr3"))
 
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 # Load the relevant data objects from the seqinr package
 library(seqinr)
 data(aaindex)
@@ -58,14 +58,14 @@ h <- aaindex[["KIDA850101"]]$I
 p <- setNames(pK[["Murray"]], rownames(pK))
 # Rename the hydrophobicity vector to use single-letter codes
 names(h) <- translateStrings(names(h), ABBREV_AA)
-db_props <- aminoAcidProperties(db, seq="JUNCTION", property=c("gravy", "charge"), 
-                                nt=TRUE, trim=TRUE, label="CDR3", 
+db_props <- aminoAcidProperties(db, seq="junction", property=c("gravy", "charge"), 
+                                nt=TRUE, trim=TRUE, label="cdr3", 
                                 hydropathy=h, pK=p)
-dplyr::select(db_props[1:3, ], starts_with("CDR3"))
+dplyr::select(db_props[1:3, ], starts_with("cdr3"))
 
-## ---- eval=TRUE, warning=FALSE, message=FALSE----------------------------
+## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
 # Translate junction DNA sequences to amino acids and trim first and last codons
-cdr3 <- translateDNA(db$JUNCTION[1:3], trim=TRUE)
+cdr3 <- translateDNA(db$junction[1:3], trim=TRUE)
 
 # Grand average of hydrophobicity
 gravy(cdr3)
@@ -88,5 +88,5 @@ charge(cdr3, normalize=FALSE)
 
 # Count of acidic amino acids
 # Takes a named list of regular expressions
-countPatterns(cdr3, c(ACIDIC="[DE]"), label="CDR3")
+countPatterns(cdr3, c(ACIDIC="[DE]"), label="cdr3")
 

@@ -4,10 +4,19 @@
 \alias{plotSubtrees}
 \title{Plots subtree statistics for multiple trees}
 \usage{
-plotSubtrees(graphs, field, stat, root = "Germline",
-  exclude = c("Germline", NA), colors = NULL,
-  main_title = "Subtrees", legend_title = "Annotation",
-  style = c("box", "violin"), silent = FALSE, ...)
+plotSubtrees(
+  graphs,
+  field,
+  stat,
+  root = "Germline",
+  exclude = c("Germline", NA),
+  colors = NULL,
+  main_title = "Subtrees",
+  legend_title = "Annotation",
+  style = c("box", "violin"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{graphs}{list of igraph objects containing annotated lineage trees.}
@@ -68,13 +77,13 @@ set of lineage trees, broken down by annotation value.
 graphs <- ExampleTrees[1-10]
 
 # Violin plots of node outdegree by sample
-plotSubtrees(graphs, "SAMPLE", "out", style="v")
+plotSubtrees(graphs, "sample_id", "out", style="v")
 
 # Violin plots of subtree size by sample
-plotSubtrees(graphs, "SAMPLE", "size", style="v")
+plotSubtrees(graphs, "sample_id", "size", style="v")
 
 # Boxplot of node depth by isotype
-plotSubtrees(graphs,  "ISOTYPE", "depth", style="b")
+plotSubtrees(graphs, "c_call", "depth", style="b")
 
 }
 \seealso{

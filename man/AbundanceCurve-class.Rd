@@ -29,12 +29,12 @@
 \item{\code{abundance}}{data.frame with relative clonal abundance data and confidence intervals,
 containing the following columns:
 \itemize{
-  \item  \code{GROUP}:  group identifier.
-  \item  \code{CLONE}:  clone identifier.
-  \item  \code{P}:      relative abundance of the clone.
-  \item  \code{LOWER}:  lower confidence inverval bound.
-  \item  \code{UPPER}:  upper confidence interval bound.
-  \item  \code{RANK}:   the rank of the clone abundance.
+  \item  \code{group}:  group identifier.
+  \item  \code{clone_id} or \code{CLONE}:  clone identifier. 
+  \item  \code{p}:      relative abundance of the clone.
+  \item  \code{lower}:  lower confidence inverval bound.
+  \item  \code{upper}:  upper confidence interval bound.
+  \item  \code{rank}:   the rank of the clone abundance.
 }}
 
 \item{\code{bootstrap}}{data.frame of bootstrapped clonal distributions.}

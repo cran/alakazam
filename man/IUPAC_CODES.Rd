@@ -6,13 +6,19 @@
 \alias{IUPAC_DNA}
 \alias{IUPAC_AA}
 \title{IUPAC ambiguous characters}
-\format{A list with single character codes as names and values containing character 
+\format{
+A list with single character codes as names and values containing character 
          vectors that define the set of standard characters that match to each each 
          ambiguous character.
 \itemize{
   \item  \code{IUPAC_DNA}:  DNA ambiguous character translations.
   \item  \code{IUPAC_AA}:   Amino acid ambiguous character translations.
-}}
+}
+
+An object of class \code{list} of length 15.
+
+An object of class \code{list} of length 25.
+}
 \usage{
 IUPAC_DNA
 

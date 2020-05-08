@@ -45,21 +45,21 @@ described in:
         generalizing the Good-Turing sample coverage theory. 
         Ecology. 2015 96, 11891201.
 
-This package provides methods for the inferrence of a complete clonal 
-abundance distribution, using the `estimateAbundance` function, along with 
-two approaches to assess diversity of these distributions: 
+This package provides methods for the inference of a complete clonal 
+abundance distribution (using the `estimateAbundance` function) along with 
+two approaches to assess the diversity of these distributions: 
 
 1. Generation of a smooth diversity (D) curve over a range of diversity orders (q) 
-using `alphaDiversity`.
+using `alphaDiversity`, and
 2. A significance test of the diversity (D) at a fixed diversity order (q).
 
 
 ## Example data
 
-A small example Change-O database, `ExampleDb`, is included in the `alakazam` package. 
-Diversity calculation requires the `CLONE` field (column) to be present in the 
-Change-O file, as well as an additional grouping column. In this example we 
-will use the grouping columns `SAMPLE` and `ISOTYPE`.
+A small example AIRR database, `ExampleDb`, is included in the `alakazam` package. 
+Diversity calculation requires the `clone` field (column) to be present in the 
+AIRR file, as well as an additional grouping column. In this example we 
+will use the grouping columns `sample_id` and `c_call`.
 
 ```{r, eval=TRUE, warning=FALSE, message=FALSE}
 # Load required packages
@@ -69,29 +69,31 @@ library(alakazam)
 data(ExampleDb)
 ```
 
+For details about the AIRR format, visit the AIRR Community documentation site https://docs.airr-community.org/en/latest/datarep/rearrangements.html#fields
+
 ## Generate a clonal abundance curve
 
 A simple table of the observed clonal abundance counts and frequencies may be
-generated using the `countClones` function either without copy numbers, where
+generated using the `countClones` function either with or without copy numbers, where
 the size of each clone is determined by the number of sequence members:
 
 ```{r, eval=TRUE, warning=FALSE}
-# Partitions the data based on the SAMPLE column
-clones <- countClones(ExampleDb, group="SAMPLE")
+# Partitions the data based on the sample column
+clones <- countClones(ExampleDb, group="sample_id")
 head(clones, 5)
 ```
 
 You may also specify a column containing the abundance count of each sequence 
 (usually copy numbers), that will including weighting of each clone size by the 
 corresponding abundance count. Furthermore, multiple grouping columns may be
-specified such that `SEQ_FREQ` (unwieghted clone size as a fraction
-of total sequences in the group) and `COPY_FREQ` (weighted faction) are 
+specified such that `seq_freq` (unwieghted clone size as a fraction
+of total sequences in the group) and `copy_freq` (weighted faction) are 
 normalized to within multiple group data partitions.
 
 ```{r, eval=TRUE, warning=FALSE}
-# Partitions the data based on both the SAMPLE and ISOTYPE columns
-# Weights the clone sizes by the DUPCOUNT column
-clones <- countClones(ExampleDb, group=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
+# Partitions the data based on both the sample_id and c_call columns
+# Weights the clone sizes by the duplicate_count column
+clones <- countClones(ExampleDb, group=c("sample_id", "c_call"), copy="duplicate_count", clone="clone_id")
 head(clones, 5)
 ```
 
@@ -101,9 +103,9 @@ intervals. A complete clonal abundance distribution may be inferred using the
 This output may be visualized using the `plotAbundanceCurve` function.
 
 ```{r, eval=TRUE, results='hide', warning=FALSE, fig.width=6, fig.height=4}
-# Partitions the data on the SAMPLE column
+# Partitions the data on the sample column
 # Calculates a 95% confidence interval via 200 bootstrap realizations
-curve <- estimateAbundance(ExampleDb, group="SAMPLE", ci=0.95, nboot=200)
+curve <- estimateAbundance(ExampleDb, group="sample_id", ci=0.95, nboot=200, clone="clone_id")
 ```
 
 ```{r, eval=TRUE, warning=FALSE, fig.width=6, fig.height=4}
@@ -120,18 +122,18 @@ resampling realization. Diversity (D) is calculated over a range of diversity
 orders (q) to generate a smooth curve.
 
 ```{r, eval=TRUE, results='hide'}
-# Compare diversity curve across values in the "SAMPLE" column
-# q ranges from 0 (min_q=0) to 4 (max_q=4) in 0.05 incriments (step_q=0.05)
+# Compare diversity curve across values in the "sample" column
+# q ranges from 0 (min_q=0) to 4 (max_q=4) in 0.05 increments (step_q=0.05)
 # A 95% confidence interval will be calculated (ci=0.95)
 # 200 resampling realizations are performed (nboot=200)
-sample_curve <- alphaDiversity(ExampleDb, group="SAMPLE",
+sample_curve <- alphaDiversity(ExampleDb, group="sample_id", clone="clone_id",
                                min_q=0, max_q=4, step_q=0.1,
                                ci=0.95, nboot=200)
 
-# Compare diversity curve across values in the "ISOTYPE" column
-# Analyse is restricted to ISOTYPE values with at least 30 sequences by min_n=30
+# Compare diversity curve across values in the c_call column
+# Analyse is restricted to c_call values with at least 30 sequences by min_n=30
 # Excluded groups are indicated by a warning message
-isotype_curve <- alphaDiversity(ExampleDb, group="ISOTYPE",
+isotype_curve <- alphaDiversity(ExampleDb, group="c_call", clone="clone_id",
                                 min_q=0, max_q=4, step_q=0.1,
                                 ci=0.95, nboot=200)
 ```
@@ -159,12 +161,12 @@ specified.
 
 ```{r, eval=TRUE, fig.width=6, fig.height=3}
 # Test diversity at q=0, q=1 and q=2 (equivalent to species richness, Shannon entropy, 
-# Simpson's index) across values in the "SAMPLE" column
+# Simpson's index) across values in the sample_id column
 # 200 bootstrap realizations are performed (nboot=200)
-isotype_test <- alphaDiversity(ExampleDb, group="ISOTYPE", min_q=0, max_q=2, step_q=1, nboot=200)
+isotype_test <- alphaDiversity(ExampleDb, group="c_call", min_q=0, max_q=2, step_q=1, nboot=200, clone="clone_id")
 
 # Print P-value table
-print(isotype_test)
+print(isotype_test@tests)
 
 # Plot results at q=0 and q=2
 # Plot the mean and standard deviations at q=0 and q=2

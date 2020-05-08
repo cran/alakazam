@@ -3,20 +3,19 @@
 \docType{package}
 \name{alakazam}
 \alias{alakazam}
-\alias{alakazam-package}
 \title{The alakazam package}
 \description{
-\code{alakazam} in a member of the Change-O suite of tools and serves five main 
+\code{alakazam} in a member of the Immcantation framework of tools and serves five main 
 purposes:
 \itemize{
-  \item  Providing core functionality for other R packages in the Change-O suite. This
+  \item  Providing core functionality for other R packages in Immcantation. This
          includes common tasks such as file I/O, basic DNA sequence manipulation, and
          interacting with V(D)J segment and gene annotations.
-  \item  Providing an R interface for interacting with the output of the pRESTO 
-         tool suite.
-  \item  Performing lineage reconstruction on clonal populations of immunoglobulin 
-         (Ig) sequences. 
+  \item  Providing an R interface for interacting with the output of the pRESTO and 
+         Change-O tool suites.
   \item  Performing clonal abundance and diversity analysis on lymphocyte repertoires.
+  \item  Performing lineage reconstruction on clonal populations of immunoglobulin 
+         (Ig) sequences.
   \item  Performing physicochemical property analyses of lymphocyte receptor sequences.
 }
 For additional details regarding the use of the \code{alakazam} package see the 
@@ -103,13 +102,6 @@ vignettes:\cr
                                       sequences.
   \item  \link{countPatterns}:        Count patterns in sequences.
                                              
-}
-}
-
-\section{General data manipulation}{
-
-\itemize{
-  \item  \link{translateStrings}:     Perform multiple string replacement operations.
 }
 }
 

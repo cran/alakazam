@@ -4,15 +4,14 @@
 \alias{extractVRegion}
 \title{Extracts FWRs and CDRs from IMGT-gapped sequences}
 \usage{
-extractVRegion(sequences, region = c("FWR1", "CDR1", "FWR2", "CDR2",
-  "FWR3"))
+extractVRegion(sequences, region = c("fwr1", "cdr1", "fwr2", "cdr2", "fwr3"))
 }
 \arguments{
 \item{sequences}{character vector of IMGT-gapped nucleotide sequences.}
 
 \item{region}{string defining the region(s) of the V segment to extract. 
 May be a single region or multiple regions (as a vector) from
-\code{c("FWR1", "CDR1", "FWR2", "CDR2" ,"FWR3")}.  By default, all
+\code{c("fwr1", "cdr1", "fwr2", "cdr2" ,"fwr3")}.  By default, all
 regions will be returned.}
 }
 \value{
@@ -29,19 +28,19 @@ IMGT numbering scheme.
 }
 \examples{
 # Assign example clone
-clone <- subset(ExampleDb, CLONE == 3138)
+clone <- subset(ExampleDb, clone_id == 3138)
 
 # Get all regions
-extractVRegion(clone$SEQUENCE_IMGT)
+extractVRegion(clone$sequence_alignment)
 
 # Get single region
-extractVRegion(clone$SEQUENCE_IMGT, "FWR1")
+extractVRegion(clone$sequence_alignment, "fwr1")
 
 # Get all CDRs
-extractVRegion(clone$SEQUENCE_IMGT, c("CDR1", "CDR2"))
+extractVRegion(clone$sequence_alignment, c("cdr1", "cdr2"))
 
 # Get all FWRs
-extractVRegion(clone$SEQUENCE_IMGT, c("FWR1", "FWR2", "FWR3"))
+extractVRegion(clone$sequence_alignment, c("fwr1", "fwr2", "fwr3"))
 
 }
 \references{

@@ -7,17 +7,42 @@
 \alias{getFamily}
 \title{Get Ig segment allele, gene and family names}
 \usage{
-getSegment(segment_call, segment_regex, first = TRUE, collapse = TRUE,
-  strip_d = TRUE, omit_nl = FALSE, sep = ",")
+getSegment(
+  segment_call,
+  segment_regex,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
 
-getAllele(segment_call, first = TRUE, collapse = TRUE,
-  strip_d = TRUE, omit_nl = FALSE, sep = ",")
+getAllele(
+  segment_call,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
 
-getGene(segment_call, first = TRUE, collapse = TRUE, strip_d = TRUE,
-  omit_nl = FALSE, sep = ",")
+getGene(
+  segment_call,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
 
-getFamily(segment_call, first = TRUE, collapse = TRUE,
-  strip_d = TRUE, omit_nl = FALSE, sep = ",")
+getFamily(
+  segment_call,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
 }
 \arguments{
 \item{segment_call}{character vector containing segment calls delimited by commas.}

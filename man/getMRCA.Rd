@@ -4,8 +4,13 @@
 \alias{getMRCA}
 \title{Retrieve the first non-root node of a lineage tree}
 \usage{
-getMRCA(graph, path = c("distance", "steps"), root = "Germline",
-  field = NULL, exclude = NULL)
+getMRCA(
+  graph,
+  path = c("distance", "steps"),
+  root = "Germline",
+  field = NULL,
+  exclude = NULL
+)
 }
 \arguments{
 \item{graph}{igraph object containing an annotated lineage tree.}
@@ -25,9 +30,9 @@ MRCA set. If \code{NULL} do not exclude any nodes. Has no effect if
 \value{
 A data.frame of the MRCA node(s) containing the columns:
           \itemize{
-            \item  \code{NAME}:      node name
-            \item  \code{STEPS}:     path length as the number of nodes traversed
-            \item  \code{DISTANCE}:  path length as the sum of edge weights
+            \item  \code{name}:      node name
+            \item  \code{steps}:     path length as the number of nodes traversed
+            \item  \code{distance}:  path length as the sum of edge weights
           }
           Along with additional columns corresponding to the 
           annotations of the input graph.
@@ -45,7 +50,7 @@ graph <- ExampleTrees[[23]]
 getMRCA(graph, path="steps", root="Germline")
 
 # Exclude nodes without an isotype annotation and use weighted path length
-getMRCA(graph, path="distance", root="Germline", field="ISOTYPE", exclude=NA)
+getMRCA(graph, path="distance", root="Germline", field="c_call", exclude=NA)
 
 }
 \seealso{

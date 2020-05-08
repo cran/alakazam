@@ -4,8 +4,14 @@
 \alias{plotMRCATest}
 \title{Plot the results of a founder permutation test}
 \usage{
-plotMRCATest(data, color = "black", main_title = "MRCA Test",
-  style = c("histogram", "cdf"), silent = FALSE, ...)
+plotMRCATest(
+  data,
+  color = "black",
+  main_title = "MRCA Test",
+  style = c("histogram", "cdf"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{\link{MRCATest} object returned by \link{testMRCA}.}
@@ -44,7 +50,7 @@ A \code{ggplot} object defining the plot.
 graphs <- ExampleTrees[1-10]
 
 # Perform MRCA test on isotypes
-x <- testMRCA(graphs, "ISOTYPE", nperm=10)
+x <- testMRCA(graphs, "c_call", nperm=10)
 
 # Plot
 plotMRCATest(x, color="steelblue", style="hist")

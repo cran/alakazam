@@ -4,9 +4,17 @@
 \alias{plotAbundanceCurve}
 \title{Plots a clonal abundance distribution}
 \usage{
-plotAbundanceCurve(data, colors = NULL, main_title = "Rank Abundance",
-  legend_title = NULL, xlim = NULL, ylim = NULL,
-  annotate = c("none", "depth"), silent = FALSE, ...)
+plotAbundanceCurve(
+  data,
+  colors = NULL,
+  main_title = "Rank Abundance",
+  legend_title = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  annotate = c("none", "depth"),
+  silent = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{\link{AbundanceCurve} object returned by \link{estimateAbundance}.}
@@ -45,7 +53,7 @@ distribution.
 }
 \examples{
 # Estimate abundance by sample and plot
-abund <- estimateAbundance(ExampleDb, group="SAMPLE", nboot=100)
+abund <- estimateAbundance(ExampleDb, group="sample_id", nboot=100)
 plotAbundanceCurve(abund, legend_title="Sample")
 
 }

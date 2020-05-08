@@ -4,8 +4,10 @@
 \name{ABBREV_AA}
 \alias{ABBREV_AA}
 \title{Amino acid abbreviation translations}
-\format{Named character vector defining single-letter character codes to 
-         three-letter abbreviation mappings.}
+\format{
+Named character vector defining single-letter character codes to 
+         three-letter abbreviation mappings.
+}
 \usage{
 ABBREV_AA
 }

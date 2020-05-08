@@ -4,7 +4,7 @@
 \alias{countClones}
 \title{Tabulates clones sizes}
 \usage{
-countClones(data, groups = NULL, copy = NULL, clone = "CLONE")
+countClones(data, groups = NULL, copy = NULL, clone = "clone_id")
 }
 \arguments{
 \item{data}{data.frame with Change-O style columns containing clonal assignments.}
@@ -21,14 +21,18 @@ is determined by the sum of copy numbers within each clonal group.}
 \value{
 A data.frame summarizing clone counts and frequencies with columns:
           \itemize{
-            \item \code{CLONE}:       clone identifier.
-            \item \code{SEQ_COUNT}:   total number of sequences for the clone.
-            \item \code{SEQ_FREQ}:    frequency of the clone as a fraction of the total
+            \item \code{clone_id}:    clone identifier. This is the default column
+                                      name, specified with \code{clone='clone_id'}.
+                                      If the function call uses Change-O 
+                                      formatted data and \code{clone='CLONE'}, this
+                                      column will have name \code{CLONE}.
+            \item \code{seq_count}:   total number of sequences for the clone.
+            \item \code{seq_freq}:    frequency of the clone as a fraction of the total
                                       number of sequences within each group.
-            \item \code{COPY_COUNT}:  sum of the copy counts in the \code{copy} column.
+            \item \code{copy_count}:  sum of the copy counts in the \code{copy} column.
                                       Only present if the \code{copy} argument is 
                                       specified.
-            \item \code{COPY_FREQ}:   frequency of the clone as a fraction of the total
+            \item \code{copy_freq}:   frequency of the clone as a fraction of the total
                                       copy number within each group. Only present if 
                                       the \code{copy} argument is specified.
           }
@@ -40,9 +44,9 @@ clonal groups.
 }
 \examples{
 # Without copy numbers
-clones <- countClones(ExampleDb, groups="SAMPLE")
+clones <- countClones(ExampleDb, groups="sample_id")
 
 # With copy numbers and multiple groups
-clones <- countClones(ExampleDb, groups=c("SAMPLE", "ISOTYPE"), copy="DUPCOUNT")
+clones <- countClones(ExampleDb, groups=c("sample_id", "c_call"), copy="duplicate_count")
 
 }

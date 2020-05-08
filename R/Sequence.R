@@ -101,10 +101,10 @@ getAAMatrix <- function(gap=0) {
 #' translateDNA("ACTGACTCGA")
 #'
 #' # Translate a vector of sequences
-#' translateDNA(ExampleDb$JUNCTION[1:3])
+#' translateDNA(ExampleDb$junction[1:3])
 #' 
 #' # Remove the first and last codon from the translation
-#' translateDNA(ExampleDb$JUNCTION[1:3], trim=TRUE)
+#' translateDNA(ExampleDb$junction[1:3], trim=TRUE)
 #' 
 #' @export
 translateDNA <- function (seq, trim=FALSE) {
@@ -277,9 +277,9 @@ padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
     
     # Pad
     if (!start) { 
-        seq <- stri_pad_right(seq, width=width, pad="N")
+        seq <- stri_pad_right(seq, width=width, pad=pad_char)
     } else {
-        seq <- stri_pad_left(seq, width=width, pad="N")
+        seq <- stri_pad_left(seq, width=width, pad=pad_char)
     }
 
     return(seq)
@@ -307,7 +307,7 @@ padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
 #'                        retained. Where a non-informative character is one of 
 #'                        \code{c("N", "-", ".", "?")}. Note, this is distinct from the 
 #'                        \code{seq} parameter which is used to determine duplicates.
-#' @param    add_count    if \code{TRUE} add the column \code{COLLAPSE_COUNT} that 
+#' @param    add_count    if \code{TRUE} add the column \code{collpase_count} that 
 #'                        indicates the number of sequences that were collapsed to build 
 #'                        each unique entry.
 #' @param    ignore       vector of characters to ignore when testing for equality.
@@ -346,32 +346,32 @@ padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
 #' vary across sequences, and are discarded along with their annotations when \code{dry=FALSE}. 
 #' Thus, ambiguous sequences are removed as duplicates of some sequence, but do not create a potential
 #' false-positive annotation merger. Ambiguous sequences are not included in the 
-#' \code{COLLAPSE_COUNT} annotation that is added when \code{add_count=TRUE}.
+#' \code{collapse_count} annotation that is added when \code{add_count=TRUE}.
 #' 
 #' If \code{dry=TRUE} sequences will not be removed from the input. Instead, the following columns
 #' will be appended to the input defining the collapse action that would have been performed in the
 #' \code{dry=FALSE} case.
 #' 
 #' \itemize{
-#'   \item  \code{COLLAPSE_ID}:     an identifer for the group of identical sequences.
-#'   \item  \code{COLLAPSE_CLASS}:  string defining how the sequence matches to the other in the set.
+#'   \item  \code{collapse_id}:     an identifer for the group of identical sequences.
+#'   \item  \code{collapse_class}:  string defining how the sequence matches to the other in the set.
 #'                                  one of \code{"duplicated"} (has duplicates),
 #'                                  \code{"unique"} (no duplicates), \code{"ambiguous_duplicate"} 
 #'                                  (no duplicates after ambiguous sequences are removed), 
 #'                                  or \code{"ambiguous"} (matches multiple non-duplicate sequences).
-#'   \item  \code{COLLAPSE_PASS}:   \code{TRUE} for the sequences that would be retained.
+#'   \item  \code{collapse_pass}:   \code{TRUE} for the sequences that would be retained.
 #' }
 #' 
 #' @seealso  Equality is tested with \link{seqEqual} and \link{pairwiseEqual}. 
 #'           For IUPAC ambiguous character codes see \link{IUPAC_DNA}.
 #'
 #' @examples
-#' # Example Change-O data.frame
-#' db <- data.frame(SEQUENCE_ID=LETTERS[1:4],
-#'                  SEQUENCE_IMGT=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
-#'                  TYPE=c("IgM", "IgG", "IgG", "IgA"),
-#'                  SAMPLE=c("S1", "S1", "S2", "S2"),
-#'                  COUNT=1:4,
+#' # Example data.frame
+#' db <- data.frame(sequence_id=LETTERS[1:4],
+#'                  sequence_alignment=c("CCCCTGGG", "CCCCTGGN", "NAACTGGN", "NNNCTGNN"),
+#'                  c_call=c("IGHM", "IGHG", "IGHG", "IGHA"),
+#'                  sample_id=c("S1", "S1", "S2", "S2"),
+#'                  duplicate_count=1:4,
 #'                  stringsAsFactors=FALSE)
 #' 
 #' # Annotations are not parsed if neither text_fields nor num_fields is specified
@@ -381,24 +381,24 @@ padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
 #' # Unique text_fields annotations are combined into a single string with ","
 #' # num_fields annotations are summed
 #' # Ambiguous duplicates are discarded
-#' collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+#' collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
 #'                    verbose=TRUE)
 #'
 #' # Use alternate delimiter for collapsing textual annotations
-#' collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+#' collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
 #'                    sep="/", verbose=TRUE)
 #' 
 #' # Add count of duplicates
-#' collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+#' collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
 #'                    add_count=TRUE, verbose=TRUE)
 #' 
 #' # Masking ragged ends may impact duplicate removal
-#' db$SEQUENCE_IMGT <- maskSeqEnds(db$SEQUENCE_IMGT)
-#' collapseDuplicates(db, text_fields=c("TYPE", "SAMPLE"), num_fields="COUNT", 
+#' db$sequence_alignment <- maskSeqEnds(db$sequence_alignment)
+#' collapseDuplicates(db, text_fields=c("c_call", "sample_id"), num_fields="duplicate_count", 
 #'                    add_count=TRUE, verbose=TRUE)
 #'
 #' @export
-collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
+collapseDuplicates <- function(data, id="sequence_id", seq="sequence_alignment",
                                text_fields=NULL, num_fields=NULL, seq_fields=NULL,
                                add_count=FALSE, ignore=c("N", "-", ".", "?"), 
                                sep=",", dry=FALSE, verbose=FALSE) {
@@ -444,17 +444,17 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         stri_length(gsub("[N\\-\\.\\?]", "", x, perl=TRUE))
     }
     
-    # Initialize COLLAPSE_COUNT with 1 for each sequence
+    # Initialize collapse_count with 1 for each sequence
     if(add_count) {
-        data[["COLLAPSE_COUNT"]] <- rep(1, nrow(data))
-        num_fields <- c(num_fields, "COLLAPSE_COUNT")
+        data[["collapse_count"]] <- rep(1, nrow(data))
+        num_fields <- c(num_fields, "collapse_count")
     }
     
     # Initialize dry run columns 
     if (dry) {
-        data$COLLAPSE_ID <- NA
-        data$COLLAPSE_CLASS <- NA
-        data$COLLAPSE_PASS <- TRUE
+        data$collapse_id <- NA
+        data$collapse_class <- NA
+        data$collapse_pass <- TRUE
     }
     
     # Return input if there are no sequences to collapse
@@ -462,9 +462,9 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     if (nseq <= 1) { 
         if (verbose) { .printVerbose(nseq, 1, 0) }
         if (dry) {
-            data$COLLAPSE_ID <- 1
-            data$COLLAPSE_CLASS <- "unique"
-            data$COLLAPSE_PASS <- TRUE            
+            data$collapse_id <- 1
+            data$collapse_class <- "unique"
+            data$collapse_pass <- TRUE            
         }
         return(data)
     }
@@ -477,9 +477,9 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     if (!any(d_mat[lower.tri(d_mat, diag=F)])) {
         if (verbose) { .printVerbose(nseq, nseq, 0) }
         if (dry) {
-            data$COLLAPSE_ID <- 1:nrow(data)
-            data$COLLAPSE_CLASS <- "unique"
-            data$COLLAPSE_PASS <- TRUE            
+            data$collapse_id <- 1:nrow(data)
+            data$collapse_class <- "unique"
+            data$collapse_pass <- TRUE            
         }
         return(data)
     }        
@@ -496,12 +496,12 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     discard_count <- length(ambig_rows)
     
     if (dry & length(ambig_rows)>0) {
-        data[["COLLAPSE_CLASS"]][ambig_rows] <- "ambiguous"
-        data[["COLLAPSE_PASS"]][ambig_rows] <- FALSE
+        data[["collapse_class"]][ambig_rows] <- "ambiguous"
+        data[["collapse_pass"]][ambig_rows] <- FALSE
     }
     
-    # Return single sequence if all sequence belong to ambiguous clusters
-    if (discard_count == nrow(d_mat)) {
+    # Return single sequence if all or all but one sequence belong to ambiguous clusters 
+	if (nrow(d_mat) - discard_count <= 1) {
         inform_len <- data.frame(list("inform_len"=.informativeLength(data[[seq]])))
         # For each ambiguous cluster, return the best sequence
         g <- igraph::simplify(igraph::graph_from_adjacency_matrix(d_mat))
@@ -515,8 +515,8 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         
         if (verbose) { .printVerbose(nseq, 0, discard_count - 1) }
         if (dry) {
-            data[["COLLAPSE_ID"]] <- inform_len$clusters
-            data[["COLLAPSE_PASS"]][selected] <- TRUE
+            data[["collapse_id"]] <- inform_len$clusters
+            data[["collapse_pass"]][selected] <- TRUE
         } else {
             return(data[selected, ])
         }
@@ -541,7 +541,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         
         # Skip taxa if previously assigned to a cluster
         # or if ambiguous
-        # (ambiguous taxa don't get their own COLLAPSE_ID)
+        # (ambiguous taxa don't get their own collapse_id)
         if (taxa %in% done_taxa) { next }
         if (dry & taxa_i %in% ambig_rows) { next }
         
@@ -553,7 +553,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
         
         # Update collapse group
         if (dry) {
-            data[["COLLAPSE_ID"]][idx] <- paste(data[["COLLAPSE_ID"]][idx], collapse_id, sep=",")
+            data[["collapse_id"]][idx] <- paste(data[["collapse_id"]][idx], collapse_id, sep=",")
         }
         
         if (dry) {
@@ -567,23 +567,23 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
             if (dry) {
                 if (length(idx_copy)==1) {
                     ## 'truly' unique
-                    data[["COLLAPSE_CLASS"]][taxa_i] <- "unique"    
+                    data[["collapse_class"]][taxa_i] <- "unique"    
                 } else {
                     ## unique after ambiguous removal
-                    data[["COLLAPSE_CLASS"]][taxa_i] <- "ambiguous_duplicate"
+                    data[["collapse_class"]][taxa_i] <- "ambiguous_duplicate"
                 }
-                data[["COLLAPSE_PASS"]][taxa_i] <- TRUE
+                data[["collapse_pass"]][taxa_i] <- TRUE
             }
         } else if (length(idx) > 1) {
             # Assign clusters of duplicates to duplicate list            
             dup_taxa <- c(dup_taxa, list(taxa_names[idx]))    
             if (dry) {
-                # Keep COLLAPSE_PASS==TRUE for the sequence with the
+                # Keep collpase_pass==TRUE for the sequence with the
                 # larger number of informative positions 
                 # (the first one if ties)
                 max_info_idx <- which.max(.informativeLength(data[[seq]][idx]))[1]
-                data[["COLLAPSE_CLASS"]][idx] <- "duplicated"
-                data[["COLLAPSE_PASS"]][idx[-max_info_idx]] <- FALSE
+                data[["collapse_class"]][idx] <- "duplicated"
+                data[["collapse_pass"]][idx[-max_info_idx]] <- FALSE
             }
         } else {
             # Report error (should never occur)
@@ -594,7 +594,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
     }
    
     if (dry) {
-        data[["COLLAPSE_ID"]] <-  sub("^NA,","",data[["COLLAPSE_ID"]])
+        data[["collapse_id"]] <-  sub("^NA,","",data[["collapse_id"]])
         return(data)
     }
     
@@ -673,7 +673,7 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
 #' @param     sequences  character vector of IMGT-gapped nucleotide sequences.
 #' @param     region     string defining the region(s) of the V segment to extract. 
 #'                       May be a single region or multiple regions (as a vector) from
-#'                       \code{c("FWR1", "CDR1", "FWR2", "CDR2" ,"FWR3")}.  By default, all
+#'                       \code{c("fwr1", "cdr1", "fwr2", "cdr2" ,"fwr3")}.  By default, all
 #'                       regions will be returned.
 #'                       
 #' @return    If only one region is specified in the \code{region} argument, a character 
@@ -693,22 +693,22 @@ collapseDuplicates <- function(data, id="SEQUENCE_ID", seq="SEQUENCE_IMGT",
 #' 
 #' @examples
 #' # Assign example clone
-#' clone <- subset(ExampleDb, CLONE == 3138)
+#' clone <- subset(ExampleDb, clone_id == 3138)
 #'
 #' # Get all regions
-#' extractVRegion(clone$SEQUENCE_IMGT)
+#' extractVRegion(clone$sequence_alignment)
 #' 
 #' # Get single region
-#' extractVRegion(clone$SEQUENCE_IMGT, "FWR1")
+#' extractVRegion(clone$sequence_alignment, "fwr1")
 #' 
 #' # Get all CDRs
-#' extractVRegion(clone$SEQUENCE_IMGT, c("CDR1", "CDR2"))
+#' extractVRegion(clone$sequence_alignment, c("cdr1", "cdr2"))
 #' 
 #' # Get all FWRs
-#' extractVRegion(clone$SEQUENCE_IMGT, c("FWR1", "FWR2", "FWR3"))
+#' extractVRegion(clone$sequence_alignment, c("fwr1", "fwr2", "fwr3"))
 #'
 #' @export
-extractVRegion <- function(sequences, region=c("FWR1", "CDR1", "FWR2", "CDR2", "FWR3")) {
+extractVRegion <- function(sequences, region=c("fwr1", "cdr1", "fwr2", "cdr2", "fwr3")) {
     # Check region argument
     region <- match.arg(region, several.ok=TRUE)
     
