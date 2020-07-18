@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 1.0.1
-Date: 2020-05-08
+Version: 1.0.2
+Date: 2020-07-17
 Authors@R: c(person("Namita", "Gupta", role=c("aut"), 
                     email="namita.gupta@yale.edu"),
              person("Susanna", "Marquez", role=c("aut"), 
@@ -49,7 +49,7 @@ Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Deprecated.R' 'Gene.R' 'Lineage.R'
         'RcppExports.R' 'Sequence.R' 'Topology.R'
 NeedsCompilation: yes
-Packaged: 2020-05-11 16:13:19 UTC; vandej27
+Packaged: 2020-07-18 00:35:16 UTC; vandej27
 Author: Namita Gupta [aut],
   Susanna Marquez [aut],
   Nima Nouri [aut],
@@ -61,4 +61,4 @@ Author: Namita Gupta [aut],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-05-11 18:10:02 UTC
+Date/Publication: 2020-07-19 00:30:06 UTC
