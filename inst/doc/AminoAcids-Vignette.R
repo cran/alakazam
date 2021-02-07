@@ -8,7 +8,7 @@ data(ExampleDb)
 db <- ExampleDb[ExampleDb$sample_id == "+7d", ]
 
 ## ---- eval=TRUE, warning=FALSE, fig.width=7.5, fig.height=6-------------------
-db_props <- aminoAcidProperties(db, seq="junction", nt=TRUE, trim=TRUE, 
+db_props <- aminoAcidProperties(db, seq="junction", trim=TRUE, 
                                 label="cdr3")
 
 # The full set of properties are calculated by default
@@ -46,7 +46,7 @@ gridPlot(g1, g2, g3, g4, ncol=2)
 
 ## ---- eval=TRUE, warning=FALSE------------------------------------------------
 db_props <- aminoAcidProperties(db, seq="junction", property=c("gravy", "charge"),
-                                nt=TRUE, trim=TRUE, label="cdr3")
+                                trim=TRUE, label="cdr3")
 dplyr::select(db_props[1:3, ], starts_with("cdr3"))
 
 ## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
@@ -59,7 +59,7 @@ p <- setNames(pK[["Murray"]], rownames(pK))
 # Rename the hydrophobicity vector to use single-letter codes
 names(h) <- translateStrings(names(h), ABBREV_AA)
 db_props <- aminoAcidProperties(db, seq="junction", property=c("gravy", "charge"), 
-                                nt=TRUE, trim=TRUE, label="cdr3", 
+                                trim=TRUE, label="cdr3", 
                                 hydropathy=h, pK=p)
 dplyr::select(db_props[1:3, ], starts_with("cdr3"))
 
@@ -88,5 +88,5 @@ charge(cdr3, normalize=FALSE)
 
 # Count of acidic amino acids
 # Takes a named list of regular expressions
-countPatterns(cdr3, c(ACIDIC="[DE]"), label="cdr3")
+countPatterns(cdr3, nt=FALSE, c(ACIDIC="[DE]"), label="cdr3")
 

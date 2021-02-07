@@ -9,7 +9,10 @@ buildPhylipLineage(
   phylip_exec,
   dist_mat = getDNAMatrix(gap = 0),
   rm_temp = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  temp_path = NULL,
+  onetree = FALSE,
+  branch_length = c("mutations", "distance")
 )
 }
 \arguments{
@@ -17,7 +20,7 @@ buildPhylipLineage(
 
 \item{phylip_exec}{absolute path to the PHYLIP dnapars executable.}
 
-\item{dist_mat}{Character distance matrix to use for reassigning edge weights. 
+\item{dist_mat}{character distance matrix to use for reassigning edge weights. 
 Defaults to a Hamming distance matrix returned by \link{getDNAMatrix} 
 with \code{gap=0}. If gap characters, \code{c("-", ".")}, are assigned 
 a value of -1 in \code{dist_mat} then contiguous gaps of any run length,
@@ -32,6 +35,16 @@ if \code{FALSE} keep the temporary directory.}
 \item{verbose}{if \code{FALSE} suppress the output of dnapars; 
 if \code{TRUE} STDOUT and STDERR of dnapars will be passed to 
 the console.}
+
+\item{temp_path}{specific path to temp directory if desired.}
+
+\item{onetree}{if \code{TRUE} save only one tree.}
+
+\item{branch_length}{specifies how to define branch lengths; one of \code{"mutations"} 
+or \code{"distance"}. If set to \code{"mutations"} (default), then branch 
+lengths represent the number of mutations between nodes. 
+If set to \code{"distance"}, then branch lengths represent
+the expected number of mutations per site, unaltered from PHYLIP output.}
 }
 \value{
 An igraph \code{graph} object defining the Ig lineage tree. Each unique input 
@@ -75,11 +88,15 @@ An igraph \code{graph} object defining the Ig lineage tree. Each unique input
                                      the input \code{ChangeoClone}.
             \item  \code{junc_len}:  junction length (nucleotide count) from the 
                                      \code{junc_len} slot of the input \code{ChangeoClone}.
+
+             Alternatively, this function will return an \code{phylo} object, which is compatible
+             with the ape package. This object will contain reconstructed ancestral sequences in
+             \code{nodes} attribute.
           }
 }
 \description{
 \code{buildPhylipLineage} reconstructs an Ig lineage via maximum parsimony using the 
-dnapars application of the PHYLIP package.
+dnapars application, or maximum liklihood using the dnaml application of the PHYLIP package.
 }
 \details{
 \code{buildPhylipLineage} builds the lineage tree of a set of unique Ig sequences via

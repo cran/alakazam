@@ -9,7 +9,7 @@ aminoAcidProperties(
   property = c("length", "gravy", "bulk", "aliphatic", "polarity", "charge", "basic",
     "acidic", "aromatic"),
   seq = "junction",
-  nt = FALSE,
+  nt = TRUE,
   trim = FALSE,
   label = NULL,
   ...
@@ -87,12 +87,12 @@ The following data sources were used for the default property scores:
 # Subset example data
 db <- ExampleDb[c(1,10,100), c("sequence_id", "junction")]
 
+# Calculate default amino acid properties from DNA sequences
+aminoAcidProperties(db, seq="junction")
 # Calculate default amino acid properties from amino acid sequences
 # Use a custom output column prefix
 db$junction_aa <- translateDNA(db$junction)
-aminoAcidProperties(db, seq="junction_aa", label="junction")
-# Calculate default amino acid properties from DNA sequences
-aminoAcidProperties(db, seq="junction", nt=TRUE)
+aminoAcidProperties(db, seq="junction_aa", label="junction", nt=FALSE)
 
 # Use the Grantham, 1974 side chain volume scores from the seqinr package
 # Set pH=7.0 for the charge calculation
@@ -104,7 +104,7 @@ x <- aaindex[["GRAR740103"]]$I
 # Rename the score vector to use single-letter codes
 names(x) <- translateStrings(names(x), ABBREV_AA)
 # Calculate properties
-aminoAcidProperties(db, property=c("bulk", "charge"), seq="junction", nt=TRUE, 
+aminoAcidProperties(db, property=c("bulk", "charge"), seq="junction", 
                     trim=TRUE, label="cdr3", bulkiness=x, pH=7.0)
 
 }

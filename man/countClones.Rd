@@ -4,10 +4,16 @@
 \alias{countClones}
 \title{Tabulates clones sizes}
 \usage{
-countClones(data, groups = NULL, copy = NULL, clone = "clone_id")
+countClones(
+  data,
+  groups = NULL,
+  copy = NULL,
+  clone = "clone_id",
+  remove_na = TRUE
+)
 }
 \arguments{
-\item{data}{data.frame with Change-O style columns containing clonal assignments.}
+\item{data}{data.frame with columns containing clonal assignments.}
 
 \item{groups}{character vector defining \code{data} columns containing grouping 
 variables. If \code{groups=NULL}, then do not group data.}
@@ -17,6 +23,10 @@ sequence. If this value is specified, then total copy abundance
 is determined by the sum of copy numbers within each clonal group.}
 
 \item{clone}{name of the \code{data} column containing clone identifiers.}
+
+\item{remove_na}{removes rows with \code{NA} values in the clone column if \code{TRUE} and issues a warning. 
+Otherwise, keeps those rows and considers \code{NA} as a clone in the final counts 
+and relative abundances.}
 }
 \value{
 A data.frame summarizing clone counts and frequencies with columns:

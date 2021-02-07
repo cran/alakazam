@@ -4,7 +4,7 @@
 \alias{padSeqEnds}
 \title{Pads ragged ends of aligned DNA sequences}
 \usage{
-padSeqEnds(seq, len = NULL, start = FALSE, pad_char = "N")
+padSeqEnds(seq, len = NULL, start = FALSE, pad_char = "N", mod3 = TRUE)
 }
 \arguments{
 \item{seq}{character vector of DNA sequence strings.}
@@ -15,6 +15,8 @@ the data in \code{seq}.}
 \item{start}{if \code{TRUE} pad the beginning of each sequence instead of the end.}
 
 \item{pad_char}{character to use for padding.}
+
+\item{mod3}{if \code{TRUE} pad sequences to be of length multiple three.}
 }
 \value{
 A modified \code{seq} vector with padded sequences.

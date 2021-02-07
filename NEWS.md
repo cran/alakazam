@@ -1,3 +1,62 @@
+Version 1.1.0: February 6, 2021
+-------------------------------------------------------------------------------
+  
+General:
+
++ Added `readFastqDb`, which reads a repertoire's .fastq file and imports the 
+  sequencing quality scores for `sequence_alignment`. Added `maskPositionsByQuality`
+  masks positions that have a sequencing quality score lower than the specified
+  threshold. The convenience function `getPositionQuality` will create a 
+  `data.frame` with quality scores per position.
++ Added a vignette describing how to read/write Change-O and AIRR Rearrangement
+  formatted files.
++ Increased `dplyr` dependency to v1.0.
++ Added the BioConductor dependencies Biostrings, GenomicAlignments, 
+  and IRanges.
+
+Amino Acid Analysis:
+
++ Fixed a conflict in the default argument settings of `aminoAcidProperties`,
+  which will now default to `nt=TRUE`.
+
+Diversity:
++ Added a parameter to `countClones` (`remove_na`) that will remove all rows with NA 
+  values in the clone column if `TRUE` (default) and issue a warning with how many were removed. 
+  If `FALSE`, those rows will be kept instead.
+
+Gene:
+
++ Added the function `getLocus` to extract the locus information from the
+  segment call.
++ Added the function `getChain` to define the chain from the segment or 
+  locus call.
++ Changed the check for empty columns in `countGenes` to give a warning instead of 
+  an error so as not to disrupt running workflows.
++ Fixed a bug in `getSegment` where filtering of non-localized genes was not 
+  being applied when called from `getFamily`, because the "NL" part of the name
+  was removed before the filtering step.
++ Updated regular expressions in `getAllele`, `getGene`, `getFamily` and 
+  `getLocus`, to parse constant region gene names correctly.
++ Updated regular expressions in `getSegment` to be able to parse 
+  constant region gene names correctly and not remove the "D" from 
+  "IGHD" when `strip_d=TRUE`.
+
+Lineage:
+
++ Added `branch_length` argument to `buildPhylipLineage`, and augmented 
+  `graphToPhylo` and `phyloToGraph` to track intermediate sequence in nodes 
+  for phylo object.
++ Added a parameter to `countGenes` (`remove_na`) that will remove all rows with NA 
+  values in the gene column if `TRUE` (default) and issue a warning with how many were removed. 
+  If `FALSE`, those rows will be kept instead.
+  
+Sequence:
+
++ In `padSeqEnds`, the argument `mod3=TRUE` has been added so that sequences are
+  padded to a length that is a multiple of 3.
++ Fixed a bug in `translateDNA` where NAs weren't being translated properly.
+
+
 Version 1.0.2: July 17, 2020
 -------------------------------------------------------------------------------
 
@@ -367,7 +426,7 @@ Diversity:
   relative abundance distribution.
 + Added support for inclusion of copy number in clone size determination
   within `rarefyDiversity()` and `testDiversity()`.
-+ Diversity scores and confiderence intervals within `rarefyDiversity()`
++ Diversity scores and confidence intervals within `rarefyDiversity()`
   and `testDiversity()` are now calculated using the mean and standard 
   deviation of the bootstrap realizations, rather than the median and
   upper/lower quantiles.

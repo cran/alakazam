@@ -9,7 +9,7 @@ readIgphyml(
   id = NULL,
   format = c("graph", "phylo"),
   collapse = FALSE,
-  branches = c("distance", "mutations")
+  branches = c("mutations", "distance")
 )
 }
 \arguments{

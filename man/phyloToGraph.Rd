@@ -4,7 +4,7 @@
 \alias{phyloToGraph}
 \title{Convert a tree in ape \code{phylo} format to igraph \code{graph} format.}
 \usage{
-phyloToGraph(phylo, germline = NULL)
+phyloToGraph(phylo, germline = "Germline")
 }
 \arguments{
 \item{phylo}{An ape \code{phylo} object.}

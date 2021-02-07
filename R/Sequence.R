@@ -110,7 +110,7 @@ getAAMatrix <- function(gap=0) {
 translateDNA <- function (seq, trim=FALSE) {
     # Function to translate a single string
     .translate <- function(x) {
-        if (stri_length(x) >= 3) {
+        if (stri_length(x) >= 3 & !is.na(x)) {
             stri_join(seqinr::translate(unlist(strsplit(x, "")), ambiguous=TRUE), 
                       collapse="")
         } else {
@@ -253,6 +253,7 @@ maskSeqEnds <- function(seq, mask_char="N", max_mask=NULL, trim=FALSE) {
 #'                     the data in \code{seq}.
 #' @param    start     if \code{TRUE} pad the beginning of each sequence instead of the end. 
 #' @param    pad_char  character to use for padding.
+#' @param    mod3      if \code{TRUE} pad sequences to be of length multiple three.
 #' 
 #' @return   A modified \code{seq} vector with padded sequences.
 #' 
@@ -271,15 +272,18 @@ maskSeqEnds <- function(seq, mask_char="N", max_mask=NULL, trim=FALSE) {
 #' padSeqEnds(seq, len=15, start=TRUE)
 #' 
 #' @export
-padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N") {
+padSeqEnds <- function(seq, len=NULL, start=FALSE, pad_char="N", mod3=TRUE) {
     # Set length to max input length
-    width <- max(stri_length(seq),len)
+    width <- max(stringi::stri_length(seq),len)
+    if (mod3 && width %% 3 != 0) {
+        width <- width + (3 - width %% 3)
+    }
     
     # Pad
     if (!start) { 
-        seq <- stri_pad_right(seq, width=width, pad=pad_char)
+        seq <- stringi::stri_pad_right(seq, width=width, pad=pad_char)
     } else {
-        seq <- stri_pad_left(seq, width=width, pad=pad_char)
+        seq <- stringi::stri_pad_left(seq, width=width, pad=pad_char)
     }
 
     return(seq)

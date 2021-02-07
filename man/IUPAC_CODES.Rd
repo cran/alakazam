@@ -5,6 +5,7 @@
 \alias{IUPAC_CODES}
 \alias{IUPAC_DNA}
 \alias{IUPAC_AA}
+\alias{DNA_IUPAC}
 \title{IUPAC ambiguous characters}
 \format{
 A list with single character codes as names and values containing character 
@@ -13,16 +14,21 @@ A list with single character codes as names and values containing character
 \itemize{
   \item  \code{IUPAC_DNA}:  DNA ambiguous character translations.
   \item  \code{IUPAC_AA}:   Amino acid ambiguous character translations.
+  \item  \code{DNA_IUPAC}:  Ordered DNA to ambiguous characters
 }
 
 An object of class \code{list} of length 15.
 
 An object of class \code{list} of length 25.
+
+An object of class \code{list} of length 15.
 }
 \usage{
 IUPAC_DNA
 
 IUPAC_AA
+
+DNA_IUPAC
 }
 \description{
 A translation list mapping IUPAC ambiguous characters code to corresponding nucleotide

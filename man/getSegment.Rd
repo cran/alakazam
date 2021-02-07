@@ -5,6 +5,8 @@
 \alias{getAllele}
 \alias{getGene}
 \alias{getFamily}
+\alias{getLocus}
+\alias{getChain}
 \title{Get Ig segment allele, gene and family names}
 \usage{
 getSegment(
@@ -36,6 +38,24 @@ getGene(
 )
 
 getFamily(
+  segment_call,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
+
+getLocus(
+  segment_call,
+  first = TRUE,
+  collapse = TRUE,
+  strip_d = TRUE,
+  omit_nl = FALSE,
+  sep = ","
+)
+
+getChain(
   segment_call,
   first = TRUE,
   collapse = TRUE,
@@ -94,6 +114,9 @@ getFamily(kappa_call, first=FALSE)
 getFamily(kappa_call, first=FALSE, collapse=FALSE)
 getFamily(kappa_call, first=FALSE, strip_d=FALSE)
 
+getLocus(kappa_call)
+getChain(kappa_call)
+
 # Heavy chain examples
 heavy_call <- c("Homsap IGHV1-69*01 F,Homsap IGHV1-69D*01 F", 
                 "Homsap IGHD1-1*01 F", 
@@ -104,6 +127,10 @@ getAllele(heavy_call, first=FALSE, strip_d=FALSE)
 
 getGene(heavy_call, first=FALSE)
 getGene(heavy_call, first=FALSE, strip_d=FALSE)
+
+getFamily(heavy_call)
+getLocus(heavy_call)
+getChain(heavy_call)
 
 # Filtering non-localized genes
 nl_call <- c("IGHV3-NL1*01,IGHV3-30-3*01,IGHV3-30*01", 

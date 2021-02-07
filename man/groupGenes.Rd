@@ -39,7 +39,7 @@ bulk sequencing data is assumed.}
 Only applicable to single-cell data.
 Ignored if \code{cell_id=NULL}.}
 
-\item{only_heavy}{use only the IGH (BCR or TRB/TRD (TCR) sequences 
+\item{only_heavy}{use only the IGH (BCR) or TRB/TRD (TCR) sequences 
 for grouping. Only applicable to single-cell data.
 Ignored if \code{cell_id=NULL}.}
 

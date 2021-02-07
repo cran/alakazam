@@ -28,12 +28,15 @@
 #'                   \code{getAllele}) or using the value as it is in the column
 #'                   \code{gene}, without any processing.
 #' @param    fill    logical of \code{c(TRUE, FALSE)} specifying when if groups (when specified)
-#'                   lacking a particular gene should be counted as 0 if TRUE or not (omitted) 
+#'                   lacking a particular gene should be counted as 0 if TRUE or not (omitted)
+#' @param    remove_na    removes rows with \code{NA} values in the gene column if \code{TRUE} and issues a warning. 
+#'                        Otherwise, keeps those rows and considers \code{NA} as a gene in the final counts 
+#'                        and relative abundances.
 #' 
 #' @return   A data.frame summarizing family, gene or allele counts and frequencies 
 #'           with columns:
 #'           \itemize{
-#'             \item \code{gene}:         name of the family, gene or allele
+#'             \item \code{gene}:         name of the family, gene or allele.
 #'             \item \code{seq_count}:    total number of sequences for the gene.
 #'             \item \code{seq_freq}:     frequency of the gene as a fraction of the total
 #'                                        number of sequences within each grouping.
@@ -43,9 +46,11 @@
 #'             \item \code{copy_freq}:    frequency of the gene as a fraction of the total
 #'                                        copy number within each group. Only present if 
 #'                                        the \code{copy} argument is specified.
-#'             \item \code{clone_count}:  total number of clones for the gene.
+#'             \item \code{clone_count}:  total number of clones for the gene. Only present if 
+#'                                        the \code{clone} argument is specified.
 #'             \item \code{clone_freq}:   frequency of the gene as a fraction of the total
-#'                                        number of clones within each grouping.
+#'                                        number of clones within each grouping. Only present if 
+#'                                        the \code{clone} argument is specified.
 #'           }
 #'           Additional columns defined by the \code{groups} argument will also be present.
 #'
@@ -69,7 +74,7 @@
 #'
 #'@export
 countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALSE,
-                       mode=c("gene", "allele", "family", "asis")) {
+                       mode=c("gene", "allele", "family", "asis"), remove_na=TRUE) {
     ## DEBUG
     # data=ExampleDb; gene="c_call"; groups=NULL; mode="gene"; clone="clone_id"
     # data=subset(db, clond_id == 3138)
@@ -79,7 +84,22 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
     # Check input
     mode <- match.arg(mode)
     check <- checkColumns(data, c(gene, groups, copy))
-    if (check != TRUE) { stop(check) }
+    if (check != TRUE) { 
+        warning(check) # instead of throwing an error and potentially disrupting a workflow
+    }
+
+    # Handle NAs
+    if (remove_na) {
+        bool_na <- is.na(data[, gene])
+        if (any(bool_na)) {
+            if  (!all(bool_na)){
+                msg <- paste0("NA(s) found in ", sum(bool_na), " row(s) of the ", gene, 
+                              " column and excluded from tabulation")
+                warning(msg)
+            }
+            data <- data[!bool_na, ]
+        }
+    }
 
     # Extract gene, allele or family assignments
     if (mode != "asis") {
@@ -130,8 +150,8 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
     if (fill) {
         gene_tab <- gene_tab %>%
             ungroup() %>%
-            tidyr::complete(!!!rlang::syms(as.list(c(groups, gene)))) %>%
-            replace(is.na(.), 0)
+            tidyr::complete(!!!rlang::syms(as.list(c(groups, gene))),
+                            fill = list(seq_count = 0, seq_freq = 0, copy_count = 0, copy_freq = 0, clone_count = 0, clone_freq = 0))
     }
 
     # Rename gene column
@@ -191,6 +211,9 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
 #' getFamily(kappa_call, first=FALSE, collapse=FALSE)
 #' getFamily(kappa_call, first=FALSE, strip_d=FALSE)
 #' 
+#' getLocus(kappa_call)
+#' getChain(kappa_call)
+#' 
 #' # Heavy chain examples
 #' heavy_call <- c("Homsap IGHV1-69*01 F,Homsap IGHV1-69D*01 F", 
 #'                 "Homsap IGHD1-1*01 F", 
@@ -201,6 +224,10 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
 #'
 #' getGene(heavy_call, first=FALSE)
 #' getGene(heavy_call, first=FALSE, strip_d=FALSE)
+#' 
+#' getFamily(heavy_call)
+#' getLocus(heavy_call)
+#' getChain(heavy_call)
 #'
 #' # Filtering non-localized genes
 #' nl_call <- c("IGHV3-NL1*01,IGHV3-30-3*01,IGHV3-30*01", 
@@ -217,20 +244,26 @@ getSegment <- function(segment_call, segment_regex, first=TRUE, collapse=TRUE,
     # Define boundaries of individual segment calls
     edge_regex <- paste0("[^", sep, "]*")
     
+    # Remove NL genes
+    if (omit_nl) {
+        # Clean segment_call to keep only the name (remove species)
+        allele_regex <- '((IG[HKL][VDJADEGMC]|TR[ABDG])[A-Z0-9\\(\\)]+[-/\\w]*[-\\*]*[\\.\\w]+)'
+        segment_call <- gsub(paste0(edge_regex, "(", allele_regex, ")", edge_regex), "\\1", 
+                  segment_call, perl=T)
+        # non-localized regex
+        nl_regex <- paste0('(IG[HKL][VDJADEGMC]|TR[ABDG])[0-9]+-NL[0-9]([-/\\w]*[-\\*][\\.\\w]+)*(',
+                           sep, "|$)")
+        # delete non-localized calls
+        segment_call <- gsub(nl_regex, "", segment_call, perl=TRUE)
+    }
+
     # Extract calls
     r <- gsub(paste0(edge_regex, "(", segment_regex, ")", edge_regex), "\\1", 
               segment_call, perl=T)
     
-    # Remove NL genes
-    if (omit_nl) {
-        nl_regex <- paste0('(IG[HLK]|TR[ABGD])[VDJ][0-9]+-NL[0-9]([-/\\w]*[-\\*][\\.\\w]+)*(', 
-                           sep, "|$)")
-        r <- gsub(nl_regex, "", r, perl=TRUE)
-    }
-    
     # Strip D from gene names if required
     if (strip_d) {
-        strip_regex <- paste0("(?<=[A-Z0-9])D(?=\\*|-|", sep, "|$)")
+        strip_regex <- paste0("(?<=[A-Z0-9][0-9])D(?=\\*|-|", sep, "|$)")
         r <- gsub(strip_regex, "", r, perl=TRUE)
     }
     
@@ -249,7 +282,7 @@ getSegment <- function(segment_call, segment_regex, first=TRUE, collapse=TRUE,
 #' @export
 getAllele <- function(segment_call, first=TRUE, collapse=TRUE, 
                       strip_d=TRUE, omit_nl=FALSE, sep=",") {    
-    allele_regex <- '((IG[HLK]|TR[ABGD])[VDJ][A-Z0-9\\(\\)]+[-/\\w]*[-\\*]*[\\.\\w]+)'
+    allele_regex <- '((IG[HKL][VDJADEGMC]|TR[ABDG])[A-Z0-9\\(\\)]+[-/\\w]*[-\\*]*[\\.\\w]+)'
     r <- getSegment(segment_call, allele_regex, first=first, collapse=collapse, 
                     strip_d=strip_d, omit_nl=omit_nl, sep=sep)
     
@@ -261,7 +294,7 @@ getAllele <- function(segment_call, first=TRUE, collapse=TRUE,
 #' @export
 getGene <- function(segment_call, first=TRUE, collapse=TRUE, 
                     strip_d=TRUE, omit_nl=FALSE, sep=",") {
-    gene_regex <- '((IG[HLK]|TR[ABGD])[VDJ][A-Z0-9\\(\\)]+[-/\\w]*)'
+    gene_regex <- '((IG[HKL][VDJADEGMC]|TR[ABDG])[A-Z0-9\\(\\)]+[-/\\w]*)'
     r <- getSegment(segment_call, gene_regex, first=first, collapse=collapse, 
                     strip_d=strip_d, omit_nl=omit_nl, sep=sep)
     
@@ -273,13 +306,37 @@ getGene <- function(segment_call, first=TRUE, collapse=TRUE,
 #' @export
 getFamily <- function(segment_call, first=TRUE, collapse=TRUE, 
                       strip_d=TRUE, omit_nl=FALSE, sep=",") {
-    family_regex <- '((IG[HLK]|TR[ABGD])[VDJ][A-Z0-9\\(\\)]+)'
+    family_regex <- '((IG[HKL][VDJADEGMC]|TR[ABDG])[A-Z0-9\\(\\)]+)'
     r <- getSegment(segment_call, family_regex, first=first, collapse=collapse, 
                     strip_d=strip_d, omit_nl=omit_nl, sep=sep)
     
     return(r)
 }
 
+
+#' @rdname getSegment
+#' @export
+getLocus <- function(segment_call, first=TRUE, collapse=TRUE, 
+                      strip_d=TRUE, omit_nl=FALSE, sep=",") {
+    locus_regex <- '((IG[HLK]|TR[ABDG]))'
+    r <- getSegment(segment_call, locus_regex, first=first, collapse=collapse, 
+                    strip_d=strip_d, omit_nl=omit_nl, sep=sep)
+    
+    return(r)
+}
+
+
+#' @rdname getSegment
+#' @export
+getChain <- function(segment_call, first=TRUE, collapse=TRUE, 
+                     strip_d=TRUE, omit_nl=FALSE, sep=",") {
+    r <- getLocus(segment_call, first=first, collapse=collapse, 
+                    strip_d=strip_d, omit_nl=omit_nl, sep=sep)
+    r <- gsub("(IGH)|(TR[BD])", "VH", r)
+    r <- gsub("(IG[KL])|(TR[AG])", "VL", r)
+    
+    return(r)
+}
 
 #### Utility functions ####
 
@@ -436,7 +493,7 @@ getAllVJL <- function(v, j, l, sep_chain, sep_anno, first) {
 #' @param    locus         name of the column containing locus information. 
 #'                         Only applicable to single-cell data.
 #'                         Ignored if \code{cell_id=NULL}.
-#' @param    only_heavy    use only the IGH (BCR or TRB/TRD (TCR) sequences 
+#' @param    only_heavy    use only the IGH (BCR) or TRB/TRD (TCR) sequences 
 #'                         for grouping. Only applicable to single-cell data.
 #'                         Ignored if \code{cell_id=NULL}.
 #' @param    first         if \code{TRUE} only the first call of the gene assignments 

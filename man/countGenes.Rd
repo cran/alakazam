@@ -11,7 +11,8 @@ countGenes(
   copy = NULL,
   clone = NULL,
   fill = FALSE,
-  mode = c("gene", "allele", "family", "asis")
+  mode = c("gene", "allele", "family", "asis"),
+  remove_na = TRUE
 )
 }
 \arguments{
@@ -43,12 +44,16 @@ to return counts for genes (calling \code{getGene}),
 families (calling \code{getFamily}), alleles (calling 
 \code{getAllele}) or using the value as it is in the column
 \code{gene}, without any processing.}
+
+\item{remove_na}{removes rows with \code{NA} values in the gene column if \code{TRUE} and issues a warning. 
+Otherwise, keeps those rows and considers \code{NA} as a gene in the final counts 
+and relative abundances.}
 }
 \value{
 A data.frame summarizing family, gene or allele counts and frequencies 
           with columns:
           \itemize{
-            \item \code{gene}:         name of the family, gene or allele
+            \item \code{gene}:         name of the family, gene or allele.
             \item \code{seq_count}:    total number of sequences for the gene.
             \item \code{seq_freq}:     frequency of the gene as a fraction of the total
                                        number of sequences within each grouping.
@@ -58,9 +63,11 @@ A data.frame summarizing family, gene or allele counts and frequencies
             \item \code{copy_freq}:    frequency of the gene as a fraction of the total
                                        copy number within each group. Only present if 
                                        the \code{copy} argument is specified.
-            \item \code{clone_count}:  total number of clones for the gene.
+            \item \code{clone_count}:  total number of clones for the gene. Only present if 
+                                       the \code{clone} argument is specified.
             \item \code{clone_freq}:   frequency of the gene as a fraction of the total
-                                       number of clones within each grouping.
+                                       number of clones within each grouping. Only present if 
+                                       the \code{clone} argument is specified.
           }
           Additional columns defined by the \code{groups} argument will also be present.
 }

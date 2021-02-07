@@ -35,7 +35,7 @@ of the diversity index, as proposed by Hill in:
         Ecology 54, 427-432 (1973).
 
 Coupled with resampling strategies to correct for variations in sequencing 
-depth, as well as inferrence of complete clonal abundance distributions as 
+depth, as well as inference of complete clonal abundance distributions as 
 described in:
 
     Chao A, et al. Rarefaction and extrapolation with Hill numbers: 
@@ -69,7 +69,7 @@ library(alakazam)
 data(ExampleDb)
 ```
 
-For details about the AIRR format, visit the AIRR Community documentation site https://docs.airr-community.org/en/latest/datarep/rearrangements.html#fields
+For details about the AIRR format, visit the [AIRR Community documentation site](https://docs.airr-community.org/en/stable/datarep/rearrangements.html).
 
 ## Generate a clonal abundance curve
 

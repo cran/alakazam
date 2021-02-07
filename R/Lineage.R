@@ -121,10 +121,12 @@ makeChangeoClone <- function(data, id="sequence_id", seq="sequence_alignment",
     tmp_df <- data[, c(id, seq, text_fields, num_fields, seq_fields)]
     tmp_df[[seq]] <- maskSeqGaps(tmp_df[[seq]], mask_char=mask_char, outer_only=FALSE)
     tmp_df[[seq]] <- maskSeqEnds(tmp_df[[seq]], mask_char=mask_char, max_mask=max_mask, trim=FALSE)
-    
+    germline <- maskSeqGaps(data[[germ]][1], mask_char=mask_char, outer_only=FALSE)
+
     # Pad ends
     if (pad_end) {
         tmp_df[[seq]] <- padSeqEnds(tmp_df[[seq]], pad_char=mask_char)
+        germline      <- padSeqEnds(germline, pad_char=mask_char)
     }
     
     seq_len <- stringi::stri_length(tmp_df[[seq]])
@@ -157,7 +159,7 @@ makeChangeoClone <- function(data, id="sequence_id", seq="sequence_alignment",
     clone <- new("ChangeoClone", 
                  data=as.data.frame(tmp_df),
                  clone=as.character(data[[clone]][1]),
-                 germline=maskSeqGaps(data[[germ]][1], mask_char=mask_char, outer_only=FALSE), 
+                 germline=germline, 
                  v_gene=getGene(data[[v_call]][1]), 
                  j_gene=getGene(data[[j_call]][1]), 
                  junc_len=data[[junc_len]][1])
@@ -195,13 +197,15 @@ writePhylipInput <- function(clone, path) {
 }
 
 
-# Run PHYLIP dnapars application
+# Run PHYLIP dnapars or dnaml application
 #
 # @param   path          temporary directory containing infile.
-# @param   phylip_exec  path to the dnapars executable.
+# @param   phylip_exec   path to dnapars or dnaml executable.
 # @param   verbose       if TRUE suppress phylip console output.
+# @param   onetree       if TRUE save only one tree
 # @return  TRUE if phylip ran successfully and FALSE otherwise
-runPhylip <- function(path, phylip_exec, verbose=FALSE) {
+runPhylip <- function(path, phylip_exec, verbose=FALSE, onetree=FALSE) {
+
     # Expand shell variables
     phylip_exec <- path.expand(phylip_exec)
     
@@ -218,9 +222,20 @@ runPhylip <- function(path, phylip_exec, verbose=FALSE) {
         invoke <- system2
     } 
     
-    # Set dnapars options
-    phy_options <- c("S", "Y", "I", "4", "5", ".")
+    # Set dnapars or dnaml options
+    if ( grepl("dnaml$",phylip_exec) ){
+        phy_options <- c("I", "5")
+    }else if (grepl("dnapars$",phylip_exec)) {
+        phy_options <- c("S", "Y", "I", "4", "5", ".")
+    }else{
+        stop("Executable not recognized! Must end with dnapars or dnaml")
+    }
+    if (onetree) {
+        phy_options <- c(phy_options, "V", "1")
+    }
+
     params <- list(phylip_exec, input=c(phy_options, "Y"), wait=TRUE)
+
     if (!verbose) {
         params <- append(params, quiet_params)
     }
@@ -260,41 +275,70 @@ checkPhylipOutput <- function(phylip_out) {
 }
 
 
-# Extracts inferred sequences from PHYLIP dnapars outfile
+# Extracts inferred sequences from PHYLIP dnapars or dnaml outfile
 #
 # @param   phylip_out   a character vector returned by readPhylipOutput
 # @return  a list containing an id vector, a sequence vector and an annotation data.frame
 getPhylipInferred <- function(phylip_out) {
-    # Process dnapars output
-    seq_start <- min(grep("From\\s+To\\s+Any Steps\\?\\s+State at upper node", 
-                          phylip_out, perl=T, fixed=F))
-    seq_empty <- grep("^\\s*$", phylip_out[seq_start:length(phylip_out)], perl=T, fixed=F)
-    seq_len <- seq_empty[min(which(seq_empty[-1] == (seq_empty[-length(seq_empty)] + 1)))]
-    seq_block <- paste(phylip_out[(seq_start + 2):(seq_start + seq_len - 2)], collapse="\n")
-    seq_df <- read.table(textConnection(seq_block), as.is=T, fill=T, blank.lines.skip=F)
+  # Process dnapars and dnaml output
+    pars_starts = grep("From\\s+To\\s+Any Steps\\?\\s+State at upper node", 
+                          phylip_out, perl=T, fixed=F)
+    ml_start = grep("node\\s+Reconstructed sequence", 
+                          phylip_out, perl=T, fixed=F)
+    if(length(pars_starts) > 0){
+        seq_start <- min(pars_starts)
+        seq_empty <- grep("^\\s*$", phylip_out[seq_start:length(phylip_out)], perl=T, fixed=F)
+        seq_len <- seq_empty[min(which(seq_empty[-1] == (seq_empty[-length(seq_empty)] + 1)))]
+        seq_block <- paste(phylip_out[(seq_start + 2):(seq_start + seq_len - 2)], collapse="\n")
+        tc <- textConnection(seq_block)
+        seq_df <- read.table(tc, as.is=T, fill=T, blank.lines.skip=F)
+        close(tc)
+        
+        # Correct first line of block and remove blank rows
+        fix.row <- c(1, which(is.na(seq_df[,1])) + 1)
+        end_col <-  ncol(seq_df) - 2
+        seq_df[fix.row, ] <- data.frame(cbind(0, seq_df[fix.row, 1], "no", seq_df[fix.row, 2:end_col]), stringsAsFactors=F)
+        if (length(fix.row)>1) {
+            seq_df <- seq_df[-(fix.row[-1] - 1), ]
+        }
+         # Create data.frame of inferred sequences
+        inferred_num <- unique(grep("^[0-9]+$", seq_df[, 2], value=T))
+        inferred_seq <- sapply(inferred_num, function(n) { 
+            paste(t(as.matrix(seq_df[seq_df[, 2] == n, -c(1:3)])), collapse="") })
+  
+    }else if(length(ml_start) > 0){
+        seq_start <- min(ml_start)
+        seq_empty <- grep("^\\s*$", phylip_out[seq_start:length(phylip_out)], perl=T, fixed=F)
+        seq_len <- max(seq_empty)
+        seq_block <- paste(phylip_out[(seq_start + 2):(seq_start + seq_len - 2)], collapse="\n")
+        tc <- textConnection(seq_block)
+        seq_df <- read.table(tc, as.is=T, fill=T, blank.lines.skip=F)
+        close(tc)
+
+        # Correct first line of block and remove blank rows
+        fix.row <- c(which(seq_df[,1]==""))
+        if (length(fix.row)>1) {
+            seq_df <- seq_df[-(fix.row), ]
+        }
+        # Create data.frame of inferred sequences
+        inferred_num <- unique(grep("^[0-9]+$", seq_df[, 1], value=T))
+        inferred_seq <- sapply(inferred_num, function(n) { 
+            paste(t(as.matrix(seq_df[seq_df[, 1] == n, -1])), collapse="") })
+        inferred_seq = toupper(inferred_seq)
     
-    # Correct first line of block and remove blank rows
-    fix.row <- c(1, which(is.na(seq_df[,1])) + 1)
-    end_col <-  ncol(seq_df) - 2
-    #seq_df[fix.row, ] <- cbind(0, seq_df[fix.row, 1], "no", seq_df[fix.row, 2:5], stringsAsFactors=F)
-    seq_df[fix.row, ] <- data.frame(cbind(0, seq_df[fix.row, 1], "no", seq_df[fix.row, 2:end_col]), stringsAsFactors=F)
-    if (length(fix.row)>1) {
-        seq_df <- seq_df[-(fix.row[-1] - 1), ]
+    }else{
+        stop("Input file format not recognized")
     }
-    
-    # Create data.frame of inferred sequences
-    inferred_num <- unique(grep("^[0-9]+$", seq_df[, 2], value=T))
-    inferred_seq <- sapply(inferred_num, function(n) { paste(t(as.matrix(seq_df[seq_df[, 2] == n, -c(1:3)])), collapse="") })
-    
+      
     if (length(inferred_num)>0) {
         return(data.frame(sequence_id=paste0("Inferred", inferred_num), 
-                          sequence=inferred_seq, stringsAsFactors = FALSE))
+            sequence=inferred_seq, stringsAsFactors = FALSE))
     }
     data.frame(sequence_id=c(), sequence=c(), stringsAsFactors = FALSE)
 }
 
 
-# Extracts graph edge list from a PHYLIP dnapars outfile
+# Extracts graph edge list from a PHYLIP dnapars or dnaml outfile
 #
 # @param   phylip_out  character vector returned by readPhylipOutput
 # @param   id_map      named vector of PHYLIP taxa names (values) to sequence 
@@ -302,15 +346,36 @@ getPhylipInferred <- function(phylip_out) {
 #                      no taxa name translation is performed
 # @return  a data.frame of edges with columns (from, to, weight)
 getPhylipEdges <- function(phylip_out, id_map=NULL) {
-    # Process dnapars output
-    edge_start <- min(grep('between\\s+and\\s+length', phylip_out, 
-                           perl=TRUE, fixed=FALSE))
-    edge_len <- min(grep('^\\s*$', phylip_out[edge_start:length(phylip_out)], 
-                         perl=TRUE, fixed=FALSE))
-    edge_block <- paste(phylip_out[(edge_start + 2):(edge_start + edge_len - 2)], collapse='\n')
-    edge_df <- read.table(textConnection(edge_block), col.names=c('from', 'to', 'weight'), 
-                          as.is=TRUE)
 
+    pars_start = grep('between\\s+and\\s+length', phylip_out, 
+                           perl=TRUE, fixed=FALSE)
+    ml_start = grep('Between\\s+And\\s+Length', phylip_out, 
+                           perl=TRUE, fixed=FALSE)
+
+    if(length(pars_start) > 0){
+        # Process dnapars output
+        edge_start <- min(pars_start)
+        edge_len <- min(grep('^\\s*$', phylip_out[edge_start:length(phylip_out)], 
+                             perl=TRUE, fixed=FALSE))
+        edge_block <- paste(phylip_out[(edge_start + 2):(edge_start + edge_len - 2)], collapse='\n')
+        tc <- textConnection(edge_block)
+        edge_df <- read.table(tc, col.names=c('from', 'to', 'weight'), 
+                              as.is=TRUE)
+        close(tc)
+    }else if(length(ml_start) > 0){
+        edge_start <- min(ml_start)+3
+        edge_len <- min(grep('^\\s*$', phylip_out[edge_start:length(phylip_out)], 
+                             perl=TRUE, fixed=FALSE))
+        block = phylip_out[(edge_start + 0):(edge_start + edge_len - 2)]
+        block = unlist(lapply(strsplit(block,split="\\s+"),function(x){
+            paste(x[1:(min(which(x == "("))-1)],collapse=" ")
+        }))
+        edge_block <- paste(block, collapse='\n')
+        tc <- textConnection(edge_block)
+        edge_df <- read.table(tc, col.names=c('from', 'to', 'weight'), 
+                              as.is=TRUE)
+        close(tc)
+    }
     # Modify inferred taxa names to include "Inferred"
     inf_map <- unique(grep("^[0-9]+$", c(edge_df$from, edge_df$to), value=T))
     names(inf_map) <- paste0("Inferred", inf_map)
@@ -430,11 +495,11 @@ phylipToGraph <- function(edges, clone) {
 #' Infer an Ig lineage using PHYLIP
 #' 
 #' \code{buildPhylipLineage} reconstructs an Ig lineage via maximum parsimony using the 
-#' dnapars application of the PHYLIP package.
+#' dnapars application, or maximum liklihood using the dnaml application of the PHYLIP package.
 #' 
 #' @param    clone         \link{ChangeoClone} object containing clone data.
 #' @param    phylip_exec   absolute path to the PHYLIP dnapars executable.
-#' @param    dist_mat      Character distance matrix to use for reassigning edge weights. 
+#' @param    dist_mat      character distance matrix to use for reassigning edge weights. 
 #'                         Defaults to a Hamming distance matrix returned by \link{getDNAMatrix} 
 #'                         with \code{gap=0}. If gap characters, \code{c("-", ".")}, are assigned 
 #'                         a value of -1 in \code{dist_mat} then contiguous gaps of any run length,
@@ -447,6 +512,13 @@ phylipToGraph <- function(edges, clone) {
 #' @param    verbose       if \code{FALSE} suppress the output of dnapars; 
 #'                         if \code{TRUE} STDOUT and STDERR of dnapars will be passed to 
 #'                         the console.
+#' @param    branch_length specifies how to define branch lengths; one of \code{"mutations"} 
+#'                         or \code{"distance"}. If set to \code{"mutations"} (default), then branch 
+#'                         lengths represent the number of mutations between nodes. 
+#'                         If set to \code{"distance"}, then branch lengths represent
+#'                         the expected number of mutations per site, unaltered from PHYLIP output.
+#' @param    temp_path     specific path to temp directory if desired.
+#' @param    onetree       if \code{TRUE} save only one tree.
 #'                                                
 #' @return   An igraph \code{graph} object defining the Ig lineage tree. Each unique input 
 #'           sequence in \code{clone} is a vertex of the tree, with additional vertices being
@@ -489,6 +561,10 @@ phylipToGraph <- function(edges, clone) {
 #'                                      the input \code{ChangeoClone}.
 #'             \item  \code{junc_len}:  junction length (nucleotide count) from the 
 #'                                      \code{junc_len} slot of the input \code{ChangeoClone}.
+#' 
+#'              Alternatively, this function will return an \code{phylo} object, which is compatible
+#'              with the ape package. This object will contain reconstructed ancestral sequences in
+#'              \code{nodes} attribute.
 #'           }
 #'           
 #' @details
@@ -551,7 +627,8 @@ phylipToGraph <- function(edges, clone) {
 #' 
 #' @export
 buildPhylipLineage <- function(clone, phylip_exec, dist_mat=getDNAMatrix(gap=0), 
-                               rm_temp=FALSE, verbose=FALSE) {
+                               rm_temp=FALSE, verbose=FALSE, temp_path=NULL, onetree=FALSE,
+                               branch_length=c("mutations", "distance")) {
     # Check clone size
     if (nrow(clone@data) < 2) {
         warning("Clone ", clone@clone, " was skipped as it does not contain at least 
@@ -559,9 +636,12 @@ buildPhylipLineage <- function(clone, phylip_exec, dist_mat=getDNAMatrix(gap=0),
         return(NULL)
     }
     
+    # determine branch length type
+	  branch_length <- match.arg(branch_length)
+
     # Check fields
-    seq_len = unique(stringi::stri_length(clone@data[["sequence"]]))
-    germ_len = ifelse(length(clone@germline) == 0, 0, stringi::stri_length(clone@germline))
+    seq_len <- unique(stringi::stri_length(clone@data[["sequence"]]))
+    germ_len <- ifelse(length(clone@germline) == 0, 0, stringi::stri_length(clone@germline))
     if(germ_len == 0) {
         stop("Clone ", clone@clone, "does not contain a germline sequence.")
     }
@@ -577,15 +657,23 @@ buildPhylipLineage <- function(clone, phylip_exec, dist_mat=getDNAMatrix(gap=0),
         stop("The file ", phylip_exec, " cannot be executed.")
     }
     
-    # Create temporary directory
-    temp_path <- makeTempDir(paste0(clone@clone, "-phylip"))
+     # Create temporary directory
+    if(is.null(temp_path)){
+        temp_path <- makeTempDir(paste0(clone@clone, "-phylip"))
+    }else{
+        if(!dir.exists(temp_path)){
+            dir.create(temp_path)
+        }
+    }
     if (verbose) {
         cat("TEMP_DIR> ", temp_path, "\n", sep="")
     }
     
     # Run PHYLIP
     id_map <- writePhylipInput(clone, temp_path)
-    runPhylip(temp_path, phylip_exec, verbose=verbose)
+
+    runPhylip(temp_path, phylip_exec, verbose=verbose, onetree=onetree)
+
     phylip_out <- readPhylipOutput(temp_path)
     
     # Remove temporary directory
@@ -601,17 +689,23 @@ buildPhylipLineage <- function(clone, phylip_exec, dist_mat=getDNAMatrix(gap=0),
     
     # Extract inferred sequences from PHYLIP output
     inf_df <- getPhylipInferred(phylip_out)
-    clone@data <- as.data.frame(dplyr::bind_rows(clone@data, inf_df))
 
     # Extract edge table from PHYLIP output 
     edges <- getPhylipEdges(phylip_out, id_map=id_map)
-    
-    # Modify PHYLIP tree to remove 0 distance edges
-    mod_list <- modifyPhylipEdges(edges, clone, dist_mat=dist_mat)
+
+    clone@data <- as.data.frame(dplyr::bind_rows(clone@data, inf_df))
 
     # Convert edges and clone data to igraph graph object
-    graph <- phylipToGraph(mod_list$edges, mod_list$clone)
-    
+    if( branch_length == "mutations" ){
+        mod_list <- modifyPhylipEdges(edges, clone, dist_mat=dist_mat)
+        graph <- phylipToGraph(mod_list$edges, mod_list$clone)
+    }else{
+        # or just keep everything the same	
+    	germ_idx <- which(edges$to == "Germline")
+    	edges[germ_idx, c('from', 'to')] <- edges[germ_idx, c('to', 'from')]
+        graph <- phylipToGraph(edges, clone)
+    }
+   
     return(graph)
 }
 
@@ -667,7 +761,7 @@ buildPhylipLineage <- function(clone, phylip_exec, dist_mat=getDNAMatrix(gap=0),
 #' }
 #' 
 #' @export
-phyloToGraph <- function(phylo, germline=NULL) {
+phyloToGraph <- function(phylo, germline="Germline") {
     names <- 1:length(unique(c(phylo$edge[, 1],phylo$edge[, 2])))
     for(i in 1:length(phylo$tip.label)){
         names[i] <- phylo$tip.label[i]
@@ -680,10 +774,14 @@ phyloToGraph <- function(phylo, germline=NULL) {
     }
     d <- data.frame(cbind(phylo$edge,phylo$edge.length))
     names(d)=c("from", "to", "weight")
-
+    
+    if(!is.null(phylo$nodes)){
+    	seqs <- unlist(lapply(phylo$nodes,function(x)x$sequence))
+    	names(seqs) <- lapply(phylo$nodes,function(x)x$id)
+    }
     if(!is.null(germline)){
         germnode <- which(phylo$tip.label == germline)
-        phylo$uca = phylo$edge[phylo$edge[,2] == germnode,1]
+        phylo$uca <- phylo$edge[phylo$edge[,2] == germnode,1]
         if(sum(d$from == phylo$uca) == 2){
             d[d$from == phylo$uca, ]$from <- germnode
             d <- d[!(d$from == germnode & d$to == germnode),] 
@@ -699,6 +797,9 @@ phyloToGraph <- function(phylo, germline=NULL) {
     g <- igraph::graph_from_data_frame(d)
     igraph::V(g)$name <- names[as.numeric(igraph::V(g)$name)]
     igraph::E(g)$label <- igraph::E(g)$weight
+    if(!is.null(phylo$nodes)){
+    	igraph::V(g)$sequence <- seqs[igraph::V(g)$name]
+    }
     return(g)
 }
 
@@ -764,6 +865,9 @@ graphToPhylo <- function(graph) {
     node_counts <- table(c(df$to,df$from))
     tips <- names(node_counts)[node_counts == 1]
     nodes <- names(node_counts)[node_counts > 1]
+    attr <- igraph::vertex_attr(graph)
+    seqs <- attr$sequence
+    names(seqs) <- attr$name
 
     germline <- tips[tips %in% df$from]
     if(length(germline) > 0){
@@ -773,6 +877,8 @@ graphToPhylo <- function(graph) {
         row <- c(ucanode,germline,0.0)
         names(row) <- c("from","to","weight")
         df <- rbind(df, row)
+        seqs <- c(seqs,seqs["Germline"])
+        names(seqs)[length(seqs)] = paste0(germline,"_UCA")
     }
     tipn <- 1:length(tips)
     names(tipn) <- tips
@@ -787,13 +893,18 @@ graphToPhylo <- function(graph) {
     phylo$edge <- matrix(cbind(df$from,df$to),ncol=2)
     phylo$edge.length <- as.numeric(df$weight)
     phylo$tip.label <- tips
+    phylo$node.label <- nodes
     phylo$Nnode <- length(nodes)
     phylo$node.label <- nodes
     class(phylo) <- "phylo"
 
-    if(length(germline) > 0){
-        phylo <- rerootGermline(phylo, germline)
-    }
+    nnodes <- length(renumber)
+    phylo$nodes <- lapply(1:nnodes,function(x){
+        n <- list()
+        n$id <- names(renumber[renumber == x])
+        n$sequence <- seqs[n$id]
+        n
+    })
 
     phylo = ape::ladderize(phylo, right=FALSE)
     
@@ -912,8 +1023,9 @@ rerootGermline <- function(tree, germid, resolve=FALSE){
 #' }
 #' 
 #' @export
+
 readIgphyml <- function(file, id=NULL, format=c("graph", "phylo"), collapse=FALSE,
-    branches=c("distance","mutations")) {
+    branches=c("mutations","distance")) {
     # Check arguments
     format <- match.arg(format)
     branches <- match.arg(branches)
@@ -932,6 +1044,7 @@ readIgphyml <- function(file, id=NULL, format=c("graph", "phylo"), collapse=FALS
         if(length(germ_id) > 1){
             stop("Can only be one tip of the form '<cloneid>_GERM'")
         }
+
         if(!ape::is.rooted(tree)){
             warning(paste("Tree",germ_base,"is not rooted and should be!"))
             tree <- rerootGermline(tree,germ_id,resolve=TRUE)
