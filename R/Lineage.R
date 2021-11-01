@@ -156,6 +156,11 @@ makeChangeoClone <- function(data, id="sequence_id", seq="sequence_alignment",
     }
     names(tmp_df)[tmp_names == seq] <- "sequence"
     names(tmp_df)[tmp_names == id] <- "sequence_id"
+ 
+    if (length(unique(data[[junc_len]]))>1) {
+      message("Junctions of multiple lengths found. `ChangeoClone` will use the length of the first one in slot `junc_len`.")
+    }
+
     clone <- new("ChangeoClone", 
                  data=as.data.frame(tmp_df),
                  clone=as.character(data[[clone]][1]),
@@ -190,7 +195,12 @@ writePhylipInput <- function(clone, path) {
     id_map <- setNames(gsub("^\\s+|\\s+$", "", v1[-(1:2)]), clone@data[["sequence_id"]])
     
     # Create PHYLIP input file
-    write.table(phy_df, file=file.path(path, "infile"), 
+    infile <- file.path(path, "infile")
+    if (.Platform$OS.type == "windows") { 
+        infile <- gsub("/","\\\\",infile)
+    }
+
+    write.table(phy_df, file=infile, 
                 quote=F, sep=" ", col.names=F, row.names=F)    
     
     return(id_map)
@@ -210,22 +220,28 @@ runPhylip <- function(path, phylip_exec, verbose=FALSE, onetree=FALSE) {
     phylip_exec <- path.expand(phylip_exec)
     
     # Remove old files
-    if (file.exists(file.path(path, "outfile"))) { file.remove(file.path(path, "outfile")) }
-    if (file.exists(file.path(path, "outtree"))) { file.remove(file.path(path, "outtree")) }    
+    outfile <- file.path(path, "outfile")
+    outtree <- file.path(path, "outtree")
+    if (.Platform$OS.type == "windows") { 
+        outfile <- gsub("/","\\\\",outfile)
+        outtree <- gsub("/","\\\\",outtree)
+    }
+    if (file.exists(outfile)) { file.remove(outfile) }
+    if (file.exists(outtree)) { file.remove(outtree) }    
     
     # Set platform specific options
     if (.Platform$OS.type == "windows") { 
-        quiet_params <- list(ignore.stdout=TRUE, ignore.stderr=TRUE)
-        invoke <- shell
+        quiet_params <- list(stdout=FALSE, stderr=FALSE)
+        invoke <- system2
     } else { 
         quiet_params <- list(stdout=FALSE, stderr=FALSE)
         invoke <- system2
     } 
     
     # Set dnapars or dnaml options
-    if ( grepl("dnaml$",phylip_exec) ){
+    if ( grepl("dnaml$",phylip_exec) | grepl("dnaml\\.exe$",phylip_exec)){
         phy_options <- c("I", "5")
-    }else if (grepl("dnapars$",phylip_exec)) {
+    }else if (grepl("dnapars$",phylip_exec) | grepl("dnapars\\.exe$",phylip_exec)) {
         phy_options <- c("S", "Y", "I", "4", "5", ".")
     }else{
         stop("Executable not recognized! Must end with dnapars or dnaml")
@@ -256,8 +272,12 @@ runPhylip <- function(path, phylip_exec, verbose=FALSE, onetree=FALSE) {
 # @param   path  the temporary folder containing the dnapars outfile
 # @return  a character vector with each item as a line in the outfile
 readPhylipOutput <- function(path) {
-    phylip_out <- scan(file.path(path, "outfile"), what="character", sep="\n", 
-                       blank.lines.skip=FALSE, strip.white=FALSE, quiet=TRUE)
+    outfile <- file.path(path, "outfile")
+    if (.Platform$OS.type == "windows") { 
+        outfile <- gsub("/","\\\\",outfile)
+    }
+    phylip_out <- scan(outfile, what="character", sep="\n", 
+            blank.lines.skip=FALSE, strip.white=FALSE, quiet=TRUE)
     return(phylip_out)
 }
 
@@ -598,8 +618,8 @@ phylipToGraph <- function(edges, clone) {
 #' @seealso  Takes as input a \link{ChangeoClone}. 
 #'           Temporary directories are created with \link{makeTempDir}.
 #'           Distance is calculated using \link{seqDist}. 
-#'           See \link{igraph} and \link{igraph.plotting} for working 
-#'           with igraph \code{graph} objects. 
+#'           See the igraph \link[igraph]{graph} documentation for how to work 
+#'           with \code{graph} objects. 
 #'
 #' @examples
 #' \dontrun{

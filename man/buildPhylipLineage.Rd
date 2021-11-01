@@ -155,6 +155,6 @@ graph <- buildPhylipLineage(clone, phylip_exec, dist_mat=getDNAMatrix(gap=-1),
 Takes as input a \link{ChangeoClone}. 
           Temporary directories are created with \link{makeTempDir}.
           Distance is calculated using \link{seqDist}. 
-          See \link{igraph} and \link{igraph.plotting} for working 
-          with igraph \code{graph} objects.
+          See the igraph \link[igraph]{graph} documentation for how to work 
+          with \code{graph} objects.
 }

@@ -19,7 +19,7 @@ head(clones, 5)
 ## ---- eval=TRUE, results='hide', warning=FALSE, fig.width=6, fig.height=4-----
 # Partitions the data on the sample column
 # Calculates a 95% confidence interval via 200 bootstrap realizations
-curve <- estimateAbundance(ExampleDb, group="sample_id", ci=0.95, nboot=200, clone="clone_id")
+curve <- estimateAbundance(ExampleDb, group="sample_id", ci=0.95, nboot=100, clone="clone_id")
 
 ## ---- eval=TRUE, warning=FALSE, fig.width=6, fig.height=4---------------------
 # Plots a rank abundance curve of the relative clonal abundances
@@ -33,14 +33,14 @@ plot(curve, colors = sample_colors, legend_title="Sample")
 # 200 resampling realizations are performed (nboot=200)
 sample_curve <- alphaDiversity(ExampleDb, group="sample_id", clone="clone_id",
                                min_q=0, max_q=4, step_q=0.1,
-                               ci=0.95, nboot=200)
+                               ci=0.95, nboot=100)
 
 # Compare diversity curve across values in the c_call column
 # Analyse is restricted to c_call values with at least 30 sequences by min_n=30
 # Excluded groups are indicated by a warning message
 isotype_curve <- alphaDiversity(ExampleDb, group="c_call", clone="clone_id",
                                 min_q=0, max_q=4, step_q=0.1,
-                                ci=0.95, nboot=200)
+                                ci=0.95, nboot=100)
 
 ## ---- eval=TRUE, fig.width=6, fig.height=4------------------------------------
 # Plot a log-log (log_q=TRUE, log_d=TRUE) plot of sample diversity
@@ -59,7 +59,7 @@ plot(isotype_curve, colors=IG_COLORS, main_title=isotype_main,
 # Test diversity at q=0, q=1 and q=2 (equivalent to species richness, Shannon entropy, 
 # Simpson's index) across values in the sample_id column
 # 200 bootstrap realizations are performed (nboot=200)
-isotype_test <- alphaDiversity(ExampleDb, group="c_call", min_q=0, max_q=2, step_q=1, nboot=200, clone="clone_id")
+isotype_test <- alphaDiversity(ExampleDb, group="c_call", min_q=0, max_q=2, step_q=1, nboot=100, clone="clone_id")
 
 # Print P-value table
 print(isotype_test@tests)

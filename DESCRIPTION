@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 1.1.0
-Date: 2021-02-06
+Version: 1.2.0
+Date: 2021-10-31
 Authors@R: c(person("Namita", "Gupta", role=c("aut"), 
                     email="namita.gupta@yale.edu"),
              person("Susanna", "Marquez", role=c("aut"), 
@@ -36,23 +36,24 @@ URL: https://alakazam.readthedocs.io/
 BugReports: https://bitbucket.org/kleinstein/alakazam/issues
 LazyData: true
 BuildVignettes: true
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Encoding: UTF-8
 SystemRequirements: C++11
-biocViews:
-Depends: R (>= 3.5.0), ggplot2 (>= 3.2.0)
-Imports: airr, ape, Biostrings, dplyr (>= 1.0), GenomicAlignments,
-        graphics, grid, igraph (>= 1.0.0), IRanges, lazyeval, Matrix,
-        methods, progress, Rcpp (>= 0.12.12), readr, rlang, scales,
-        seqinr, stats, stringi, tibble, tidyr (>= 1.0.0), utils
 LinkingTo: Rcpp
+biocViews: Software, AnnotationData
+Depends: R (>= 4.0), ggplot2 (>= 3.3.4)
+Imports: airr (>= 1.3), ape, dplyr (>= 1.0), graphics, grid, igraph (>=
+        1.0), Matrix, methods, progress, Rcpp (>= 0.12.12), readr,
+        rlang, scales, seqinr, stats, stringi, tibble, tidyr (>= 1.0),
+        utils, Biostrings (>= 2.56.0), GenomicAlignments (>= 1.24.0),
+        IRanges (>= 2.22.2)
 Suggests: knitr, rmarkdown, testthat
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Deprecated.R' 'Fastq.R' 'Gene.R' 'Lineage.R'
         'RcppExports.R' 'Sequence.R' 'Topology.R'
 NeedsCompilation: yes
-Packaged: 2021-02-07 02:44:47 UTC; vandej27
+Packaged: 2021-10-31 16:29:41 UTC; vandej27
 Author: Namita Gupta [aut],
   Susanna Marquez [aut],
   Nima Nouri [aut],
@@ -65,4 +66,4 @@ Author: Namita Gupta [aut],
   Steven Kleinstein [aut, cph]
 Maintainer: Jason Vander Heiden <jason.vanderheiden@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-02-07 06:00:03 UTC
+Date/Publication: 2021-11-01 16:10:16 UTC

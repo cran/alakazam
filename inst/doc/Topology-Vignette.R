@@ -103,7 +103,7 @@ tableEdges(graph, "c_call", indirect=TRUE, exclude=c("Germline", NA))
 
 ## ---- eval=TRUE---------------------------------------------------------------
 # Test isotype relationships
-edge_test <- testEdges(graph_list, "c_call", nperm=20)
+edge_test <- testEdges(graph_list, "c_call", nperm=10)
 
 # Print p-value table
 print(edge_test)
@@ -129,7 +129,7 @@ print(mrca_df[c("name", "sample_id", "c_call", "steps", "distance")])
 
 ## ---- eval=TRUE---------------------------------------------------------------
 # Test isotype MRCA annotations
-mrca_test <- testMRCA(graph_list, "c_call", nperm=20)
+mrca_test <- testMRCA(graph_list, "c_call", nperm=10)
 
 # Print p-value table
 print(mrca_test)

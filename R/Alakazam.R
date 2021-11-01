@@ -65,6 +65,7 @@
 #'   \item  \link{getAllele}:            Get V(D)J allele names.
 #'   \item  \link{getGene}:              Get V(D)J gene names.
 #'   \item  \link{getFamily}:            Get V(D)J family names.
+#'   \item  \link{junctionAlignment}: Junction alignment properties 
 #' }
 #' 
 #' @section  Sequence distance calculation:
@@ -127,14 +128,13 @@
 #'                          degree shortest_paths all_shortest_paths distances
 #'                          graph_from_adjacency_matrix components groups
 #' @importFrom  IRanges     IRanges
-#' @importFrom  lazyeval    interp
 #' @importFrom  Matrix      sparseMatrix rowSums
 #' @importFrom  progress    progress_bar
 #' @importFrom  readr       read_delim read_tsv write_delim write_tsv cols
 #' @importFrom  rlang       := sym syms enquo
 #' @importFrom  scales      log2_trans log10_trans trans_breaks trans_format
 #'                          math_format percent scientific pretty_breaks
-#' @importFrom  seqinr      translate
+#' @importFrom  seqinr      translate s2c
 #' @importFrom  stats       na.omit setNames ecdf sd cor cov median mad
 #'                          dbinom pbinom qbinom rbinom
 #'                          dnorm pnorm qnorm rnorm

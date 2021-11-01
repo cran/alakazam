@@ -1,3 +1,25 @@
+Version 1.2.0: October 31, 2021
+-------------------------------------------------------------------------------
+
+General:
+
++ Updated dependencies to R >= 4.0 and ggplot2 >= 3.3.4.
++ Removed lazyeval dependency.
++ Added `junctionAlignment`, which counts the number of nucleotides in the 
+  reference germline not present in the alignment, and the number of V and J 
+  nucleotides in the CDR3.
+  
+Gene Usage:
+
++ Fixed a bug in `getFamily` where temporary designation gene names were not
+  being correctly subset to the cluster (family) level.
+
+Lineage:
+
++ Fixed a bug in `runPhylip` which was causing `buildPhylipLineage` to fail 
+  when run on Windows.
+
+
 Version 1.1.0: February 6, 2021
 -------------------------------------------------------------------------------
   
@@ -13,6 +35,9 @@ General:
 + Increased `dplyr` dependency to v1.0.
 + Added the BioConductor dependencies Biostrings, GenomicAlignments, 
   and IRanges.
++ In `padSeqEnds`, the argument `mod3=TRUE` has been added so that sequences are
+  padded to a length that is a multiple of 3.
++ Fixed a bug in `translateDNA` where `NA` values weren't being translated properly.
 
 Amino Acid Analysis:
 
@@ -24,7 +49,7 @@ Diversity:
   values in the clone column if `TRUE` (default) and issue a warning with how many were removed. 
   If `FALSE`, those rows will be kept instead.
 
-Gene:
+Gene Usage:
 
 + Added the function `getLocus` to extract the locus information from the
   segment call.
@@ -49,12 +74,6 @@ Lineage:
 + Added a parameter to `countGenes` (`remove_na`) that will remove all rows with NA 
   values in the gene column if `TRUE` (default) and issue a warning with how many were removed. 
   If `FALSE`, those rows will be kept instead.
-  
-Sequence:
-
-+ In `padSeqEnds`, the argument `mod3=TRUE` has been added so that sequences are
-  padded to a length that is a multiple of 3.
-+ Fixed a bug in `translateDNA` where NAs weren't being translated properly.
 
 
 Version 1.0.2: July 17, 2020

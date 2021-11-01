@@ -141,6 +141,13 @@ getAllele(nl_call, first=FALSE, omit_nl=TRUE)
 getGene(nl_call, first=FALSE, omit_nl=TRUE)
 getFamily(nl_call, first=FALSE, omit_nl=TRUE)
 
+# Temporary designation examples
+tmp_call <- c("IGHV9S3*01", "IGKV10S12*01")
+
+getAllele(tmp_call)
+getGene(tmp_call)
+getFamily(tmp_call)
+
 }
 \references{
 \url{http://imgt.org}

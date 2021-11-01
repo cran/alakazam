@@ -23,7 +23,7 @@ clone@data[, c("sample_id", "c_call", "duplicate_count")]
 #  graph <- buildPhylipLineage(clone, phylip_exec, rm_temp=TRUE)
 
 ## ---- echo=FALSE, warning=FALSE, message=FALSE--------------------------------
-# Load data insted of running phylip
+# Load data instead of running phylip
 # Clone 3138 is at index 23
 graph <- ExampleTrees[[23]]
 
@@ -74,7 +74,7 @@ clones <- ExampleDb %>%
 #                   phylip_exec=phylip_exec, rm_temp=TRUE)
 
 ## ---- echo=FALSE, warning=FALSE, message=FALSE--------------------------------
-# Load data insted of running phylip
+# Load data instead of running phylip
 graphs <- ExampleTrees
 
 ## ---- eval=TRUE---------------------------------------------------------------
@@ -94,25 +94,20 @@ V(graph)$label <- V(graph)$name
 E(graph)$label <- E(graph)$weight
 
 ## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
-##plot lineage tree using igraph
-plot(graph, layout=layout_as_tree)
-
-# convert to phylo
+# Convert to phylo
 phylo <- graphToPhylo(graph)
 
-#plot using ape
+# Plot using ape
 plot(phylo, show.node.label=TRUE)
 
-#write tree file in Newick format
-ape::write.tree(phylo, file="example.tree")
+## ---- eval=FALSE--------------------------------------------------------------
+#  # Read in Newick tree as phylo object
+#  phylo <- ape::read.tree("example.tree")
+#  
+#  # Write tree file in Newick format
+#  ape::write.tree(phylo, file="example.tree")
 
 ## ---- eval=TRUE---------------------------------------------------------------
-#read in tree as phylo object
-phylo_r <- ape::read.tree("example.tree")
-
-#convert to graph object
-graph_r <- phyloToGraph(phylo_r, germline="Germline")
-
-#plot converted form using igraph - it's the same as before
-plot(graph_r,layout=layout_as_tree)
+# Convert to graph object
+graph <- phyloToGraph(phylo, germline="Germline")
 
