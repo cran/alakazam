@@ -18,6 +18,6 @@ determining regions (CDRs) for IMGT-gapped immunoglobulin (Ig) nucleotide sequen
 according to the IMGT numbering scheme.
 }
 \references{
-\url{http://imgt.org}
+\url{https://www.imgt.org/}
 }
 \keyword{datasets}

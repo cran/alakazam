@@ -150,7 +150,7 @@ getFamily(tmp_call)
 
 }
 \references{
-\url{http://imgt.org}
+\url{https://www.imgt.org/}
 }
 \seealso{
 \link{countGenes}
