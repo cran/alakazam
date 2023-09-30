@@ -1,4 +1,4 @@
-## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
+## ----eval=TRUE, warning=FALSE, message=FALSE----------------------------------
 library(alakazam)
 library(dplyr)
 library(airr)
@@ -18,7 +18,7 @@ quality <- getPositionQuality(db, sequence_id="sequence_id",
                               quality_num="quality_alignment_num")
 head(quality)
 
-## ---- fig.cap="Sequence quality per IMGT position for one sequence.", fig.asp=0.25----
+## ----fig.cap="Sequence quality per IMGT position for one sequence.", fig.asp=0.25----
 min_pos <- min(quality$position)
 max_pos <- max(quality$position)
 

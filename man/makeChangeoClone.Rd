@@ -14,6 +14,7 @@ makeChangeoClone(
   junc_len = "junction_length",
   clone = "clone_id",
   mask_char = "N",
+  locus = "locus",
   max_mask = 0,
   pad_end = FALSE,
   text_fields = NULL,
@@ -50,6 +51,9 @@ for any given clone.}
 entries in this column should be identical.}
 
 \item{mask_char}{character to use for masking and padding.}
+
+\item{locus}{name of the column containing locus specification. Must be present
+and only contain the value "IGH", representing heavy chains.}
 
 \item{max_mask}{maximum number of characters to mask at the leading and trailing
 sequence ends. If \code{NULL} then the upper masking bound will 
@@ -123,6 +127,7 @@ db <- data.frame(sequence_id=LETTERS[1:4],
                  j_call="Homsap IGKJ5*01 F",
                  junction_length=2,
                  clone_id=1,
+                 locus=rep("IGH", length=4),
                  c_call=c("IGHM", "IGHG", "IGHG", "IGHA"),
                  duplicate_count=1:4,
                  stringsAsFactors=FALSE)

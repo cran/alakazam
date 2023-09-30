@@ -24,4 +24,6 @@ appropriate for writing a Change-O tab-delimited database file from a data.frame
 }
 \seealso{
 Wraps \link[readr]{write_delim}. See \link{readChangeoDb} for reading to Change-O files.
+          See \link[airr]{read_rearrangement} and \link[airr]{write_rearrangement}
+          to read and write AIRR-C Standard formatted repertoires.
 }

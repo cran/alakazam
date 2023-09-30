@@ -74,7 +74,7 @@ set of lineage trees, broken down by annotation value.
 }
 \examples{
 # Define example tree set
-graphs <- ExampleTrees[1-10]
+graphs <- ExampleTrees[1:10]
 
 # Violin plots of node outdegree by sample
 plotSubtrees(graphs, "sample_id", "out", style="v")

@@ -48,7 +48,7 @@ charge(seq, pK=x)
 \enumerate{
   \item  Moore DS. Amino acid and peptide net charges: A simple calculational procedure. 
            Biochem Educ. 13, 10-11 (1985).
-  \item  \url{http://emboss.sourceforge.net/apps/cvs/emboss/apps/iep.html}
+  \item  \url{https://emboss.sourceforge.net/apps/cvs/emboss/apps/iep.html}
   }
 }
 \seealso{

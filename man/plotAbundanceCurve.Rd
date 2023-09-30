@@ -2,7 +2,7 @@
 % Please edit documentation in R/Diversity.R
 \name{plotAbundanceCurve}
 \alias{plotAbundanceCurve}
-\title{Plots a clonal abundance distribution}
+\title{Plot a clonal abundance distribution}
 \usage{
 plotAbundanceCurve(
   data,
@@ -28,10 +28,13 @@ colors to assign to those group names.}
 \item{legend_title}{string specifying the legend title.}
 
 \item{xlim}{numeric vector of two values specifying the 
-\code{c(lower, upper)} x-axis limits.}
+\code{c(lower, upper)} x-axis limits. The lower x-axis 
+value must be >=1.}
 
 \item{ylim}{numeric vector of two values specifying the 
-\code{c(lower, upper)} y-axis limits.}
+\code{c(lower, upper)} y-axis limits. The limits on the 
+abundance values are expressed as fractions of 1: use
+c(0,1) to set the lower and upper limits to 0\% and 100\%.}
 
 \item{annotate}{string defining whether to added values to the group labels 
 of the legend. When \code{"none"} (default) is specified no
@@ -58,7 +61,6 @@ plotAbundanceCurve(abund, legend_title="Sample")
 
 }
 \seealso{
-See \link{AbundanceCurve} for the input object and \link{estimateAbundance} for 
-generating the input abundance distribution.
-Plotting is performed with \link{ggplot}.
+See \link{AbundanceCurve} for the input object and \link{estimateAbundance} for
+generating the input abundance distribution. Plotting is performed with \link{ggplot}.
 }

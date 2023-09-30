@@ -58,4 +58,6 @@ into a data.frame.
 \seealso{
 Wraps \link[readr]{read_delim}. 
           See \link{writeChangeoDb} for writing to Change-O files.
+          See \link[airr]{read_rearrangement} and \link[airr]{write_rearrangement}
+          to read and write AIRR-C Standard formatted repertoires.
 }

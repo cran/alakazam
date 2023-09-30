@@ -69,7 +69,7 @@ div <- alphaDiversity(ExampleDb, group="sample_id", nboot=100)
 # Plot diversity
 plotDiversityCurve(div, legend_title="Sample")
 
-#' # Plot diversity
+# Plot diversity
 plotDiversityCurve(div, legend_title="Sample", score="evenness")
 
 }

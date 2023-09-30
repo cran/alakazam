@@ -2,7 +2,7 @@
 % Please edit documentation in R/Topology.R
 \name{testEdges}
 \alias{testEdges}
-\title{Tests for parent-child annotation enchrichment in lineage trees}
+\title{Tests for parent-child annotation enrichment in lineage trees}
 \usage{
 testEdges(
   graphs,
@@ -41,7 +41,7 @@ the significance of an annotation's association with parent-child relationships.
 \examples{
 \donttest{
 # Define example tree set
-graphs <- ExampleTrees[1-10]
+graphs <- ExampleTrees[1:10]
 
 # Perform edge test on isotypes
 x <- testEdges(graphs, "c_call", nperm=10)

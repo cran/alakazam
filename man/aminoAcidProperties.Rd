@@ -126,7 +126,7 @@ aminoAcidProperties(db, property=c("bulk", "charge"), seq="junction",
   \item  Wu YC, et al. The relationship between CD27 negative and positive B cell 
            populations in human peripheral blood. 
            Front Immunol 2, 1-12 (2011).
-  \item  \url{http://emboss.sourceforge.net/apps/cvs/emboss/apps/iep.html}
+  \item  \url{https://emboss.sourceforge.net/apps/cvs/emboss/apps/iep.html}
 }
 }
 \seealso{

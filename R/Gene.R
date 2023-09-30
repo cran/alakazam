@@ -155,7 +155,7 @@ countGenes <- function(data, gene, groups=NULL, copy=NULL, clone=NULL, fill=FALS
     }
 
     # Rename gene column
-    gene_tab <- rename(gene_tab, "gene"=gene)
+    gene_tab <- gene_tab %>% rename(all_of(c("gene"=gene)))
     
     return(gene_tab)
 }
@@ -580,13 +580,19 @@ groupGenes <- function(data, v_call="v_call", j_call="j_call", junc_len=NULL,
                        first=FALSE) {
     # Check base input
     check <- checkColumns(data, c(v_call, j_call, junc_len))
-    if (check != TRUE) { stop(check) }
+    if (check!=TRUE) { stop("A column or some combination of columns v_call, j_call, and junc_len were not found in the data") }
     
     # Check single-cell input
     if (!is.null(cell_id)) {
-        check <- checkColumns(data, c(cell_id, locus))
+        check <- checkColumns(data, c(cell_id))
         if (check != TRUE) { stop(check) }
     }
+    
+    # Check locus
+    # message locus is required
+    if (is.null(locus)) { stop("`locus`, is a required parameter.") }
+    check <- checkColumns(data, locus)
+    if (check != TRUE) { stop(check) }
     
     # if necessary, cast select columns to character (factor not allowed later on)
     if (!is(data[[v_call]], "character")) { data[[v_call]] <- as.character(data[[v_call]]) }
@@ -638,14 +644,14 @@ groupGenes <- function(data, v_call="v_call", j_call="j_call", junc_len=NULL,
         # make a copy
         data_orig <- data; rm(data)
         
-        if (only_heavy) {
+        if(only_heavy){
             
             # use heavy chains only
             
             # Straightforward subsetting like below won't work in cases 
             #     where multiple HCs are present for a cell 
             # subset to heavy only
-            # data <- data_orig[data_orig[[locus]]=="IGH", ]
+            data <- data_orig[data_orig[[locus]] %in% c("IGH","TRB","TRD"), ]
             
             # flatten data
             cols <- c(cell_id, v_call, j_call, junc_len)
@@ -1126,7 +1132,7 @@ groupGenes <- function(data, v_call="v_call", j_call="j_call", junc_len=NULL,
             # matrix
             # important to specify rowSums from Matrix package
             # base::rowSums will NOT work
-            cell_idx <- which(Matrix::rowSums(mtx_cell_VJL[, x])>0)
+            cell_idx <- which(Matrix::rowSums(mtx_cell_VJL[, x, drop=F ])>0)
         } else {
             # vector
             cell_idx <- which(mtx_cell_VJL[, x]>0)

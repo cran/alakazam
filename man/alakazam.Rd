@@ -3,7 +3,7 @@
 \docType{package}
 \name{alakazam}
 \alias{alakazam}
-\title{The alakazam package}
+\title{The Alakazam package}
 \description{
 \code{alakazam} in a member of the Immcantation framework of tools and serves five main 
 purposes:

@@ -1,4 +1,4 @@
-## ---- eval=TRUE, warning=FALSE, message=FALSE---------------------------------
+## ----eval=TRUE, warning=FALSE, message=FALSE----------------------------------
 # Load required packages
 library(alakazam)
 library(igraph)
@@ -16,7 +16,7 @@ V(graph)$c_call[c(2, 7)] <- "IGHM"
 # Make a list of example trees excluding multi-isotype trees
 graph_list <- ExampleTrees[sapply(ExampleTrees, function(x) !any(grepl(",", V(x)$c_call)))]
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Set node colors
 V(graph)$color[V(graph)$sample_id == "-1h"] <- "seagreen"
 V(graph)$color[V(graph)$sample_id == "+7d"] <- "steelblue"
@@ -50,22 +50,22 @@ plot(graph, layout=layout_as_tree, vertex.frame.color="grey",
 legend("topleft", c("Germline", "Inferred", "-1h", "+7d"), 
        fill=c("black", "white", "seagreen", "steelblue"), cex=0.75)
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Consider all nodes
 getPathLengths(graph, root="Germline")
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Exclude nodes without an isotype annotation from step count
 getPathLengths(graph, root="Germline", field="c_call", exclude=NA)
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Summarize tree
 df <- summarizeSubtrees(graph, fields=c("sample_id", "c_call"), root="Germline")
 print(df[1:4])
 print(df[c(1, 5:8)])
 print(df[c(1, 9:12)])
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Set sample colors
 sample_colors <- c("-1h"="seagreen", "+7d"="steelblue")
 
@@ -89,19 +89,19 @@ p4 <- plotSubtrees(graph_list,  "c_call", "depth", colors=IG_COLORS,
 # Plot in a 2x2 grid
 gridPlot(p1, p2, p3, p4, ncol=2)
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Count direct edges between isotypes
 tableEdges(graph, "c_call")
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Direct edges excluding germline and inferred nodes
 tableEdges(graph, "c_call", exclude=c("Germline", NA))
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Count indirect edges walking through germline and inferred nodes
 tableEdges(graph, "c_call", indirect=TRUE, exclude=c("Germline", NA))
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Test isotype relationships
 edge_test <- testEdges(graph_list, "c_call", nperm=10)
 
@@ -112,14 +112,14 @@ print(edge_test)
 plotEdgeTest(edge_test, color="steelblue", main_title="Isotype Edges", 
              style="hist")
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Use unweighted path length and do not exclude any nodes
 mrca_df <- getMRCA(graph, path="steps", root="Germline")
 
 # Print subset of the annotation data.frame
 print(mrca_df[c("name", "sample_id", "c_call", "steps", "distance")])
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Exclude nodes without an isotype annotation and use weighted path length
 mrca_df <- getMRCA(graph, path="distance", root="Germline", 
                    field="c_call", exclude=NA)
@@ -127,7 +127,7 @@ mrca_df <- getMRCA(graph, path="distance", root="Germline",
 # Print excluding sequence, label, color, shape and size annotations
 print(mrca_df[c("name", "sample_id", "c_call", "steps", "distance")])
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 # Test isotype MRCA annotations
 mrca_test <- testMRCA(graph_list, "c_call", nperm=10)
 
