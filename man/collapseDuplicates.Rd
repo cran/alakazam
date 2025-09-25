@@ -21,7 +21,7 @@ collapseDuplicates(
 \arguments{
 \item{data}{data.frame containing Change-O columns. The data.frame 
 must contain, at a minimum, a unique identifier column 
-and a column containg a character vector of DNA sequences.}
+and a column containing a character vector of DNA sequences.}
 
 \item{id}{name of the column containing sequence identifiers.}
 
@@ -35,8 +35,8 @@ string with each unique value alphabetized and delimited by
 \item{num_fields}{vector of numeric columns to collapse. The numeric annotations
 of duplicate sequences will be summed.}
 
-\item{seq_fields}{vector of nucletoide sequence columns to collapse. The sequence 
-with the fewest numer of non-informative characters will be 
+\item{seq_fields}{vector of nucleotide sequence columns to collapse. The sequence 
+with the fewest number of non-informative characters will be 
 retained. Where a non-informative character is one of 
 \code{c("N", "-", ".", "?")}. Note, this is distinct from the 
 \code{seq} parameter which is used to determine duplicates.}
@@ -61,7 +61,7 @@ sequences; if \code{FALSE} process sequences silently.}
 A modified \code{data} data.frame with duplicate sequences removed and 
           annotation fields collapsed if \code{dry=FALSE}. If \code{dry=TRUE}, 
           sequences will be labeled with the collapse action, but the input will be
-          otherwise unmodifed (see Details).
+          otherwise unmodified (see Details).
 }
 \description{
 \code{collapseDuplicates} identifies duplicate DNA sequences, allowing for ambiguous 
@@ -96,7 +96,7 @@ will be appended to the input defining the collapse action that would have been 
 \code{dry=FALSE} case.
 
 \itemize{
-  \item  \code{collapse_id}:     an identifer for the group of identical sequences.
+  \item  \code{collapse_id}:     an identifier for the group of identical sequences.
   \item  \code{collapse_class}:  string defining how the sequence matches to the other in the set.
                                  one of \code{"duplicated"} (has duplicates),
                                  \code{"unique"} (no duplicates), \code{"ambiguous_duplicate"} 

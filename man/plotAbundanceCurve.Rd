@@ -62,5 +62,5 @@ plotAbundanceCurve(abund, legend_title="Sample")
 }
 \seealso{
 See \link{AbundanceCurve} for the input object and \link{estimateAbundance} for
-generating the input abundance distribution. Plotting is performed with \link{ggplot}.
+generating the input abundance distribution. Plotting is performed with \link[ggplot2]{ggplot}.
 }

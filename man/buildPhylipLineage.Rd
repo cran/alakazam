@@ -58,7 +58,7 @@ An igraph \code{graph} object defining the Ig lineage tree. Each unique input
                                      slot of the input \code{clone} for observed sequences. 
                                      The germline (root) vertex is assigned the name 
                                      "Germline" and inferred intermediates are assigned
-                                     names with the format {"Inferred1", "Inferred2", ...}.
+                                     names with the format \{"Inferred1", "Inferred2", ...\}.
             \item  \code{sequence}:  value in the \code{sequence} column of the \code{data} 
                                      slot of the input \code{clone} for observed sequences.
                                      The germline (root) vertex is assigned the sequence
@@ -96,7 +96,9 @@ An igraph \code{graph} object defining the Ig lineage tree. Each unique input
 }
 \description{
 \code{buildPhylipLineage} reconstructs an Ig lineage via maximum parsimony using the 
-dnapars application, or maximum liklihood using the dnaml application of the PHYLIP package.
+dnapars application, or maximum likelihood using the dnaml application of the PHYLIP package.
+\strong{Note}: To use the most recent methods for building, visualizing and analyzing 
+trees, use the R package [Dowser](https://dowser.readthedocs.io).
 }
 \details{
 \code{buildPhylipLineage} builds the lineage tree of a set of unique Ig sequences via

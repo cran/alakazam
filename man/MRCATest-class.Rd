@@ -32,7 +32,7 @@ the MRCA of the tree.
   \item  \code{annotation}:  annotation value.
   \item  \code{count}:       observed count of MRCA positions 
                              with the given annotation.
-  \item  \code{expected}:    expected mean count of MRCA occurance
+  \item  \code{expected}:    expected mean count of MRCA occurrence
                              for the annotation.
   \item  \code{pvalue}:      one-sided p-value for the hypothesis that 
                              the observed annotation abundance is greater 

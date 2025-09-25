@@ -14,6 +14,7 @@ estimateAbundance(
   uniform = TRUE,
   ci = 0.95,
   nboot = 200,
+  cell_id = "cell_id",
   progress = FALSE
 )
 }
@@ -45,6 +46,9 @@ be resampled to its original size or, if specified, \code{max_size}.}
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
 
 \item{nboot}{number of bootstrap realizations to generate.}
+
+\item{cell_id}{name of the \code{data} column containing cell identifiers. If
+\code{cell_id=NULL} then the function will assume bulk data.}
 
 \item{progress}{if \code{TRUE} show a progress bar.}
 }

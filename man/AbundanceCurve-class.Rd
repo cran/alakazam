@@ -32,7 +32,7 @@ containing the following columns:
   \item  \code{group}:  group identifier.
   \item  \code{clone_id} or \code{CLONE}:  clone identifier. 
   \item  \code{p}:      relative abundance of the clone.
-  \item  \code{lower}:  lower confidence inverval bound.
+  \item  \code{lower}:  lower confidence interval bound.
   \item  \code{upper}:  upper confidence interval bound.
   \item  \code{rank}:   the rank of the clone abundance.
 }}

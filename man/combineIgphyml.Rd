@@ -14,7 +14,7 @@ which can be added automatically using the \code{id} option of
 
 \item{format}{string specifying whether each column of the resulting data.frame
 should represent a parameter (\code{wide}) or if 
-there should only be three columns; i.e. id, varable, and value
+there should only be three columns; i.e. id, variable, and value
 (\code{long}).}
 }
 \value{
@@ -25,7 +25,7 @@ A data.frame containing HLP model parameter estimates for all igphyml objects.
 \code{combineIgphyml} combines IgPhyML object parameters into a data.frame.
 }
 \details{
-\code{combineIgphyml} combines repertoire-wide parameter estimates from mutliple igphyml
+\code{combineIgphyml} combines repertoire-wide parameter estimates from multiple igphyml
 objects produced by readIgphyml into a dataframe that can be easily used for plotting and 
 other hypothesis testing analyses.
 

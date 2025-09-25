@@ -9,7 +9,7 @@ db_changeo <- alakazam::readChangeoDb(changeo_file)
 db_airr <- airr::read_rearrangement(airr_file)
 
 ## ----eval=FALSE, warning=FALSE, message=FALSE---------------------------------
-#  # Write the data to a tab-delimited file
-#  alakazam::writeChangeoDb(db_changeo, "changeo.tsv")
-#  airr::write_rearrangement(db_airr, "airr.tsv")
+# # Write the data to a tab-delimited file
+# alakazam::writeChangeoDb(db_changeo, "changeo.tsv")
+# airr::write_rearrangement(db_airr, "airr.tsv")
 

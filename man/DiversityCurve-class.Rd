@@ -38,12 +38,12 @@ orders (\eqn{Q}).
                           realizations.
   \item  \code{d_sd}:     standard deviation of the diversity index 
                           over all bootstrap realizations.
-  \item  \code{d_lower}:  diversity lower confidence inverval bound.
+  \item  \code{d_lower}:  diversity lower confidence interval bound.
   \item  \code{d_upper}:  diversity upper confidence interval bound.
   \item  \code{e}:        evenness index calculated as \code{D} 
                           divided by \code{D} at \code{Q=0}.
-  \item  \code{e_lower}:  evenness lower confidence inverval bound.
-  \item  \code{e_upper}:  eveness upper confidence interval bound.
+  \item  \code{e_lower}:  evenness lower confidence interval bound.
+  \item  \code{e_upper}:  evenness upper confidence interval bound.
 }}
 
 \item{\code{tests}}{data.frame describing the significance test results with columns:

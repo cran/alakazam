@@ -9,6 +9,7 @@ countClones(
   groups = NULL,
   copy = NULL,
   clone = "clone_id",
+  cell_id = "cell_id",
   remove_na = TRUE
 )
 }
@@ -23,6 +24,9 @@ sequence. If this value is specified, then total copy abundance
 is determined by the sum of copy numbers within each clonal group.}
 
 \item{clone}{name of the \code{data} column containing clone identifiers.}
+
+\item{cell_id}{name of the \code{data} column containing cell identifiers. If
+\code{cell_id} column is not present the function will assume bulk data.}
 
 \item{remove_na}{removes rows with \code{NA} values in the clone column if \code{TRUE} and issues a warning. 
 Otherwise, keeps those rows and considers \code{NA} as a clone in the final counts 

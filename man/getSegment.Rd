@@ -69,77 +69,83 @@ getChain(
 
 \item{segment_regex}{string defining the segment match regular expression.}
 
-\item{first}{if \code{TRUE} return only the first call in 
-\code{segment_call}; if \code{FALSE} return all calls 
+\item{first}{if \code{TRUE} return only the first call in
+\code{segment_call}; if \code{FALSE} return all calls
 delimited by commas.}
 
-\item{collapse}{if \code{TRUE} check for duplicates and return only unique 
-segment assignments; if \code{FALSE} return all assignments 
+\item{collapse}{if \code{TRUE} check for duplicates and return only unique
+segment assignments; if \code{FALSE} return all assignments
 (faster). Has no effect if \code{first=TRUE}.}
 
-\item{strip_d}{if \code{TRUE} remove the "D" from the end of gene annotations 
-(denoting a duplicate gene in the locus); 
+\item{strip_d}{if \code{TRUE} remove the "D" from the end of gene annotations
+(denoting a duplicate gene in the locus);
 if \code{FALSE} do not alter gene names.}
 
 \item{omit_nl}{if \code{TRUE} remove non-localized (NL) genes from the result.
 Only applies at the gene or allele level.}
 
-\item{sep}{character defining both the input and output segment call 
+\item{sep}{character defining both the input and output segment call
 delimiter.}
 }
 \value{
 A character vector containing allele, gene or family names.
 }
 \description{
-\code{getSegment} performs generic matching of delimited segment calls with a custom 
-regular expression. \link{getAllele}, \link{getGene} and \link{getFamily} extract 
-the allele, gene and family names, respectively, from a character vector of 
+\code{getSegment} performs generic matching of delimited segment calls with a custom
+regular expression. \link{getAllele}, \link{getGene} and \link{getFamily} extract
+the allele, gene and family names, respectively, from a character vector of
 immunoglobulin (Ig) or TCR segment allele calls in IMGT format.
 }
 \examples{
 # Light chain examples
-kappa_call <- c("Homsap IGKV1D-39*01 F,Homsap IGKV1-39*02 F,Homsap IGKV1-39*01",
-                "Homsap IGKJ5*01 F")
+kappa_call <- c(
+    "Homsap IGKV1D-39*01 F,Homsap IGKV1-39*02 F,Homsap IGKV1-39*01",
+    "Homsap IGKJ5*01 F"
+)
 
 getAllele(kappa_call)
-getAllele(kappa_call, first=FALSE)
-getAllele(kappa_call, first=FALSE, strip_d=FALSE)
+getAllele(kappa_call, first = FALSE)
+getAllele(kappa_call, first = FALSE, strip_d = FALSE)
 
 getGene(kappa_call)
-getGene(kappa_call, first=FALSE)
-getGene(kappa_call, first=FALSE, strip_d=FALSE)
+getGene(kappa_call, first = FALSE)
+getGene(kappa_call, first = FALSE, strip_d = FALSE)
 
 getFamily(kappa_call)
-getFamily(kappa_call, first=FALSE)
-getFamily(kappa_call, first=FALSE, collapse=FALSE)
-getFamily(kappa_call, first=FALSE, strip_d=FALSE)
+getFamily(kappa_call, first = FALSE)
+getFamily(kappa_call, first = FALSE, collapse = FALSE)
+getFamily(kappa_call, first = FALSE, strip_d = FALSE)
 
 getLocus(kappa_call)
 getChain(kappa_call)
 
 # Heavy chain examples
-heavy_call <- c("Homsap IGHV1-69*01 F,Homsap IGHV1-69D*01 F", 
-                "Homsap IGHD1-1*01 F", 
-                "Homsap IGHJ1*01 F")
+heavy_call <- c(
+    "Homsap IGHV1-69*01 F,Homsap IGHV1-69D*01 F",
+    "Homsap IGHD1-1*01 F",
+    "Homsap IGHJ1*01 F"
+)
 
-getAllele(heavy_call, first=FALSE)
-getAllele(heavy_call, first=FALSE, strip_d=FALSE)
+getAllele(heavy_call, first = FALSE)
+getAllele(heavy_call, first = FALSE, strip_d = FALSE)
 
-getGene(heavy_call, first=FALSE)
-getGene(heavy_call, first=FALSE, strip_d=FALSE)
+getGene(heavy_call, first = FALSE)
+getGene(heavy_call, first = FALSE, strip_d = FALSE)
 
 getFamily(heavy_call)
 getLocus(heavy_call)
 getChain(heavy_call)
 
 # Filtering non-localized genes
-nl_call <- c("IGHV3-NL1*01,IGHV3-30-3*01,IGHV3-30*01", 
-             "Homosap IGHV3-30*01 F,Homsap IGHV3-NL1*01 F",
-             "IGHV1-NL1*01")
-             
-getAllele(nl_call, first=FALSE, omit_nl=TRUE)
-getGene(nl_call, first=FALSE, omit_nl=TRUE)
-getFamily(nl_call, first=FALSE, omit_nl=TRUE)
+nl_call <- c(
+    "IGHV3-NL1*01,IGHV3-30-3*01,IGHV3-30*01",
+    "Homosap IGHV3-30*01 F,Homsap IGHV3-NL1*01 F",
+    "IGHV1-NL1*01"
+)
+
+getAllele(nl_call, first = FALSE, omit_nl = TRUE)
+getGene(nl_call, first = FALSE, omit_nl = TRUE)
+getFamily(nl_call, first = FALSE, omit_nl = TRUE)
 
 # Temporary designation examples
 tmp_call <- c("IGHV9S3*01", "IGKV10S12*01")

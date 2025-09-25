@@ -6,7 +6,7 @@
 \alias{ChangeoClone}
 \title{S4 class defining a clone}
 \description{
-\code{ChangeoClone} defines a common data structure for perform lineage recontruction
+\code{ChangeoClone} defines a common data structure for perform lineage reconstruction
 from Change-O data.
 }
 \section{Slots}{

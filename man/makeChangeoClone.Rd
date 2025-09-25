@@ -86,9 +86,11 @@ A \link{ChangeoClone} object containing the modified clone.
 }
 \description{
 \code{makeChangeoClone} takes a data.frame with AIRR or Change-O style columns as input and 
-masks gap positions, masks ragged ends, removes duplicates sequences, and merges 
+masks gap positions, masks ragged ends, removes duplicate sequences, and merges 
 annotations associated with duplicate sequences. It returns a \code{ChangeoClone} 
-object which serves as input for lineage reconstruction.
+object which serves as input for lineage reconstruction. \strong{Note}: To use the 
+most recent methods for building, visualizing and analyzing 
+trees, use the R package [Dowser](https://dowser.readthedocs.io).
 }
 \details{
 The input data.frame (\code{data}) must columns for each of the required column name 

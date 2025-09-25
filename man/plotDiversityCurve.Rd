@@ -75,5 +75,5 @@ plotDiversityCurve(div, legend_title="Sample", score="evenness")
 }
 \seealso{
 See \link{alphaDiversity} and \link{alphaDiversity} for generating 
-          \link{DiversityCurve} objects for input. Plotting is performed with \link{ggplot}.
+          \link{DiversityCurve} objects for input. Plotting is performed with \link[ggplot2]{ggplot}.
 }

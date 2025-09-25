@@ -63,5 +63,5 @@ plotDiversityTest(div, q=2, legend_title="Sample")
 }
 \seealso{
 See \link{alphaDiversity} for generating input.
-          Plotting is performed with \link{ggplot}.
+          Plotting is performed with \link[ggplot2]{ggplot}.
 }

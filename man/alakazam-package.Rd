@@ -3,7 +3,6 @@
 \docType{package}
 \name{alakazam-package}
 \alias{alakazam-package}
-\alias{_PACKAGE}
 \title{alakazam: Immunoglobulin Clonal Lineage and Diversity Analysis}
 \description{
 Provides methods for high-throughput adaptive immune receptor repertoire sequencing (AIRR-Seq; Rep-Seq) analysis. In particular, immunoglobulin (Ig) sequence lineage reconstruction, lineage topology analysis, diversity profiling, amino acid property analysis and gene usage. Citations: Gupta and Vander Heiden, et al (2017) \doi{10.1093/bioinformatics/btv359}, Stern, Yaari and Vander Heiden, et al (2014) \doi{10.1126/scitranslmed.3008879}.
@@ -12,7 +11,7 @@ Provides methods for high-throughput adaptive immune receptor repertoire sequenc
 Useful links:
 \itemize{
   \item \url{https://alakazam.readthedocs.io/}
-  \item Report bugs at \url{https://bitbucket.org/kleinstein/alakazam/issues}
+  \item Report bugs at \url{https://github.com/immcantation/alakazam/issues}
 }
 
 }
@@ -26,6 +25,7 @@ Authors:
   \item Ruoyi Jiang \email{ruoyi.jiang@yale.edu}
   \item Julian Zhou \email{julian.zhou@bulldogs.yale.edu}
   \item Kenneth Hoehn \email{kenneth.hoehn@yale.edu}
+  \item Cole Jensen \email{cole.jensen@yale.edu}
   \item Jason Vander Heiden \email{jason.vanderheiden@gmail.com}
   \item Steven Kleinstein \email{steven.kleinstein@yale.edu} [copyright holder]
 }
@@ -34,7 +34,10 @@ Other contributors:
 \itemize{
   \item Daniel Gadala-Maria \email{daniel.gadala-maria@yale.edu} [contributor]
   \item Edel Aron \email{edel.aron@yale.edu} [contributor]
-  \item Cole Jensen \email{cole.jensen@yale.edu} [contributor]
+  \item Gisela Gabernet \email{gisela.gabernet@yale.edu} [contributor]
+  \item Caroline Sullivan \email{caroline.sullivan@yale.edu} [contributor]
+  \item Hailong Meng \email{hailong.meng@yale.edu} [contributor]
+  \item Burhan Sabuwala \email{burhan.sabuwala@yale.edu} [contributor]
 }
 
 }

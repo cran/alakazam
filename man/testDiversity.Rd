@@ -14,7 +14,8 @@ testDiversity(
   max_n = NULL,
   nboot = 2000,
   progress = FALSE,
-  ci = 0.95
+  ci = 0.95,
+  cell_id = "cell_id"
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ if automatically determined from the size of the largest group.}
 \item{progress}{if \code{TRUE} show a progress bar.}
 
 \item{ci}{confidence interval to calculate; the value must be between 0 and 1.}
+
+\item{cell_id}{the name of the \code{data} column containing cell identifiers.}
 }
 \value{
 A \link{DiversityCurve} object containing slot test with p-values and summary 
@@ -71,7 +74,7 @@ Significance of the difference in diversity index (\eqn{D}) between groups is te
 constructing a bootstrap delta distribution for each pair of unique values in the 
 \code{group} column. The bootstrap delta distribution is built by subtracting the diversity 
 index \eqn{Da} in \eqn{group-a} from the corresponding value \eqn{Db} in \eqn{group-b}, 
-for all bootstrap realizations, yeilding a distribution of \code{nboot} total deltas; where 
+for all bootstrap realizations, yielding a distribution of \code{nboot} total deltas; where 
 \eqn{group-a} is the group with the greater mean \eqn{D}. The p-value for hypothesis 
 \eqn{Da  !=  Db} is the value of \eqn{P(0)} from the empirical cumulative distribution 
 function of the bootstrap delta distribution, multiplied by 2 for the two-tailed correction.

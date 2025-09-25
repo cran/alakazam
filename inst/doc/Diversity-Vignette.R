@@ -18,7 +18,7 @@ head(clones, 5)
 
 ## ----eval=TRUE, results='hide', warning=FALSE, fig.width=6, fig.height=4------
 # Partitions the data on the sample column
-# Calculates a 95% confidence interval via 200 bootstrap realizations
+# Calculates a 95% confidence interval via 100 bootstrap realizations
 curve <- estimateAbundance(ExampleDb, group="sample_id", ci=0.95, nboot=100, clone="clone_id")
 
 ## ----eval=TRUE, warning=FALSE, fig.width=6, fig.height=4----------------------
@@ -30,7 +30,7 @@ plot(curve, colors = sample_colors, legend_title="Sample")
 # Compare diversity curve across values in the "sample" column
 # q ranges from 0 (min_q=0) to 4 (max_q=4) in 0.05 increments (step_q=0.05)
 # A 95% confidence interval will be calculated (ci=0.95)
-# 200 resampling realizations are performed (nboot=200)
+# 100 resampling realizations are performed (nboot=100)
 sample_curve <- alphaDiversity(ExampleDb, group="sample_id", clone="clone_id",
                                min_q=0, max_q=4, step_q=0.1,
                                ci=0.95, nboot=100)
@@ -58,7 +58,7 @@ plot(isotype_curve, colors=IG_COLORS, main_title=isotype_main,
 ## ----eval=TRUE, fig.width=6, fig.height=3-------------------------------------
 # Test diversity at q=0, q=1 and q=2 (equivalent to species richness, Shannon entropy, 
 # Simpson's index) across values in the sample_id column
-# 200 bootstrap realizations are performed (nboot=200)
+# 100 bootstrap realizations are performed (nboot=100)
 isotype_test <- alphaDiversity(ExampleDb, group="c_call", min_q=0, max_q=2, step_q=1, nboot=100, clone="clone_id")
 
 # Print P-value table

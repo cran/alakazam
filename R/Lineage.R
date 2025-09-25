@@ -9,9 +9,11 @@ NULL
 #' Generate a ChangeoClone object for lineage construction
 #' 
 #' \code{makeChangeoClone} takes a data.frame with AIRR or Change-O style columns as input and 
-#' masks gap positions, masks ragged ends, removes duplicates sequences, and merges 
+#' masks gap positions, masks ragged ends, removes duplicate sequences, and merges 
 #' annotations associated with duplicate sequences. It returns a \code{ChangeoClone} 
-#' object which serves as input for lineage reconstruction.
+#' object which serves as input for lineage reconstruction. \strong{Note}: To use the 
+#' most recent methods for building, visualizing and analyzing 
+#' trees, use the R package [Dowser](https://dowser.readthedocs.io).
 #' 
 #' @param    data         data.frame containing the AIRR or Change-O data for a clone. See Details
 #'                        for the list of required columns and their default values.
@@ -119,6 +121,11 @@ makeChangeoClone <- function(data, id="sequence_id", seq="sequence_alignment",
     check <- checkColumns(data, c(id, seq, germ, v_call, j_call, junc_len, clone, 
                                   text_fields, num_fields, seq_fields, locus))
     if (check != TRUE) { stop(check) }
+    
+    num_clones <- length(unique(data[[clone]]))
+    if (num_clones > 1) {
+        stop(paste0("`data` contains ",num_clones, " clone identifiers in the `",clone,"` field. Expecting one."))
+    }
     
     if(sum(is.na(data[[locus]])) > 0){
         stop(paste("Missing values found in",locus,"column"))
@@ -426,7 +433,7 @@ getPhylipEdges <- function(phylip_out, id_map=NULL) {
 # Modify edges of phylip output
 #
 # @param   edges     data.frame of edges returned by getPhylipEdges
-# @param   clone     a ChangeoClone object containg sequence data
+# @param   clone     a ChangeoClone object containing sequence data
 # @param   dist_mat  DNA character distance matrix
 # @return  a list of modified edges data.frame and clone object
 modifyPhylipEdges <- function(edges, clone, dist_mat=getDNAMatrix(gap=0)) {
@@ -488,7 +495,7 @@ modifyPhylipEdges <- function(edges, clone, dist_mat=getDNAMatrix(gap=0)) {
 # Convert edge data.frame and clone object to igraph graph object
 #
 # @param   edges  data.frame of edges returned by getPhylipEdges
-# @param   clone  a ChangeoClone object containg sequence data
+# @param   clone  a ChangeoClone object containing sequence data
 # @return  an igraph graph object
 phylipToGraph <- function(edges, clone) {
     # Create igraph object
@@ -526,7 +533,9 @@ phylipToGraph <- function(edges, clone) {
 #' Infer an Ig lineage using PHYLIP
 #' 
 #' \code{buildPhylipLineage} reconstructs an Ig lineage via maximum parsimony using the 
-#' dnapars application, or maximum liklihood using the dnaml application of the PHYLIP package.
+#' dnapars application, or maximum likelihood using the dnaml application of the PHYLIP package.
+#' \strong{Note}: To use the most recent methods for building, visualizing and analyzing 
+#' trees, use the R package [Dowser](https://dowser.readthedocs.io).
 #' 
 #' @param    clone         \link{ChangeoClone} object containing clone data.
 #' @param    phylip_exec   absolute path to the PHYLIP dnapars executable.
@@ -562,7 +571,7 @@ phylipToGraph <- function(edges, clone) {
 #'                                      slot of the input \code{clone} for observed sequences. 
 #'                                      The germline (root) vertex is assigned the name 
 #'                                      "Germline" and inferred intermediates are assigned
-#'                                      names with the format {"Inferred1", "Inferred2", ...}.
+#'                                      names with the format \{"Inferred1", "Inferred2", ...\}.
 #'             \item  \code{sequence}:  value in the \code{sequence} column of the \code{data} 
 #'                                      slot of the input \code{clone} for observed sequences.
 #'                                      The germline (root) vertex is assigned the sequence
@@ -1025,11 +1034,11 @@ rerootGermline <- function(tree, germid, resolve=FALSE){
 #'           
 #' @details
 #' \code{readIgphyml} reads output from the IgPhyML repertoire phylogenetics inference package. 
-#' The resulting object is divded between parameter estimates (usually under the HLP19 model),
+#' The resulting object is divided between parameter estimates (usually under the HLP19 model),
 #' which provide information about mutation and selection pressure operating on the sequences.
 #' 
 #' Trees returned from this function are either igraph objects or phylo objects, and each may be 
-#' visualized accordingly. Futher, branch lengths in tree may represent either the expected number of
+#' visualized accordingly. Further, branch lengths in tree may represent either the expected number of
 #' substitutions per site (codon, if estimated under HLP or GY94 models), or the total number of 
 #' expected substitutions per site. If the latter, internal nodes - but not tips - separated by branch
 #' lengths less than 0.1 are collapsed to simplify viewing.
@@ -1055,7 +1064,6 @@ rerootGermline <- function(tree, germid, resolve=FALSE){
 #' }
 #' 
 #' @export
-
 readIgphyml <- function(file, id=NULL, format=c("graph", "phylo"), collapse=FALSE,
     branches=c("mutations","distance")) {
     # Check arguments
@@ -1125,14 +1133,14 @@ readIgphyml <- function(file, id=NULL, format=c("graph", "phylo"), collapse=FALS
 #'                         \code{readIgphyml}.
 #' @param   format         string specifying whether each column of the resulting data.frame
 #'                         should represent a parameter (\code{wide}) or if 
-#'                         there should only be three columns; i.e. id, varable, and value
+#'                         there should only be three columns; i.e. id, variable, and value
 #'                         (\code{long}).
 #'                                                
 #' @return   A data.frame containing HLP model parameter estimates for all igphyml objects.
 #'           Only parameters shared among all objects will be returned.
 #'           
 #' @details
-#' \code{combineIgphyml} combines repertoire-wide parameter estimates from mutliple igphyml
+#' \code{combineIgphyml} combines repertoire-wide parameter estimates from multiple igphyml
 #' objects produced by readIgphyml into a dataframe that can be easily used for plotting and 
 #' other hypothesis testing analyses.
 #' 

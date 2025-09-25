@@ -2,7 +2,6 @@
 [![](https://cranlogs.r-pkg.org/badges/alakazam)](https://www.r-pkg.org/pkg/alakazam)
 [![](https://img.shields.io/static/v1?label=AIRR-C%20sw-tools%20v1&message=compliant&color=008AFF&labelColor=000000&style=plastic)](https://docs.airr-community.org/en/stable/swtools/airr_swtools_standard.html)
 
-
 Alakazam
 -------------------------------------------------------------------------------
 
@@ -31,5 +30,8 @@ Alakazam serves five main purposes:
 Contact
 -------------------------------------------------------------------------------
 
-For help and questions, please contact the [Immcantation Group](mailto:immcantation@googlegroups.com)
-or use the [issue tracker](https://bitbucket.org/kleinstein/alakazam/issues?status=new&status=open).
+If you need help or have any questions, please contact the [Immcantation Group](mailto:immcantation@googlegroups.com).
+
+If you have discovered a bug or have a feature request, you can open an issue using the [issue tracker](https://github.com/immcantation/alakazam/issues).
+
+To receive alerts about Immcantation releases, news, events, and tutorials, join the [Immcantation News](https://groups.google.com/g/immcantation-news) Google Group. [Membership settings](https://groups.google.com/g/immcantation-news/membership) can be adjusted to change the frequency of email updates.

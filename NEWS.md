@@ -1,14 +1,43 @@
+Version 1.4.0: September 22, 2025
+-------------------------------------------------------------------------------
+
+General:
+
++ Development of `alakazam` has moved to GitHub: https://github.com/immcantation/alakazam.
++ Adjusted data processing and error handling to accommodate for mixed data (bulk and 
+  single cell sequences in the same data.frame).
+
+Gene Usage:
+
++ `groupGenes` has deprecated the `only_heavy` and `split_light` 
+  arguments and now exclusively clusters sequences based on heavy chains. For users 
+  who need to split clones further by light chain information, use the 
+  `dowser::resolveLightChains` function.
++ Enhanced `countGenes` to count sequences by locus for bulk data when both `copy=NULL` 
+  and `clone=NULL`. The `first` and `collapse` arguments (utilized by `getGene`, 
+  `getAllele`, and `getFamily`) are now exposed to provide better control over how 
+  sequences are counted when multiple gene calls are present.
+
+Version 1.3.1: August 1, 2024
+-------------------------------------------------------------------------------
+
+Documentation:
+
++ This is a documentation-only update to address changes in Read the Docs.
+
 Version 1.3.0: September 29, 2023
 -------------------------------------------------------------------------------
 
 Backwards Incompatible Changes:
 
-+ Some functions now require the parameter `locus`: `makeChangeoClone` 
++ Some functions now require the parameter `locus`: `makeChangeoClone`. In 
+  `groupGenes`, `locus` was previously required only for single cell data, now 
+  it is also required for bulk data.
 
 General:
 
 + Updated dependencies to ggplot2 >= 3.4.0, airr >= 1.4.1, igraph >= 1.5.0.
-+ Updated the example data `ExampleTrees` to use the igprah 1.5.0 format. See
++ Updated the example data `ExampleTrees` to use the igraph 1.5.0 format. See
   https://r.igraph.org/news/index.html#igraph-150 for details.
 + Performance improvements in `collapseDuplicates`.
 
@@ -207,7 +236,7 @@ Diversity:
 + Moved the rarefaction calculation for the diversity functions into 
   `estimateAbundance`. `alphaDiversity` will call `estimateAbundance` for 
   bootstrapping if not provided an existing `AbundanceCurve` object.
-+ Restructured the `DiversityCurve` and `AbundanceCurve` objects to accomodate
++ Restructured the `DiversityCurve` and `AbundanceCurve` objects to accommodate
   the new diversity methods.
 
 Gene Usage:
@@ -239,7 +268,7 @@ Gene Usage:
   to the `group` pairs that do not exist in the data.
 + Added new function `groupGenes` to group sequences sharing same V and J gene.
   
-Toplogy Analysis:
+Topology Analysis:
 
 + Fixed a bug in tableEdges causing it to fail when no parent/child 
   relationships exist when specifying `indirect=TRUE`.

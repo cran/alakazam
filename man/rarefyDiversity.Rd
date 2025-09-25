@@ -17,6 +17,7 @@ rarefyDiversity(
   ci = 0.95,
   nboot = 2000,
   uniform = TRUE,
+  cell_id = "cell_id",
   progress = FALSE
 )
 }
@@ -52,6 +53,8 @@ maximum is set.}
 \item{uniform}{if \code{TRUE} then uniformly resample each group to the same 
 number of observations. If \code{FALSE} then allow each group to
 be resampled to its original size or, if specified, \code{max_size}.}
+
+\item{cell_id}{name of the \code{data} column containing cell identifiers.}
 
 \item{progress}{if \code{TRUE} show a progress bar.}
 }

@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 1.3.0
-Date: 2023-09-29
+Version: 1.4.0
+Date: 2025-09-22
 Authors@R: c(person("Susanna", "Marquez", role=c("cre", "aut"), 
                     email="susanna.marquez@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -18,8 +18,16 @@ Authors@R: c(person("Susanna", "Marquez", role=c("cre", "aut"),
                     email="daniel.gadala-maria@yale.edu"),
              person("Edel", "Aron", role=c("ctb"), 
                     email="edel.aron@yale.edu"),
-             person("Cole", "Jensen", role=c("ctb"),
+             person("Cole", "Jensen", role=c("aut"),
                     email="cole.jensen@yale.edu"),
+             person("Gisela", "Gabernet", role=c("ctb"),
+                    email="gisela.gabernet@yale.edu"),   
+             person("Caroline", "Sullivan", role=c("ctb"),
+                    email="caroline.sullivan@yale.edu"),
+             person("Hailong", "Meng", role=c("ctb"),
+                    email="hailong.meng@yale.edu"),
+             person("Burhan", "Sabuwala", role=c("ctb"),
+                    email="burhan.sabuwala@yale.edu"),
              person("Jason", "Vander Heiden", role=c("aut"), 
                     email="jason.vanderheiden@gmail.com"), 
              person("Steven", "Kleinstein", role=c("aut", "cph"), 
@@ -35,7 +43,7 @@ Description: Provides methods for high-throughput adaptive immune
     Stern, Yaari and Vander Heiden, et al (2014) <doi:10.1126/scitranslmed.3008879>.
 License: AGPL-3
 URL: https://alakazam.readthedocs.io/
-BugReports: https://bitbucket.org/kleinstein/alakazam/issues
+BugReports: https://github.com/immcantation/alakazam/issues
 LazyData: true
 BuildVignettes: true
 VignetteBuilder: knitr, rmarkdown
@@ -49,12 +57,12 @@ Imports: airr (>= 1.4.1), ape, dplyr (>= 1.0), graphics, grid, igraph
         tidyr (>= 1.0), utils, Biostrings (>= 2.56.0),
         GenomicAlignments (>= 1.24.0), IRanges (>= 2.22.2)
 Suggests: knitr, rmarkdown, testthat
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Deprecated.R' 'Fastq.R' 'Gene.R' 'Lineage.R'
         'RcppExports.R' 'Sequence.R' 'Topology.R'
 NeedsCompilation: yes
-Packaged: 2023-09-29 13:49:31 UTC; susanna
+Packaged: 2025-09-24 18:23:15 UTC; susanna
 Author: Susanna Marquez [cre, aut],
   Namita Gupta [aut],
   Nima Nouri [aut],
@@ -63,9 +71,13 @@ Author: Susanna Marquez [cre, aut],
   Kenneth Hoehn [aut],
   Daniel Gadala-Maria [ctb],
   Edel Aron [ctb],
-  Cole Jensen [ctb],
+  Cole Jensen [aut],
+  Gisela Gabernet [ctb],
+  Caroline Sullivan [ctb],
+  Hailong Meng [ctb],
+  Burhan Sabuwala [ctb],
   Jason Vander Heiden [aut],
   Steven Kleinstein [aut, cph]
 Maintainer: Susanna Marquez <susanna.marquez@yale.edu>
 Repository: CRAN
-Date/Publication: 2023-09-30 01:12:40 UTC
+Date/Publication: 2025-09-25 05:10:36 UTC

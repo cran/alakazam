@@ -10,7 +10,7 @@ nonsquareDist(seq, indx, dist_mat = getDNAMatrix())
 \item{seq}{character vector containing a DNA sequences. The sequence vector needs to
 be named.}
 
-\item{indx}{numeric vector contating the indices (a subset of indices of \code{seq}).}
+\item{indx}{numeric vector containing the indices (a subset of indices of \code{seq}).}
 
 \item{dist_mat}{Character distance matrix. Defaults to a Hamming distance 
 matrix returned by \link{getDNAMatrix}. If gap 
@@ -26,7 +26,7 @@ A matrix of numerical distance between each entry in \code{seq} and
           sequences specified by \code{indx} indices. 
           
           Note that the input subsampled indices will be ordered ascendingly. Therefore, 
-          it is necassary to assign unique names to the input sequences, \code{seq}, 
+          it is necessary to assign unique names to the input sequences, \code{seq}, 
           to recover the input order later. Row and columns names will be added accordingly.
 
           Amino acid distance matrix may be built with \link{getAAMatrix}. 

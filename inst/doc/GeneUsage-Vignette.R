@@ -27,7 +27,7 @@ g1 <- ggplot(ighv1, aes(x=gene, y=seq_freq)) +
     xlab("") +
     scale_y_continuous(labels=percent) +
     scale_color_brewer(palette="Set1") +
-    geom_point(aes(color=sample_id), size=5, alpha=0.8)
+    geom_point(aes(color=sample_id), size=5, alpha=0.8, position=position_dodge(width = 0.1))
 plot(g1)
 
 ## ----eval=TRUE, warning=FALSE-------------------------------------------------
@@ -43,7 +43,7 @@ g2 <- ggplot(family, aes(x=gene, y=seq_freq)) +
     xlab("") +
     scale_y_continuous(labels=percent) +
     scale_color_brewer(palette="Set1") +
-    geom_point(aes(color=sample_id), size=5, alpha=0.8)
+    geom_point(aes(color=sample_id), size=5, alpha=0.8, position=position_dodge(width = 0.1))
 plot(g2)
 
 ## ----eval=TRUE, warning=FALSE-------------------------------------------------
@@ -64,7 +64,7 @@ g3 <- ggplot(family, aes(x=gene, y=clone_freq)) +
     xlab("") +
     scale_y_continuous(labels=percent) +
     scale_color_brewer(palette="Set1") +
-    geom_point(aes(color=sample_id), size=5, alpha=0.8) +
+    geom_point(aes(color=sample_id), size=5, alpha=0.8, position=position_dodge(width = 0.1)) +
     facet_grid(. ~ c_call)
 plot(g3)
 
@@ -86,7 +86,7 @@ g4 <- ggplot(family, aes(x=gene, y=copy_freq)) +
     xlab("") +
     scale_y_continuous(labels=percent) +
     scale_color_brewer(palette="Set1") +
-    geom_point(aes(color=sample_id), size=5, alpha=0.8) +
+    geom_point(aes(color=sample_id), size=5, alpha=0.8, position=position_dodge(width = 0.1)) +
     facet_grid(. ~ c_call)
 plot(g4)
 
