@@ -142,7 +142,7 @@ countGenes <- function(data, gene, groups = NULL, copy = NULL, clone = NULL, fil
         data_sc <- data %>% dplyr::filter(!is.na(!!rlang::sym(cell_id)))
         data_sc[[cell_id]] <- as.character(data_sc[[cell_id]])
         data_blk <- data %>% dplyr::filter(is.na(!!rlang::sym(cell_id)))
-        if (nrow(data_blk > 0)) {
+        if (nrow(data_blk) > 0) {
             warning(paste0(
                 "Mixed bulk and single-cell data detected.\n",
                 "Sequences with '", cell_id, "' NA will be counted individually towards the total number of sequences.\n",
@@ -203,7 +203,7 @@ countGenes <- function(data, gene, groups = NULL, copy = NULL, clone = NULL, fil
             gene_tab_count <- data %>%
                 dplyr::group_by(!!!rlang::syms(c(groups, "locus", gene))) %>%
                 dplyr::summarize(seq_count = n(), .groups = "drop")
-            if (nrow(locus_tab > 1)) {
+            if (nrow(locus_tab) > 1) {
                 gene_tab <- gene_tab_count %>%
                     dplyr::left_join(locus_tab, by = c(groups, "locus")) %>%
                     dplyr::mutate(seq_freq = !!rlang::sym("seq_count") / !!rlang::sym("locus_count")) %>%
@@ -242,7 +242,7 @@ countGenes <- function(data, gene, groups = NULL, copy = NULL, clone = NULL, fil
             gene_tab_count <- clone_gene_tab %>%
                 dplyr::group_by(!!!rlang::syms(c(groups, "locus", gene))) %>%
                 dplyr::summarize(clone_count = n(), .groups = "drop")
-            if (nrow(locus_tab > 1)) {
+            if (nrow(locus_tab) > 1) {
                 gene_tab <- gene_tab_count %>%
                     dplyr::left_join(locus_tab, by = c(groups, "locus")) %>%
                     dplyr::mutate(clone_freq = !!rlang::sym("clone_count") / !!rlang::sym("locus_clone_count")) %>%
@@ -274,7 +274,7 @@ countGenes <- function(data, gene, groups = NULL, copy = NULL, clone = NULL, fil
                     seq_count = length(!!rlang::sym(gene)),
                     copy_count = sum(!!rlang::sym(copy), na.rm = TRUE), .groups = "drop"
                 )
-            if (nrow(locus_tab > 1)) {
+            if (nrow(locus_tab) > 1) {
                 gene_tab <- gene_tab_count %>%
                     dplyr::left_join(locus_tab, by = c(groups, "locus")) %>%
                     dplyr::mutate(
@@ -705,7 +705,7 @@ singleCellValidation <- function(data, locus = "locus", cell_id = "cell_id") {
     # check for multiple heavy chains
     heavy_count <- table(heavy[[cell_id]])
     multi_heavy_cells <- names(heavy_count[heavy_count > 1])
-    if (length(multi_heavy_cells != 0)) {
+    if (length(multi_heavy_cells) != 0) {
         stop(paste(
             "Only one heavy chain is allowed per cell. Remove cells with",
             "multiple heavy chains."
