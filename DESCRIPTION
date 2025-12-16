@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 1.4.1
-Date: 2025-10-01
+Version: 1.4.2
+Date: 2025-12-15
 Authors@R: c(person("Susanna", "Marquez", role=c("cre", "aut"), 
                     email="susanna.marquez@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -26,6 +26,8 @@ Authors@R: c(person("Susanna", "Marquez", role=c("cre", "aut"),
                     email="caroline.sullivan@yale.edu"),
              person("Hailong", "Meng", role=c("ctb"),
                     email="hailong.meng@yale.edu"),
+             person("Huimin", "Lyu", role=c("ctb"),
+                    email="huimin.lyu@yale.edu"),
              person("Burhan", "Sabuwala", role=c("ctb"),
                     email="burhan.sabuwala@yale.edu"),
              person("Jason", "Vander Heiden", role=c("aut"), 
@@ -62,7 +64,7 @@ Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Deprecated.R' 'Fastq.R' 'Gene.R' 'Lineage.R'
         'RcppExports.R' 'Sequence.R' 'Topology.R'
 NeedsCompilation: yes
-Packaged: 2025-10-01 14:13:37 UTC; susanna
+Packaged: 2025-12-15 18:10:47 UTC; susanna
 Author: Susanna Marquez [cre, aut],
   Namita Gupta [aut],
   Nima Nouri [aut],
@@ -75,9 +77,10 @@ Author: Susanna Marquez [cre, aut],
   Gisela Gabernet [ctb],
   Caroline Sullivan [ctb],
   Hailong Meng [ctb],
+  Huimin Lyu [ctb],
   Burhan Sabuwala [ctb],
   Jason Vander Heiden [aut],
   Steven Kleinstein [aut, cph]
 Maintainer: Susanna Marquez <susanna.marquez@yale.edu>
 Repository: CRAN
-Date/Publication: 2025-10-02 16:30:02 UTC
+Date/Publication: 2025-12-16 06:11:17 UTC
