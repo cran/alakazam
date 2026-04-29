@@ -37,6 +37,7 @@ Other contributors:
   \item Gisela Gabernet \email{gisela.gabernet@yale.edu} [contributor]
   \item Caroline Sullivan \email{caroline.sullivan@yale.edu} [contributor]
   \item Hailong Meng \email{hailong.meng@yale.edu} [contributor]
+  \item Huimin Lyu \email{huimin.lyu@yale.edu} [contributor]
   \item Burhan Sabuwala \email{burhan.sabuwala@yale.edu} [contributor]
 }
 

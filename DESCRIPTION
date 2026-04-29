@@ -1,7 +1,7 @@
 Package: alakazam
 Type: Package
-Version: 1.4.2
-Date: 2025-12-15
+Version: 1.4.3
+Date: 2026-04-29
 Authors@R: c(person("Susanna", "Marquez", role=c("cre", "aut"), 
                     email="susanna.marquez@yale.edu"),
              person("Namita", "Gupta", role=c("aut"), 
@@ -58,13 +58,13 @@ Imports: airr (>= 1.4.1), ape, dplyr (>= 1.0), graphics, grid, igraph
         0.12.12), readr, rlang, scales, seqinr, stats, stringi, tibble,
         tidyr (>= 1.0), utils, Biostrings (>= 2.56.0),
         GenomicAlignments (>= 1.24.0), IRanges (>= 2.22.2)
-Suggests: knitr, rmarkdown, testthat
+Suggests: cigarillo, knitr, rmarkdown, testthat
 RoxygenNote: 7.3.3
 Collate: 'Alakazam.R' 'AminoAcids.R' 'Classes.R' 'Core.R' 'Data.R'
         'Diversity.R' 'Deprecated.R' 'Fastq.R' 'Gene.R' 'Lineage.R'
         'RcppExports.R' 'Sequence.R' 'Topology.R'
 NeedsCompilation: yes
-Packaged: 2025-12-15 18:10:47 UTC; susanna
+Packaged: 2026-04-29 13:38:10 UTC; root
 Author: Susanna Marquez [cre, aut],
   Namita Gupta [aut],
   Nima Nouri [aut],
@@ -83,4 +83,4 @@ Author: Susanna Marquez [cre, aut],
   Steven Kleinstein [aut, cph]
 Maintainer: Susanna Marquez <susanna.marquez@yale.edu>
 Repository: CRAN
-Date/Publication: 2025-12-16 06:11:17 UTC
+Date/Publication: 2026-04-29 15:00:03 UTC

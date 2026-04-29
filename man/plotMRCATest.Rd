@@ -50,6 +50,7 @@ A \code{ggplot} object defining the plot.
 graphs <- ExampleTrees[1:10]
 
 # Perform MRCA test on isotypes
+set.seed(123)
 x <- testMRCA(graphs, "c_call", nperm=10)
 
 # Plot

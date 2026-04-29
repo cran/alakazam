@@ -213,9 +213,20 @@ calcSequenceAlignmentQuality <- function(sequence_db,
    cigars <-  c(v_cigar, vd_pseudo_cigar, d_cigar, dj_pseudo_cigar, j_cigar)
    cigars <- cigars[!is.na(cigars)]
 
+   use_cigarillo <- utils::packageVersion("GenomicAlignments") >= package_version("1.45.5")
+   if (use_cigarillo && !requireNamespace("cigarillo", quietly=TRUE)) {
+      stop("The 'cigarillo' package is required when using GenomicAlignments >= 1.45.5, ",
+           "which replaced explodeCigarOps()/explodeCigarOpLengths() with functions from cigarillo. ",
+           "Please install it with: BiocManager::install(\"cigarillo\")")
+   }
    ranges <- bind_rows(lapply(cigars, function(cigar) {
-      ops <- GenomicAlignments::explodeCigarOps(cigar)[[1]]
-      lengths <- GenomicAlignments::explodeCigarOpLengths(cigar)[[1]]
+      if (use_cigarillo) {
+         ops <- cigarillo::explode_cigar_ops(cigar)[[1]]
+         lengths <- cigarillo::explode_cigar_oplens(cigar)[[1]]
+      } else {
+         ops <- GenomicAlignments::explodeCigarOps(cigar)[[1]]
+         lengths <- GenomicAlignments::explodeCigarOpLengths(cigar)[[1]]
+      }
       keep <- ops %in% c("N", "I") == F
       ops <- ops[keep]
       lengths <- lengths[keep]
@@ -490,7 +501,8 @@ getPositionQuality <- function(data,
    bind_rows(lapply(1:nrow(data), function(i) {
       seq_id <- data[[sequence_id]][i]
       seq_len <- nchar(data[[sequence]][i])
-      qual_values <- as.numeric(strsplit(data[[quality_num]][i],",")[[1]])
+      qual_parts <- strsplit(data[[quality_num]][i],",")[[1]]
+      qual_values <- as.numeric(replace(qual_parts, qual_parts == "NA", NA))
       nt <- strsplit(data[[sequence]],"")[[1]]
       if (seq_len != length(qual_values)) {
          stop("Different length, for sequence: ", seq_id,". seq: ", sequence, ". qual: ", quality_num)

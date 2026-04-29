@@ -17,7 +17,9 @@ The path to the temporary folder.
 system temp location.
 }
 \examples{
+\dontrun{
 makeTempDir("Clone50")
+}
 
 }
 \seealso{
